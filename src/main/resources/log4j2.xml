@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="pattern_console">%d{DATE} %-5level - %msg%n</Property>
+        <Property name="pattern_file">%d{DATE} [%t] %-5level %logger{1} - %msg%n</Property>
+        <Property name="logdir">C:/Users/HP/Desktop/EpamTrain/Epam-FinalProject/logs</Property>
+        <Property name="filename">log.txt</Property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_console}"/>
+        </Console>
+        <RollingFile name="file" fileName="${logdir}/${filename}" filePattern="${logdir}/${date:yyyy-MM-dd}/log_%d{dd-MM-yyyy}_%i.txt">
+            <PatternLayout pattern="${pattern_file}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
+        </Root>
+    </Loggers>
+</Configuration>

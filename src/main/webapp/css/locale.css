@@ -1,0 +1,18 @@
+.select
+{
+    display: inline-block;
+    width: 160px;
+    height: 34px;
+    line-height: 30px;
+    position: relative;
+}
+option{
+    float: right;
+    list-style: none;
+    margin-right: 40px;
+    position: relative;
+    text-decoration: none;
+    line-height: 70px;
+    font-size: 18px;
+    padding: 8px 15px;
+}

@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+/*.picture{*/
+/*  background-image: url("../plus.svg");*/
+/*  background: white;*/
+/*}*/
+body{
+    background: #f2f2f2;
+}
+nav{
+    background: royalblue;
+}
+nav:after{
+    content: '';
+    clear: both;
+    display: table;
+}
+nav .logo {
+    float: left;
+    color: snow;
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 70px;
+    padding-left: 60px;
+}
+nav ul{
+    float: right;
+    list-style: none;
+    margin-right: 40px;
+    position: relative;
+}
+nav ul li {
+    float: left;
+    display: inline-block;
+    background: royalblue;
+    margin: 0 5px;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    line-height: 70px;
+    font-size: 18px;
+    padding: 8px 15px;
+}
+nav ul li a:hover {
+    color: skyblue;
+    border-radius: 5px;
+    box-shadow: 0 0 5px skyblue,
+    0 0 5px skyblue;
+}
+nav ul ul li a:hover {
+    color: skyblue;
+    box-shadow: none;
+}
+nav ul ul {
+    position: absolute;
+    top: 90px;
+    border-top: 3px solid skyblue;
+    opacity: 0;
+    visibility: hidden;
+    transition: top .3s;
+}
+nav ul ul ul {
+    border-top: none;
+}
+nav ul li:hover > ul {
+    top: 70px;
+    opacity: 1;
+    visibility: visible;
+}
+nav ul ul li{
+    position: relative;
+    margin: 0;
+    width: 150px;
+    float: none;
+    display: list-item;
+    border-bottom: 1px solid skyblue;
+}
+nav ul ul li a {
+    line-height: 50px;
+}
+nav ul ul ul li {
+    position: relative;
+    top: -70px;
+    left: 150px;
+}
+.delim {
+    border-left: 4px solid skyblue;
+    height: 16px;
+    margin-left: 40px;
+    margin-right: 2px;
+}
+.line-list {
+    display: inline;
+    color: skyblue;
+    border-radius: 5px;
+    box-shadow: 0 0 5px skyblue,
+    0 0 5px skyblue;
+    text-decoration: none;
+    line-height: 70px;
+    font-size: 18px;
+    padding: 8px 15px;
+}
+.page-footer {
+    position: fixed;
+    font-size: 12px;
+    bottom: 0;
+    width: 100%;
+    height: 6.8%;
+    background-color: royalblue;
+    color: snow;
+    padding-left: 60px;
+}
+p.copyright {
+    position: absolute;
+    width: 100%;
+    color: snow;
+    line-height: 40px;
+    font-size: 1.3em;
+    text-align: center;
+    bottom:0;
+}
+.page-footer a {
+    position: absolute;
+    font-size: 17px;
+    margin-left: 56px;
+    color: snow;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-position: left;
+    bottom:12px;
+}
+.page-footer-email {
+    padding-left: 25px;
+    background-image: url("/images/svg/icon-email.svg");
+}
