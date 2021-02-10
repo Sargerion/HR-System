@@ -11,6 +11,7 @@ public class SessionAttribute {
     public static final String ADMIN_TYPE = "admin_type";
     public static final String HR_TYPE = "hr_type";
     public static final String FINDER_TYPE = "finder_type";
+    public static final String CONFIRMATION_TOKEN = "confirm_token";
 
     private SessionAttribute() {
 

@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Optional;
 
 @WebServlet(name = "controller", urlPatterns = {"/controller","*.do"})
@@ -42,6 +43,9 @@ public class Controller extends HttpServlet {
         }
         requestContext.insertAttributes(request);
         logger.info(commandResult.toString());
+        if(request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
+            request.getSession().invalidate();
+        }
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {
             RequestDispatcher dispatcher = request.getRequestDispatcher(commandResult.getPage());
             dispatcher.forward(request, response);

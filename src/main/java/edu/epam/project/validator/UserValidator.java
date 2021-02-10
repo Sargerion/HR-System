@@ -4,7 +4,7 @@ public class UserValidator {
 
     private static final String LOGIN_REGEX = "^[a-zA-Z0-9_-]{6,15}$";
     private static final String PASSWORD_REGEX = "^[a-zA-Z0-9_-]{6,15}$";
-    private static final String EMAIL_REGEX = "(\\w{3,})@(\\w+\\.)(\\w{2,4})";
+    private static final String EMAIL_REGEX = "^([a-z0-9_\\.-]+)@([a-z0-9_\\.-]+)\\.([a-z\\.]{2,6})$";
 
     public static boolean isValidLogin(String login) {
         return login.matches(LOGIN_REGEX);

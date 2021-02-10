@@ -7,7 +7,7 @@
     <groupId>edu.epam</groupId>
     <artifactId>Epam-FinalProject</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Epam-FinalProject</name>
+    <name>Epam-FinalProject-1.0-SNAPSHOT</name>
     <packaging>war</packaging>
 
     <properties>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <version>1.4.7</version>
         </dependency>
     </dependencies>
 

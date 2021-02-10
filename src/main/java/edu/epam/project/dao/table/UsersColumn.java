@@ -8,6 +8,7 @@ public class UsersColumn {
     public static final String EMAIL = "user_email";
     public static final String TYPE_ID = "user_type_id";
     public static final String STATUS_ID = "user_status_id";
+    public static final String CONFIRMATION_TOKEN = "confirmation_token";
 
     private UsersColumn() {
 

@@ -7,12 +7,16 @@ import edu.epam.project.dao.table.UsersColumn;
 import edu.epam.project.entity.User;
 import edu.epam.project.entity.UserStatus;
 import edu.epam.project.entity.UserType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public enum UserBuilder implements EntityBuilder<User> {
+
     INSTANCE;
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public User build(ResultSet resultSet) throws SQLException {

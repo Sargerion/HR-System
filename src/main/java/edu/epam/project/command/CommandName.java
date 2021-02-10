@@ -1,14 +1,14 @@
 package edu.epam.project.command;
 
-import edu.epam.project.command.impl.LanguageCommand;
-import edu.epam.project.command.impl.LogInCommand;
-import edu.epam.project.command.impl.RegisterCommand;
+import edu.epam.project.command.impl.*;
 
 public enum CommandName {
 
     LOG_IN(new LogInCommand()),
+    LOG_OUT(new LogOutCommand()),
     CHANGE_LANGUAGE(new LanguageCommand()),
-    REGISTER(new RegisterCommand());
+    REGISTER(new RegisterCommand()),
+    ACTIVATE(new ActivateCommand());
 
     private Command command;
 

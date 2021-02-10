@@ -20,21 +20,21 @@ public class Main {
     public static void main(String[] args) throws ConnectionException, SQLException {
 //        String passw = "Qwerty1";
 //        System.out.println(Encrypter.encryptPassword(passw));
-        String login = "sergio_1";
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            //String foundPassword = resultSet.getString(UsersColumn.PASSWORD);
-            System.out.println("orekgoewg");
-            resultSet.next();
-                System.out.println(resultSet.getInt(1) + "\n" +
-                        resultSet.getString(2) + "\n" +
-                        resultSet.getString(3)+ "\n"+
-                        resultSet.getString(4)+ "\n" +
-                        resultSet.getString(5)+ "\n"+
-                        resultSet.getString(6)+ "\n");
-
-        }
+//        String login = "sergio_1";
+//        try (Connection connection = ConnectionPool.getInstance().getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
+//            preparedStatement.setString(1, login);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            //String foundPassword = resultSet.getString(UsersColumn.PASSWORD);
+//            System.out.println("orekgoewg");
+//            resultSet.next();
+//                System.out.println(resultSet.getInt(1) + "\n" +
+//                        resultSet.getString(2) + "\n" +
+//                        resultSet.getString(3)+ "\n"+
+//                        resultSet.getString(4)+ "\n" +
+//                        resultSet.getString(5)+ "\n"+
+//                        resultSet.getString(6)+ "\n");
+//
+//        }
     }
 }

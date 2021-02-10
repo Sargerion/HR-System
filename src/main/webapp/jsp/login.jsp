@@ -43,6 +43,7 @@
     </nav>
 </header>
 <c:import url="modules/loginForm.jsp"/>
+<c:import url="/jsp/modules/part/message_part.jsp"/>
 <c:import url="modules/footer.jsp"/>
 </body>
 </html>

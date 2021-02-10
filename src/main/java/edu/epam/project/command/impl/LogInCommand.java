@@ -55,7 +55,7 @@ public class LogInCommand implements Command {
                     case COMPANY_HR -> {
                         requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.HR_TYPE);
                         requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                        commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
+                        commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);//TODO:ИЗМЕНИТЬ СТРАНИЦУ
                         //comanres
                     }
                     case FINDER -> {

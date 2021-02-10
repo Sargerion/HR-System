@@ -9,17 +9,21 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
 import edu.epam.project.util.Encrypter;
+import edu.epam.project.util.mail.ConfirmationToken;
 import edu.epam.project.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public enum UserServiceImpl implements UserService {
     INSTANCE;
 
     private static final Logger logger = LogManager.getLogger();
+    public static final int EXPIRED_CONFIRMATION_TIME = 15;
     private static final UserDao userDao = new UsersDaoImpl();
 
 
@@ -34,12 +38,21 @@ public enum UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long entityId) throws ServiceException {
-        return Optional.empty();
+    public Optional<User> findById(Integer entityId) throws ServiceException {
+        Optional<User> foundUser = Optional.empty();
+        try {
+            foundUser = userDao.findById(entityId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return foundUser;
     }
 
+
+
     @Override
-    public boolean update(User entity, Long entityId) throws ServiceException {
+    public boolean update(User entity, Integer entityId) throws ServiceException {
         return false;
     }
 
@@ -49,7 +62,7 @@ public enum UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteById(Long entityId) throws ServiceException {
+    public boolean deleteById(Integer entityId) throws ServiceException {
         return false;
     }
 
@@ -62,11 +75,17 @@ public enum UserServiceImpl implements UserService {
         }
         try {
             if (userDao.existsLogin(login)) {
-                userDbPassword = userDao.findUserPasswordByLogin(login);
-                if (userDbPassword.isPresent()) {
-                    if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
-                        foundUser = userDao.findUserByLogin(login);
+                if(userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
+                    userDbPassword = userDao.findUserPasswordByLogin(login);
+                    if (userDbPassword.isPresent()) {
+                        if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
+                            foundUser = userDao.findUserByLogin(login);
+                        } else {
+                            throw new ServiceException("Incorrect password");
+                        }
                     }
+                } else {
+                    throw new ServiceException("Account is not active");
                 }
             } else {
                 throw new ServiceException("No such login");
@@ -83,6 +102,9 @@ public enum UserServiceImpl implements UserService {
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
             throw new ServiceException("Invalid login or password or email, check template");
         }
+        if (!repeatPassword.equals(password)) {
+            throw new ServiceException("Repeat password is different");
+        }
         try {
             if (userDao.existsLogin(login)) {
                 throw new ServiceException("Login has already existed");
@@ -90,11 +112,43 @@ public enum UserServiceImpl implements UserService {
             user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE) :
                     new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
             String encryptedPassword = Encrypter.encryptPassword(password);
+            user.get().setConfirmationToken(UUID.randomUUID().toString());
             userDao.addUser(user.get(), encryptedPassword);
-            //todo: sendActivation
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
         return user;
+    }
+
+    @Override
+    public boolean activateUser(User user, String confirmationToken) throws ServiceException {
+        boolean activateResult = false;
+        User tryActivateUser;
+        try {
+            Optional<User> foundUser = userDao.findUserByLogin(user.getLogin());
+            if (foundUser.isPresent() && confirmationToken.equals(user.getConfirmationToken())) {
+                tryActivateUser = foundUser.get();
+                tryActivateUser.setStatus(UserStatus.ACTIVE);
+                userDao.updateStatus(user);
+                activateResult = true;
+            }
+        } catch (DaoException e) {
+            logger.error("Can't activate user");
+            throw new ServiceException(e);
+        }
+        logger.info("User activate");
+        return activateResult;
+    }
+
+    @Override
+    public Optional<String> findUserActivateTokenById(Integer id) throws ServiceException {
+        Optional<String> foundToken;
+        try {
+            foundToken = userDao.findUserActivateTokenById(id);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return foundToken;
     }
 }

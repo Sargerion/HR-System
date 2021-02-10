@@ -27,7 +27,7 @@ public abstract class AbstractDao<K, T extends Entity> implements AutoCloseable 
 
     public abstract List<T> findAll() throws DaoException;
 
-    public abstract boolean update(T entity, K entityId) throws DaoException;
+    public abstract boolean update(T entity) throws DaoException;
 
     public abstract boolean delete(T entity) throws DaoException;
 

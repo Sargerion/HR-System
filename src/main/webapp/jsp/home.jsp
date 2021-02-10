@@ -42,6 +42,8 @@
     </ul>
     </nav>
 </header>
+<c:import url="/jsp/modules/part/message_part.jsp"/>
+<br/>
 <c:import url="modules/footer.jsp"/>
 </body>
 </html>

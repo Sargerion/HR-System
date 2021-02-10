@@ -1,5 +1,7 @@
 package edu.epam.project.entity;
 
+import edu.epam.project.util.mail.ConfirmationToken;
+
 public class User extends Entity {
 
     private Integer userId;
@@ -7,7 +9,7 @@ public class User extends Entity {
     private String email;
     private UserType type;
     private UserStatus status;
-    private String activateKey;
+    private String confirmationToken;
 
     public User() {
 
@@ -61,12 +63,12 @@ public class User extends Entity {
         this.status = status;
     }
 
-    public String getActivateKey() {
-        return activateKey;
+    public String getConfirmationToken() {
+        return confirmationToken;
     }
 
-    public void setActivateKey(String activateKey) {
-        this.activateKey = activateKey;
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
     }
 
     @Override
@@ -101,7 +103,7 @@ public class User extends Entity {
         sb.append(", email='").append(email).append('\'');
         sb.append(", type=").append(type);
         sb.append(", status=").append(status);
-        sb.append(", activateKey=").append(activateKey);
+        sb.append(", confirmationToken=").append(confirmationToken);
         sb.append('}');
         return sb.toString();
     }
