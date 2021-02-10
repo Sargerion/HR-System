@@ -1,12 +1,8 @@
 package edu.epam.project.command.impl;
 
-import edu.epam.project.command.Command;
-import edu.epam.project.command.CommandResult;
-import edu.epam.project.command.RequestParameter;
-import edu.epam.project.command.SessionRequestContext;
-import edu.epam.project.command.TransitionType;
-import edu.epam.project.command.PathJsp;
+import edu.epam.project.command.*;
 import edu.epam.project.entity.User;
+import edu.epam.project.entity.UserStatus;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
@@ -18,41 +14,35 @@ import java.util.Optional;
 public class ActivateCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String CORRECT_ACTIVATE = "Congrats, you've successfully confirm registration, now you're active";
-    private static final String ERROR_EXPIRE_TIME = "It's a pity, but confirmation time expired, please register anew!";
+    private static final String ERROR_SECOND_TRANSIT_BY_LINK = "You've already active, you can just login";
+    private static final String TOKEN_EXPIRE = "confirmed";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        //todo:УДАЛИТЬ ЮЗЕРА
         UserService userService = UserServiceImpl.INSTANCE;
-        Optional<String> confirm_Token = requestContext.getRequestParameter(RequestParameter.CONFIRMATION_TOKEN);
         Optional<String> userId = requestContext.getRequestParameter(RequestParameter.USER_ID);
         Optional<User> activatingUser;
         CommandResult commandResult = null;
-        if (confirm_Token.isEmpty() || userId.isEmpty()) {
-            requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_EXPIRE_TIME);
-            commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
-            throw new CommandException("Empty Parameters");
-        }
         try {
             activatingUser = userService.findById(Integer.parseInt(userId.get()));
             if (activatingUser.isPresent()) {
-                logger.info(activatingUser.get().getConfirmationToken());
                 Optional<String> token = userService.findUserActivateTokenById(Integer.parseInt(userId.get()));
                 activatingUser.get().setConfirmationToken(token.get());
-                if (userService.activateUser(activatingUser.get(), confirm_Token.get())) {
-                    requestContext.setRequestAttribute(RequestParameter.CONFIRM_MESSAGE, CORRECT_ACTIVATE);
-                    commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.REDIRECT);
-                    activatingUser.get().setConfirmationToken(null);
-                    //todo:update user
+                if (token.get().equals(TOKEN_EXPIRE)) {
+                    requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_SECOND_TRANSIT_BY_LINK);
+                    commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
+                    logger.error(ERROR_SECOND_TRANSIT_BY_LINK);
                 } else {
-                    requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_EXPIRE_TIME);
+                    requestContext.setRequestAttribute(RequestParameter.CONFIRM_MAIL_MESSAGE, FriendlyMessage.CORRECT_ACTIVATE_FINDER);
                     commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
-                    activatingUser.get().setConfirmationToken(null);
-                    //todo:update user
+                    activatingUser.get().setConfirmationToken(TOKEN_EXPIRE);
+                    activatingUser.get().setStatus(UserStatus.ACTIVE);
+                    userService.update(activatingUser.get());
+                    logger.info(FriendlyMessage.CORRECT_ACTIVATE_FINDER);
                 }
             }
         } catch (ServiceException e) {
+            logger.error(e);
             throw new CommandException(e);
         }
         return commandResult;

@@ -34,7 +34,7 @@ public class Controller extends HttpServlet {
         Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter(RequestParameter.COMMAND));
         logger.info(optionalCommand);
         Command command = optionalCommand.orElseThrow(IllegalAccessError::new);
-        CommandResult commandResult = null;
+        CommandResult commandResult;
         try {
             commandResult = command.execute(requestContext);
         } catch (CommandException e) {

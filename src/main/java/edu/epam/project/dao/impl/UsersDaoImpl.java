@@ -52,10 +52,10 @@ public class UsersDaoImpl extends UserDao {
             "VALUES (?, ?, ?, ?, ?, ?);";
 
     @Language("SQL")
-    private static final String UPDATE_USER = "UPDATE users SET user_login = ?, user_email, user_type_id, user_status_id;";
+    private static final String UPDATE_USER_BY_LOGIN = "UPDATE users SET user_login = ?, user_email = ?, user_type_id = ?, user_status_id = ?, confirmation_token = ? WHERE user_login = ?;";
 
     @Language("SQL")
-    private static final String UPDATE_STATUS = "UPDATE users SET user_status_id=?;";
+    private static final String UPDATE_STATUS_BY_LOGIN = "UPDATE users SET user_status_id = ? WHERE user_login = ?;";
 
     @Language("SQL")
     private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses " +
@@ -193,34 +193,54 @@ public class UsersDaoImpl extends UserDao {
     }
 
     @Override
-    public boolean update(User user) throws DaoException {
-//        try (Connection connection = ConnectionPool.getInstance().getConnection();
-//             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
-//            preparedStatement.setString(1, user.getLogin());
-//            preparedStatement.setString(2, user.getEmail());
-//            preparedStatement.setInt(4, user.getType());
-//            preparedStatement.setInt(5, UserStatusesColumn.NOT_ACTIVE);
-//        } catch (ConnectionException | SQLException e) {
-//            throw new DaoException(e);
-//        }
-        return false;
+    public void update(User user) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_BY_LOGIN)) {
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getEmail());
+            switch (user.getType()) {
+                case COMPANY_HR -> {
+                    preparedStatement.setInt(3, UserTypesColumn.HR_TYPE);
+                }
+                case FINDER -> {
+                    preparedStatement.setInt(3, UserTypesColumn.FINDER_TYPE);
+                }
+            }
+            switch (user.getStatus()) {
+                case ACTIVE -> {
+                    preparedStatement.setInt(4, UserStatusesColumn.ACTIVE);
+                }
+                case NOT_ACTIVE -> {
+                    preparedStatement.setInt(4, UserStatusesColumn.NOT_ACTIVE);
+                }
+                case BLOCKED -> {
+                    preparedStatement.setInt(4, UserStatusesColumn.BLOCKED);
+                }
+            }
+            preparedStatement.setString(5, user.getConfirmationToken());
+            preparedStatement.setString(6, user.getLogin());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public void updateStatus(User user) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BY_LOGIN)) {
             switch (user.getStatus()) {
-                case NOT_ACTIVE -> {
+                case ACTIVE -> {
                     preparedStatement.setInt(1, UserStatusesColumn.ACTIVE);
                 }
-                case BLOCKED -> {
+                case NOT_ACTIVE -> {
                     preparedStatement.setInt(1, UserStatusesColumn.NOT_ACTIVE);
                 }
-                default -> {
+                case BLOCKED -> {
                     preparedStatement.setInt(1, UserStatusesColumn.BLOCKED);
                 }
             }
+            preparedStatement.setString(2, user.getLogin());
             preparedStatement.executeUpdate();
         } catch (ConnectionException | SQLException e) {
             throw new DaoException(e);

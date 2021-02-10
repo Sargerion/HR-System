@@ -33,7 +33,6 @@
             <input type="email" name="email" class="form-control" required pattern="^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$" placeholder="<fmt:message key="email_placeholder"/>">
         </div>
         <input type="checkbox" name="hr_option" class="form-control"><h5 style="text-align: center"><fmt:message key="like_hr"/></h5><br/>
-        <c:import url="/jsp/error/error_parts/error_part.jsp"/>
         <input style="width: 40%;" type="submit" class="btn" value=<fmt:message key="register"/>>
         <br/>
     </form>

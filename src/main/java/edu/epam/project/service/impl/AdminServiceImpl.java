@@ -28,7 +28,7 @@ public enum AdminServiceImpl implements AdminService {
             if (foundUser.isPresent()) {
                 tryActivateUser = foundUser.get();
                 tryActivateUser.setStatus(UserStatus.ACTIVE);
-                userDao.updateStatus(user);
+                userDao.updateStatus(tryActivateUser);
                 activateResult = true;
             }
         } catch (DaoException e) {
@@ -50,13 +50,13 @@ public enum AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Optional<User> findById(Long entityId) throws ServiceException {
+    public Optional<User> findById(Integer entityId) throws ServiceException {
         return Optional.empty();
     }
 
     @Override
-    public boolean update(User entity, Long entityId) throws ServiceException {
-        return false;
+    public void update(User entity) throws ServiceException {
+
     }
 
     @Override
@@ -65,7 +65,7 @@ public enum AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public boolean deleteById(Long entityId) throws ServiceException {
+    public boolean deleteById(Integer entityId) throws ServiceException {
         return false;
     }
 }

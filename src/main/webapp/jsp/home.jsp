@@ -43,7 +43,8 @@
     </nav>
 </header>
 <c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <br/>
-<c:import url="modules/footer.jsp"/>
+<c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

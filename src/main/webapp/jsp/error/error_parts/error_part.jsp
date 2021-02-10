@@ -2,5 +2,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:if test="${not empty requestScope.errorMessage}">
-    <p class="mist">${requestScope.errorMessage}</p>
+    <p style="color: red; font-size: 20px; text-align: center;border: 1px solid red;padding: 35px;">${requestScope.errorMessage}</p>
 </c:if>

@@ -15,7 +15,7 @@ public interface BaseService<K, T extends Entity> {
 
     Optional<T> findById(K entityId) throws ServiceException;
 
-    boolean update(T entity, K entityId) throws ServiceException;
+    void update(T entity) throws ServiceException;
 
     boolean delete(T entity) throws ServiceException;
 

@@ -16,8 +16,7 @@ import java.util.Properties;
 public class MailSender {
 
     private static final Logger logger = LogManager.getLogger();
-    public static final String ACTIVATE_MESSAGE = "You have registered on CringeLinkedIn, please confirm registration by link";//todo:replace
-    public static final String ACTIVATE_LINK = "http://localhost:8081/Epam_FinalProject_war_exploded/controller?command=activate&";
+
     private MimeMessage mimeMessage;
     private String sendToEmail;
     private String mailSubject;
@@ -42,10 +41,25 @@ public class MailSender {
         }
     }
 
-    public void sendActivation(User user) throws MailSendException {
-        setMailSubject("Confirmation of registration");
-        setMailBody(ACTIVATE_LINK + "userId=" + user.getUserId() + "&confirm_token=" + user.getConfirmationToken());
+    public void sendActivationFinder(User user) throws MailSendException {
+        setMailSubject(MessageСontent.ACTIVATE_MESSAGE_FINDER);
+        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getUserId() + "&confirm_token=" + user.getConfirmationToken());
         send();
+        logger.info("Activation sent to finder with login -> {}", user.getLogin());
+    }
+
+    public void sendActivationHR(User user) throws MailSendException {
+        setMailSubject(MessageСontent.ACTIVATE_MESSAGE_HR);
+        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getUserId() + "&confirm_token=" + user.getConfirmationToken());
+        send();
+        logger.info("Activation sent to HR with login -> {}", user.getLogin());
+    }
+
+    public void sendNotificationToHR(User user) throws MailSendException {
+        setMailSubject(MessageСontent.NOTIFICATION_MESSAGE_HR);
+        setMailBody(MessageСontent.NOTIFICATION_BODY);
+        send();
+        logger.info("Notification sent to HR with login -> {}", user.getLogin());
     }
 
     private void initializeMessage() throws MessagingException {

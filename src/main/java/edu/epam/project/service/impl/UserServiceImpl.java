@@ -10,12 +10,10 @@ import edu.epam.project.exception.ExceptionMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
 import edu.epam.project.util.Encrypter;
-import edu.epam.project.util.mail.ConfirmationToken;
 import edu.epam.project.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,7 +22,6 @@ public enum UserServiceImpl implements UserService {
     INSTANCE;
 
     private static final Logger logger = LogManager.getLogger();
-    public static final int EXPIRED_CONFIRMATION_TIME = 15;
     private static final UserDao userDao = new UsersDaoImpl();
 
 
@@ -40,7 +37,7 @@ public enum UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(Integer entityId) throws ServiceException {
-        Optional<User> foundUser = Optional.empty();
+        Optional<User> foundUser;
         try {
             foundUser = userDao.findById(entityId);
         } catch (DaoException e) {
@@ -53,8 +50,13 @@ public enum UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean update(User entity, Integer entityId) throws ServiceException {
-        return false;
+    public void update(User entity) throws ServiceException {
+        try {
+            userDao.update(entity);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
@@ -103,12 +105,12 @@ public enum UserServiceImpl implements UserService {
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
             throw new ServiceException(ExceptionMessage.REGISTER_FAIL_INPUT);
         }
-        if (!repeatPassword.equals(password)) {
-            throw new ServiceException(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
-        }
         try {
             if (userDao.existsLogin(login)) {
                 throw new ServiceException(ExceptionMessage.LOGIN_ALREADY_EXISTS);
+            }
+            if (!repeatPassword.equals(password)) {
+                throw new ServiceException(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
             }
             user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE) :
                     new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
@@ -119,26 +121,6 @@ public enum UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return user;
-    }
-
-    @Override
-    public boolean activateUser(User user, String confirmationToken) throws ServiceException {
-        boolean activateResult = false;
-        User tryActivateUser;
-        try {
-            Optional<User> foundUser = userDao.findUserByLogin(user.getLogin());
-            if (foundUser.isPresent() && confirmationToken.equals(user.getConfirmationToken())) {
-                tryActivateUser = foundUser.get();
-                tryActivateUser.setStatus(UserStatus.ACTIVE);
-                userDao.updateStatus(user);
-                activateResult = true;
-            }
-        } catch (DaoException e) {
-            logger.error(ExceptionMessage.DAO_CANT_ACTIVATE);
-            throw new ServiceException(e);
-        }
-        logger.info("User activate");
-        return activateResult;
     }
 
     @Override

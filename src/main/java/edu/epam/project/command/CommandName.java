@@ -1,6 +1,7 @@
 package edu.epam.project.command;
 
 import edu.epam.project.command.impl.*;
+import edu.epam.project.command.impl.admin.ActivateHRCommand;
 
 public enum CommandName {
 
@@ -8,7 +9,8 @@ public enum CommandName {
     LOG_OUT(new LogOutCommand()),
     CHANGE_LANGUAGE(new LanguageCommand()),
     REGISTER(new RegisterCommand()),
-    ACTIVATE(new ActivateCommand());
+    ACTIVATE(new ActivateCommand()),
+    ACTIVATE_HR(new ActivateHRCommand());
 
     private Command command;
 

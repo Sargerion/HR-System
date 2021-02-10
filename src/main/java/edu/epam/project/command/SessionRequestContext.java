@@ -40,7 +40,7 @@ public class SessionRequestContext {
     }
 
     public Optional<String> getRequestParameter(String key) {
-        if (requestParameters.isEmpty()) {
+        if (requestParameters.isEmpty() || !requestParameters.containsKey(key)) {
             return Optional.empty();
         }
         return Optional.of(requestParameters.get(key)[0]);

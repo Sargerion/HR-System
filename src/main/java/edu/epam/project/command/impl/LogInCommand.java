@@ -8,7 +8,6 @@ import edu.epam.project.command.TransitionType;
 import edu.epam.project.command.PathJsp;
 import edu.epam.project.command.SessionAttribute;
 import edu.epam.project.entity.User;
-import edu.epam.project.entity.UserStatus;
 import edu.epam.project.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
@@ -23,7 +22,7 @@ import java.util.Optional;
 public class LogInCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String EMPTY_LOGIN_PARAMETERS = "Empty sign up parameters";
+    private static final String EMPTY_LOGIN_PARAMETERS = "Empty login parameters";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
@@ -54,19 +53,19 @@ public class LogInCommand implements Command {
             UserType userType = user.getType();
             switch (userType) {
                 case ADMIN -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.ADMIN_TYPE);
+//                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.ADMIN_TYPE);
                     requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
                     logger.info("Admin with login -> {} entered", user.getLogin());
                 }
                 case COMPANY_HR -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.HR_TYPE);
+//                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.HR_TYPE);
                     requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
                     logger.info("Company HR with login -> {} entered", user.getLogin());
                 }
                 case FINDER -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.FINDER_TYPE);
+//                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.FINDER_TYPE);
                     requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
                     logger.info("Finder with login -> {} entered", user.getLogin());

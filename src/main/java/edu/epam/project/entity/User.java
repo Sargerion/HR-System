@@ -1,7 +1,5 @@
 package edu.epam.project.entity;
 
-import edu.epam.project.util.mail.ConfirmationToken;
-
 public class User extends Entity {
 
     private Integer userId;
