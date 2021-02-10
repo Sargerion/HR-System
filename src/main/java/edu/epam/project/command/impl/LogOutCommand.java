@@ -1,11 +1,15 @@
 package edu.epam.project.command.impl;
 
-import edu.epam.project.command.*;
+import edu.epam.project.command.Command;
+import edu.epam.project.command.CommandResult;
+import edu.epam.project.command.RequestParameter;
+import edu.epam.project.command.SessionRequestContext;
+import edu.epam.project.command.TransitionType;
+import edu.epam.project.command.PathJsp;
+
 import edu.epam.project.exception.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.servlet.http.HttpSession;
 
 public class LogOutCommand implements Command {
 
@@ -15,6 +19,6 @@ public class LogOutCommand implements Command {
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         String locale = requestContext.getLocale();
         requestContext.setRequestAttribute(RequestParameter.LOCALE, locale);
-        return new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
+        return new CommandResult(PathJsp.HOME_PAGE, TransitionType.REDIRECT);
     }
 }

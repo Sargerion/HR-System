@@ -36,5 +36,9 @@ public class Main {
 //                        resultSet.getString(6)+ "\n");
 //
 //        }
+
+
+        System.out.println("edu.epam.project.exception.ServiceException: Incorrect password".substring("edu.epam.project.exception.ServiceException: Incorrect password".indexOf(":") + 1));
+
     }
 }

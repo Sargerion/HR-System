@@ -1,6 +1,12 @@
 package edu.epam.project.command.impl;
 
-import edu.epam.project.command.*;
+import edu.epam.project.command.Command;
+import edu.epam.project.command.CommandResult;
+import edu.epam.project.command.RequestParameter;
+import edu.epam.project.command.SessionRequestContext;
+import edu.epam.project.command.TransitionType;
+import edu.epam.project.command.PathJsp;
+import edu.epam.project.command.SessionAttribute;
 import edu.epam.project.entity.User;
 import edu.epam.project.entity.UserStatus;
 import edu.epam.project.entity.UserType;
@@ -17,8 +23,7 @@ import java.util.Optional;
 public class LogInCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
-    private static final String ERROR_LOGIN_MESSAGE = "Incorrect login or password";
-    private static final String ERROR_STATUS_MESSAGE = "You account is not active";
+    private static final String EMPTY_LOGIN_PARAMETERS = "Empty sign up parameters";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
@@ -28,7 +33,7 @@ public class LogInCommand implements Command {
         String getLogin;
         String getPassword;
         if (login.isEmpty() || password.isEmpty()) {
-            throw new CommandException("Empty sign up parameters");
+            throw new CommandException(EMPTY_LOGIN_PARAMETERS);
         } else {
             getLogin = login.get();
             getPassword = password.get();
@@ -38,44 +43,35 @@ public class LogInCommand implements Command {
         try {
             optionalUser = userService.loginUser(getLogin, getPassword);
         } catch (ServiceException e) {
-            requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_STATUS_MESSAGE);
+            String exception = e.toString();
+            exception = exception.substring(exception.indexOf(":") + 1);
+            requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, exception);
             commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
+            logger.error(e);
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getStatus() != UserStatus.BLOCKED) {
-                UserType userType = user.getType();
-                switch (userType) {
-                    case ADMIN -> {
-                        requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.ADMIN_TYPE);
-                        requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                        commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
-                        //comanres
-                    }
-                    case COMPANY_HR -> {
-                        requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.HR_TYPE);
-                        requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                        commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);//TODO:ИЗМЕНИТЬ СТРАНИЦУ
-                        //comanres
-                    }
-                    case FINDER -> {
-                        requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.FINDER_TYPE);
-                        requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                        commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
-                        //comanres
-                    }
-                    default -> {
-                        logger.error("Incorrect role");
-                        throw new CommandException("Incorrect role");
-                    }
+            UserType userType = user.getType();
+            switch (userType) {
+                case ADMIN -> {
+                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.ADMIN_TYPE);
+                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
+                    commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
+                    logger.info("Admin with login -> {} entered", user.getLogin());
                 }
-            } else {
-                requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_STATUS_MESSAGE);
-                commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
+                case COMPANY_HR -> {
+                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.HR_TYPE);
+                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
+                    commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
+                    logger.info("Company HR with login -> {} entered", user.getLogin());
+                }
+                case FINDER -> {
+                    requestContext.setSessionAttribute(SessionAttribute.USER_TYPE, SessionAttribute.FINDER_TYPE);
+                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
+                    commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
+                    logger.info("Finder with login -> {} entered", user.getLogin());
+                }
             }
-        } else {
-            requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, ERROR_LOGIN_MESSAGE);
-            commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
         }
         return commandResult;
     }

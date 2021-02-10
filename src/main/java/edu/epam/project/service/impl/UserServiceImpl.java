@@ -6,6 +6,7 @@ import edu.epam.project.entity.User;
 import edu.epam.project.entity.UserStatus;
 import edu.epam.project.entity.UserType;
 import edu.epam.project.exception.DaoException;
+import edu.epam.project.exception.ExceptionMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
 import edu.epam.project.util.Encrypter;
@@ -71,24 +72,24 @@ public enum UserServiceImpl implements UserService {
         Optional<User> foundUser = Optional.empty();
         Optional<String> userDbPassword;
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password)) {
-            throw new ServiceException("Invalid login or password");
+            throw new ServiceException(ExceptionMessage.INVALID_LOGIN_OR_PASSWORD);
         }
         try {
             if (userDao.existsLogin(login)) {
-                if(userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
+                if (userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
                     userDbPassword = userDao.findUserPasswordByLogin(login);
                     if (userDbPassword.isPresent()) {
                         if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
                             foundUser = userDao.findUserByLogin(login);
                         } else {
-                            throw new ServiceException("Incorrect password");
+                            throw new ServiceException(ExceptionMessage.INCORRECT_PASSWORD);
                         }
                     }
                 } else {
-                    throw new ServiceException("Account is not active");
+                    throw new ServiceException(ExceptionMessage.NOT_ACTIVE_ACCOUNT);
                 }
             } else {
-                throw new ServiceException("No such login");
+                throw new ServiceException(ExceptionMessage.NO_LOGIN);
             }
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -100,14 +101,14 @@ public enum UserServiceImpl implements UserService {
     public Optional<User> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
         Optional<User> user;
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
-            throw new ServiceException("Invalid login or password or email, check template");
+            throw new ServiceException(ExceptionMessage.REGISTER_FAIL_INPUT);
         }
         if (!repeatPassword.equals(password)) {
-            throw new ServiceException("Repeat password is different");
+            throw new ServiceException(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
         }
         try {
             if (userDao.existsLogin(login)) {
-                throw new ServiceException("Login has already existed");
+                throw new ServiceException(ExceptionMessage.LOGIN_ALREADY_EXISTS);
             }
             user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE) :
                     new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
@@ -133,7 +134,7 @@ public enum UserServiceImpl implements UserService {
                 activateResult = true;
             }
         } catch (DaoException e) {
-            logger.error("Can't activate user");
+            logger.error(ExceptionMessage.DAO_CANT_ACTIVATE);
             throw new ServiceException(e);
         }
         logger.info("User activate");
