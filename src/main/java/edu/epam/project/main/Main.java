@@ -1,5 +1,6 @@
 package edu.epam.project.main;
 
+import edu.epam.project.entity.UserType;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.pool.ConnectionPool;
 import org.intellij.lang.annotations.Language;
@@ -39,5 +40,6 @@ public class Main {
 
 
 //        System.out.println("edu.epam.project.exception.ServiceException: Incorrect password".substring("edu.epam.project.exception.ServiceException: Incorrect password".indexOf(":") + 1));
+
     }
 }
