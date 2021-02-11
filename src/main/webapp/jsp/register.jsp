@@ -16,7 +16,7 @@
     <nav>
         <div class="logo"><fmt:message key="logo"/></div>
         <ul>
-            <li><a href="#"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a href="#">
                 <ul>
@@ -24,7 +24,7 @@
                 </ul>
             </li>
             <li>
-                <a href="#" >Services</a>
+                <a href="#" ><fmt:message key="service"/></a>
                 <ul>
                     <li><a href="#" >Something</a></li>
                     <li>

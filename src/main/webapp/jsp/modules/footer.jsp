@@ -11,6 +11,9 @@
     <div class=" page-footer_center">
         <p class="copyright"><fmt:message key="copyright"/></p>
     </div>
+    <div style="margin: 35px 35px 35px 0.9cm;">
+        <%@include file="/images/svg/icon-email.svg"%>
+    </div>
     <a class="page-footer-email" href="mailto:sergey.galyan16@gmail.com"><fmt:message key="contact_email"/></a>
 </footer>
 </body>

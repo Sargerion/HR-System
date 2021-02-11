@@ -18,17 +18,17 @@
         <h2 class="logo" style="font-size: 19px; "><fmt:message key="login_placeholder"/>:${sessionScope.user.getLogin()}</h2>
         <h2 class="logo" style="font-size: 19px;"><fmt:message key="user_role"/>:${sessionScope.user.getType()}</h2>
         <ul>
-            <li><a href="#"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a href="#">
                 <ul>
-                    <li><c:import url="modules/locale.jsp"/></li>
+                    <li><c:import url="/jsp/modules/locale.jsp"/></li>
                 </ul>
             </li>
             <li>
-                <a href="#" class="delim">Services</a>
+                <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="#" >Something</a></li>
+                    <li><a href="#" ><fmt:message key="see_hrs"/></a></li>
                     <li>
                         <a href="#">More<span class="picture"></span></a>
                         <ul>
@@ -48,6 +48,6 @@
         </ul>
     </nav>
 </header>
-<c:import url="modules/footer.jsp"/>
+<c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

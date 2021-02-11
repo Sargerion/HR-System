@@ -4,10 +4,6 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-/*.picture{*/
-/*  background-image: url("../plus.svg");*/
-/*  background: white;*/
-/*}*/
 body{
     background: #f2f2f2;
 }
@@ -133,8 +129,4 @@ p.copyright {
     background-repeat: no-repeat;
     background-position: left;
     bottom:12px;
-}
-.page-footer-email {
-    padding-left: 25px;
-    background-image: url("/images/svg/icon-email.svg");
 }

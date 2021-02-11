@@ -11,12 +11,14 @@
 </head>
 <body>
 <div class="container">
-    <form name="logInForm" method="post" action="<c:url value="/controller"/>">
+    <form style="position:relative;" name="logInForm" method="post" action="<c:url value="/controller"/>">
         <input type="hidden" name="command" value="log_in">
         <h1><fmt:message key="login_page"/></h1>
+        <h5><fmt:message key="login_needs"/></h5>
         <div class="form-group">
             <input type="text" name="login" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>">
         </div>
+        <h5><fmt:message key="password_needs"/></h5>
         <div class="form-group">
             <input type="password" name="password" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="password_placeholder"/>">
         </div>

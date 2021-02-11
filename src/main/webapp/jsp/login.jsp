@@ -16,7 +16,7 @@
     <nav>
         <div class="logo"><fmt:message key="logo"/></div>
         <ul>
-            <li><a href="#"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a href="#">
                 <ul>
@@ -24,9 +24,9 @@
                 </ul>
             </li>
             <li>
-                <a href="#" >Services</a>
+                <a href="#" ><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="#" >Something</a></li>
+                    <li><a href="#" ></a></li>
                     <li>
                         <a href="#">More<span class="picture"></span></a>
                         <ul>
@@ -43,6 +43,9 @@
     </nav>
 </header>
 <c:import url="modules/loginForm.jsp"/>
+<div style="display:flex;align-items:center;justify-content: center;margin:55px;position: sticky;">
+    <%@include file="/images/svg/hr_system.svg"%>
+</div>
 <c:import url="modules/footer.jsp"/>
 </body>
 </html>
