@@ -61,7 +61,6 @@ public class UsersDaoImpl extends UserDao {
     private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses " +
             "ON users.user_status_id = user_statuses.user_status_id WHERE user_login = ?;";
 
-
     @Override
     public boolean add(User entity) throws DaoException {
         throw new UnsupportedOperationException("You can't add user in UsersDaoImpl by this way");
@@ -86,6 +85,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             user.setUserId(resultSet.getInt(1));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return Optional.of(user);
@@ -101,13 +101,14 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             foundToken = Optional.ofNullable(resultSet.getString(UsersColumn.CONFIRMATION_TOKEN));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return foundToken;
     }
 
     @Override
-    public boolean exists(Integer userId) throws DaoException {
+    public boolean existId(Integer userId) throws DaoException {
         boolean isExist;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(CONTAINS_USER_ID)) {
@@ -116,6 +117,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             isExist = resultSet.getInt(1) != 0;
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return isExist;
@@ -137,6 +139,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             foundPassword = Optional.ofNullable(resultSet.getString(UsersColumn.PASSWORD));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return foundPassword;
@@ -152,6 +155,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             checkingUser = Optional.ofNullable(userBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return checkingUser;
@@ -167,6 +171,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return userStatus;
@@ -182,6 +187,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             foundUser = Optional.ofNullable(userBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return foundUser;
@@ -221,6 +227,7 @@ public class UsersDaoImpl extends UserDao {
             preparedStatement.setString(6, user.getLogin());
             preparedStatement.executeUpdate();
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
     }
@@ -243,6 +250,7 @@ public class UsersDaoImpl extends UserDao {
             preparedStatement.setString(2, user.getLogin());
             preparedStatement.executeUpdate();
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
     }
@@ -266,6 +274,7 @@ public class UsersDaoImpl extends UserDao {
             resultSet.next();
             result = resultSet.getInt(1) != 0;
         } catch (ConnectionException | SQLException e) {
+            logger.error(e);
             throw new DaoException(e);
         }
         return result;

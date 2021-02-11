@@ -59,13 +59,12 @@ public class RegisterCommand implements Command {
         }
         try {
             if (optionalUser.isPresent()) {
+                MailSender mailSender = new MailSender(optionalUser.get().getEmail());
                 if (isHR.isEmpty()) {
-                    MailSender mailSender = new MailSender(optionalUser.get().getEmail());
                     mailSender.sendActivationFinder(optionalUser.get());
                     commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
                     requestContext.setRequestAttribute(RequestParameter.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
                 } else {
-                    MailSender mailSender = new MailSender(optionalUser.get().getEmail());
                     mailSender.sendNotificationToHR(optionalUser.get());
                     commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
                     requestContext.setRequestAttribute(RequestParameter.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);

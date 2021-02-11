@@ -19,6 +19,7 @@ public class LogOutCommand implements Command {
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         String locale = requestContext.getLocale();
         requestContext.setRequestAttribute(RequestParameter.LOCALE, locale);
+        logger.info("Exit from account");
         return new CommandResult(PathJsp.HOME_PAGE, TransitionType.REDIRECT);
     }
 }

@@ -20,7 +20,7 @@ public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger();
     private static ConnectionPool instance;
     private static final AtomicBoolean isInit = new AtomicBoolean(true);
-    private static final int DEFAULT_POOL_SIZE = 16;
+    private static final int DEFAULT_POOL_SIZE = 8;
     private static final Lock lock_instance = new ReentrantLock();
     private final Lock lock_connection = new ReentrantLock();
     private final BlockingQueue<ProxyConnection> freeConnections;
@@ -45,7 +45,6 @@ public class ConnectionPool {
     }
 
     private void initializePool() {
-        //todo доработать обработку ошибок
         ConnectionBuilder connectionBuilder = new ConnectionBuilder();
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             ProxyConnection proxyConnection;

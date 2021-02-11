@@ -10,7 +10,7 @@ public class PathJsp {
     public static final String FINDER_PAGE = "/jsp/welcomeFinder.jsp";
     public static final String ERROR_404_PAGE = "/jsp/error/404.jsp";
     public static final String ERROR_500_PAGE = "/jsp/error/500.jsp";
-    public static final String ERROR_MESSAGE_PART = "/jsp/error/error_parts/error_part.jsp";
+
     private PathJsp() {
 
     }

@@ -16,7 +16,7 @@ public abstract class UserDao extends AbstractDao<Integer, User> {
 
     public abstract void updateStatus(User user) throws DaoException;
 
-    public abstract boolean exists(Integer userId) throws DaoException;
+    public abstract boolean existId(Integer userId) throws DaoException;
 
     public abstract boolean existsLogin(String userLogin) throws DaoException;
 

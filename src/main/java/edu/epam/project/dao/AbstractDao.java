@@ -1,6 +1,5 @@
 package edu.epam.project.dao;
 
-import edu.epam.project.builder.EntityBuilder;
 import edu.epam.project.entity.Entity;
 import edu.epam.project.exception.DaoException;
 
@@ -45,5 +44,5 @@ public abstract class AbstractDao<K, T extends Entity> implements AutoCloseable 
                 throw new DaoException(e);
             }
         }
-    }//todo спросить
+    }
 }

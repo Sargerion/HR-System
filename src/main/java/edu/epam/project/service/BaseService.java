@@ -1,7 +1,6 @@
 package edu.epam.project.service;
 
 import edu.epam.project.entity.Entity;
-import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
 
 import java.util.List;
