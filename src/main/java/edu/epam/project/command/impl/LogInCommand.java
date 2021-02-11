@@ -51,19 +51,17 @@ public class LogInCommand implements Command {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             UserType userType = user.getType();
+            requestContext.setSessionAttribute(SessionAttribute.USER, user);
             switch (userType) {
                 case ADMIN -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
                     logger.info("Admin with login -> {} entered", user.getLogin());
                 }
                 case COMPANY_HR -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
                     logger.info("Company HR with login -> {} entered", user.getLogin());
                 }
                 case FINDER -> {
-                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
                     commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
                     logger.info("Finder with login -> {} entered", user.getLogin());
                 }
