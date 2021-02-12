@@ -22,7 +22,7 @@ public class ConnectionPool {
     private static final AtomicBoolean isPoolInitialize = new AtomicBoolean(true);
     private static final int MAX_POOL_SIZE = 8;
     private static final int MIN_POOL_SIZE = 2;
-    private static final int RETURN_CONNECTION_PERIOD_MINUTES = 5;
+    private static final int RETURN_CONNECTION_PERIOD_MINUTES = 4;
     private static final int VALUE_TO_DOWNSIZE_POOL = 150;
     private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
     private static final Lock lock_instance = new ReentrantLock();
@@ -53,6 +53,7 @@ public class ConnectionPool {
 
     public Connection getConnection() throws ConnectionException {
         ProxyConnection proxyConnection = null;
+        logger.debug("getting connection started");
         if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
             try {
                 lock_connection.lock();
@@ -72,6 +73,7 @@ public class ConnectionPool {
                 givenAwayConnections.offer(nextProxyConnection);
                 proxyConnection = nextProxyConnection;
                 logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
+                logger.info("Connection cteated");
             } finally {
                 lock_connection.unlock();
             }

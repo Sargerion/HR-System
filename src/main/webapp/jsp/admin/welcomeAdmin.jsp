@@ -18,7 +18,7 @@
         <h2 class="logo" style="font-size: 19px; "><fmt:message key="login_placeholder"/>:${sessionScope.user.getLogin()}</h2>
         <h2 class="logo" style="font-size: 19px;"><fmt:message key="user_role"/>:${sessionScope.user.getType()}</h2>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/admin/welcomeAdmin.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a href="#">
                 <ul>
