@@ -13,9 +13,8 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public enum UserBuilder implements EntityBuilder<User> {
+public class UserBuilder implements EntityBuilder<User> {
 
-    INSTANCE;
     private static final Logger logger = LogManager.getLogger();
 
     @Override
@@ -25,6 +24,7 @@ public enum UserBuilder implements EntityBuilder<User> {
         String userEmail = resultSet.getString(UsersColumn.EMAIL);
         UserType userType = UserType.valueOf(resultSet.getString(UserTypesColumn.NAME));
         UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
-        return new User(userId, userLogin, userEmail, userType, userStatus);
+        String confirmationToken = resultSet.getString(UsersColumn.CONFIRMATION_TOKEN);
+        return new User(userId, userLogin, userEmail, userType, userStatus, confirmationToken);
     }
 }

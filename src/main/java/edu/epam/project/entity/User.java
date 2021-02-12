@@ -2,7 +2,6 @@ package edu.epam.project.entity;
 
 public class User extends Entity {
 
-    private Integer userId;
     public String login;
     private String email;
     private UserType type;
@@ -10,23 +9,23 @@ public class User extends Entity {
     private String confirmationToken;
 
     public User() {
-
     }
 
     public User(Integer userId, String login, String email, UserType type, UserStatus status) {
-        this.userId = userId;
+        super(userId);
         this.login = login;
         this.email = email;
         this.type = type;
         this.status = status;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public User(Integer userId, String login, String email, UserType type, UserStatus status, String confirmationToken) {
+        super(userId);
+        this.login = login;
+        this.email = email;
+        this.type = type;
+        this.status = status;
+        this.confirmationToken = confirmationToken;
     }
 
     public String getLogin() {
@@ -77,14 +76,17 @@ public class User extends Entity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         User user = (User) o;
-        return userId.equals(user.userId) && login.equals(user.login) &&
+        return login.equals(user.login) &&
                 email.equals(user.email) && type == user.type && status == user.status;
     }
 
     @Override
     public int hashCode() {
-        int result = (userId != null ? userId.hashCode() : 0);
+        int result = super.hashCode();
         result = 31 * result +
                 (login != null ? login.hashCode() : 0) +
                 (email != null ? email.hashCode() : 0) +
@@ -96,7 +98,7 @@ public class User extends Entity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
-        sb.append("userId=").append(userId);
+        sb.append(super.toString());
         sb.append(", login='").append(login).append('\'');
         sb.append(", email='").append(email).append('\'');
         sb.append(", type=").append(type);

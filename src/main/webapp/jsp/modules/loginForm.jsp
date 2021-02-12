@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<fmt:setLocale value="${not empty sessionScope.locale ? sessionScope.locale : 'ru_RU'}" scope="session"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
 
 <html>
@@ -22,7 +22,7 @@
         <div class="form-group">
             <input type="password" name="password" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="password_placeholder"/>">
         </div>
-        <input type="submit" class="btn" value=<fmt:message key="login"/>>
+        <input type="submit" class="btn" value="<fmt:message key="login"/>">
         <br/>
         <c:import url="/jsp/modules/part/message_part.jsp"/>
         <br/>

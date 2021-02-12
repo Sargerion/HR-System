@@ -1,4 +1,4 @@
-package edu.epam.project.util.mail;
+package edu.epam.project.service.impl.mail;
 
 public class MessageСontent {
 

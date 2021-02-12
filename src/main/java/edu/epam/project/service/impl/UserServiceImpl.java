@@ -14,16 +14,20 @@ import edu.epam.project.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
-public enum UserServiceImpl implements UserService {
-    INSTANCE;
+public class UserServiceImpl implements UserService {
 
+    private static final UserServiceImpl instance = new UserServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final UserDao userDao = new UsersDaoImpl();
+    private final UserDao userDao = UsersDaoImpl.getInstance();
 
+    private UserServiceImpl() {
+    }
+
+    public static UserServiceImpl getInstance() {
+        return instance;
+    }
 
     @Override
     public boolean add(User entity) throws ServiceException {
@@ -48,7 +52,6 @@ public enum UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public void update(User entity) throws ServiceException {
         try {
@@ -70,11 +73,13 @@ public enum UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> loginUser(String login, String password) throws ServiceException {
+    public Map<Optional<User>, Optional<String>> loginUser(String login, String password) throws ServiceException {
         Optional<User> foundUser = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Map<Optional<User>, Optional<String>> loginResult = new HashMap<>();
         Optional<String> userDbPassword;
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password)) {
-            throw new ServiceException(ExceptionMessage.INVALID_LOGIN_OR_PASSWORD);
+            errorMessage = Optional.of(ExceptionMessage.INVALID_LOGIN_OR_PASSWORD);
         }
         try {
             if (userDao.existsLogin(login)) {
@@ -84,54 +89,46 @@ public enum UserServiceImpl implements UserService {
                         if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
                             foundUser = userDao.findUserByLogin(login);
                         } else {
-                            throw new ServiceException(ExceptionMessage.INCORRECT_PASSWORD);
+                            errorMessage = Optional.of(ExceptionMessage.INCORRECT_PASSWORD);
                         }
                     }
                 } else {
-                    throw new ServiceException(ExceptionMessage.NOT_ACTIVE_ACCOUNT);
+                    errorMessage = Optional.of(ExceptionMessage.NOT_ACTIVE_ACCOUNT);
                 }
             } else {
-                throw new ServiceException(ExceptionMessage.NO_LOGIN);
+                errorMessage = Optional.of(ExceptionMessage.NO_LOGIN);
             }
+            loginResult.put(foundUser, errorMessage);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return foundUser;
+        return loginResult;
     }
 
     @Override
-    public Optional<User> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
-        Optional<User> user;
+    public Map<Optional<User>, Optional<String>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
+        Optional<User> user = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Map<Optional<User>, Optional<String>> registerResult = new HashMap<>();
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
-            throw new ServiceException(ExceptionMessage.REGISTER_FAIL_INPUT);
+            errorMessage = Optional.of(ExceptionMessage.REGISTER_FAIL_INPUT);
         }
         try {
             if (userDao.existsLogin(login)) {
-                throw new ServiceException(ExceptionMessage.LOGIN_ALREADY_EXISTS);
+                errorMessage = Optional.of(ExceptionMessage.LOGIN_ALREADY_EXISTS);
+            } else if (!repeatPassword.equals(password)) {
+                errorMessage = Optional.of(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
+            } else {
+                user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
+                        : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
+                String encryptedPassword = Encrypter.encryptPassword(password);
+                user.get().setConfirmationToken(UUID.randomUUID().toString());
+                userDao.addUser(user.get(), encryptedPassword);
             }
-            if (!repeatPassword.equals(password)) {
-                throw new ServiceException(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
-            }
-            user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE) :
-                    new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
-            String encryptedPassword = Encrypter.encryptPassword(password);
-            user.get().setConfirmationToken(UUID.randomUUID().toString());
-            userDao.addUser(user.get(), encryptedPassword);
+            registerResult.put(user, errorMessage);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return user;
-    }
-
-    @Override
-    public Optional<String> findUserActivateTokenById(Integer id) throws ServiceException {
-        Optional<String> foundToken;
-        try {
-            foundToken = userDao.findUserActivateTokenById(id);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return foundToken;
+        return registerResult;
     }
 }

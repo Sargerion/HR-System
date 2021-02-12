@@ -16,12 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public enum AdminServiceImpl implements AdminService {
-    INSTANCE;
+public class AdminServiceImpl implements AdminService {
 
+    private static final AdminServiceImpl instance = new AdminServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final UserDao userDao = new UsersDaoImpl();
-    private static final AdminDao adminDao = new AdminDaoImpl();
+    private final UserDao userDao = UsersDaoImpl.getInstance();
+    private final AdminDao adminDao = AdminDaoImpl.getInstance();
+
+    private AdminServiceImpl() {
+    }
+
+    public static AdminServiceImpl getInstance() {
+        return instance;
+    }
 
     @Override
     public boolean activateHR(User user) throws ServiceException {

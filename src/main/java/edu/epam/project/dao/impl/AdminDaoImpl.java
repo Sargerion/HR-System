@@ -21,10 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AdminDaoImpl extends AdminDao {
+public class AdminDaoImpl implements AdminDao {
 
+    private static final AdminDaoImpl instance = new AdminDaoImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final EntityBuilder<User> userBuilder = UserBuilder.INSTANCE;
+    private static final EntityBuilder<User> userBuilder = new UserBuilder();
+
+    private AdminDaoImpl() {
+    }
+
+    public static AdminDaoImpl getInstance() {
+        return instance;
+    }
 
     @Language("SQL")
     private static final String SELECT_NOT_ACTIVE_HR_LIST = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, " +

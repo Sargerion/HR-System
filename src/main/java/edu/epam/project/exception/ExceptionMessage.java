@@ -9,7 +9,7 @@ public class ExceptionMessage {
     public static final String REGISTER_FAIL_INPUT = "Invalid login or password or email, check template";
     public static final String REGISTER_DIFFERENT_PASSWORDS = "Repeat password is different";
     public static final String LOGIN_ALREADY_EXISTS = "Login has already existed";
-    public static final String DAO_CANT_ACTIVATE = "Can't activate user";
+    public static final String ERROR_SECOND_TRANSIT_BY_LINK = "You've already active, you can just login";
 
     private ExceptionMessage() {
 

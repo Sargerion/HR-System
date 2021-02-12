@@ -2,6 +2,7 @@ package edu.epam.project.controller;
 
 import edu.epam.project.command.*;
 import edu.epam.project.exception.CommandException;
+import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,11 +42,11 @@ public class Controller extends HttpServlet {
             logger.error(e);
             throw new ServletException(e);
         }
-        requestContext.insertAttributes(request);
         logger.info(commandResult.toString());
         if(request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
             request.getSession().invalidate();
         }
+        requestContext.insertAttributes(request);
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {
             RequestDispatcher dispatcher = request.getRequestDispatcher(commandResult.getPage());
             dispatcher.forward(request, response);
@@ -57,6 +58,10 @@ public class Controller extends HttpServlet {
     @Override
     public void destroy() {
         super.destroy();
-        ConnectionPool.getInstance().destroyPool();
+        try {
+            ConnectionPool.getInstance().destroyPool();
+        } catch (ConnectionException e) {
+            logger.error(e);
+        }
     }
 }

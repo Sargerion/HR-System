@@ -17,8 +17,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
 
-    private static final Logger logger = LogManager.getLogger();
     private static ConnectionPool instance;
+    private static final Logger logger = LogManager.getLogger();
     private static final AtomicBoolean isInit = new AtomicBoolean(true);
     private static final int DEFAULT_POOL_SIZE = 8;
     private static final Lock lock_instance = new ReentrantLock();
@@ -58,14 +58,13 @@ public class ConnectionPool {
     }
 
     public Connection getConnection() throws ConnectionException {
-        ProxyConnection proxyConnection;
+        ProxyConnection proxyConnection = null;
         try {
             lock_connection.lock();
             proxyConnection = freeConnections.take();
             givenAwayConnections.offer(proxyConnection);
         } catch (InterruptedException e) {
             logger.error(e);
-            throw new ConnectionException(e);
         } finally {
             lock_connection.unlock();
         }
@@ -88,11 +87,14 @@ public class ConnectionPool {
         }
     }
 
-    public void destroyPool() {
+    public void destroyPool() throws ConnectionException {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
                 freeConnections.take().realClose();
-            } catch (SQLException | InterruptedException e) {
+            } catch (SQLException e) {
+                logger.error(e);
+                throw new ConnectionException(e);
+            } catch (InterruptedException e) {
                 logger.error(e);
             }
         }

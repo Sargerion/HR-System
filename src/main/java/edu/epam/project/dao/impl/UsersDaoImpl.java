@@ -20,10 +20,18 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-public class UsersDaoImpl extends UserDao {
+public class UsersDaoImpl implements UserDao {
 
+    private static final UsersDaoImpl instance = new UsersDaoImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final EntityBuilder<User> userBuilder = UserBuilder.INSTANCE;
+    private static final EntityBuilder<User> userBuilder = new UserBuilder();
+
+    private UsersDaoImpl() {
+    }
+
+    public static UsersDaoImpl getInstance() {
+        return instance;
+    }
 
     @Language("SQL")
     private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
@@ -36,16 +44,13 @@ public class UsersDaoImpl extends UserDao {
 
     @Language("SQL")
     private static final String SELECT_USER_BY_LOGIN = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, " +
-            "US.user_status_name FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
+            "US.user_status_name, U.confirmation_token FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
             "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE U.user_login = ?;";
 
     @Language("SQL")
     private static final String SELECT_USER_BY_ID = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, " +
-            "US.user_status_name FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
+            "US.user_status_name, U.confirmation_token FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
             "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE U.user_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_USER_TOKEN = "SELECT confirmation_token FROM users WHERE user_id=?;";
 
     @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO users (user_login, user_password, user_email, user_type_id, user_status_id, confirmation_token) " +
@@ -83,28 +88,12 @@ public class UsersDaoImpl extends UserDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
-            user.setUserId(resultSet.getInt(1));
+            user.setEntityId((resultSet.getInt(1)));
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
         return Optional.of(user);
-    }
-
-    @Override
-    public Optional<String> findUserActivateTokenById(Integer id) throws DaoException {
-        Optional<String> foundToken;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_TOKEN)) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            foundToken = Optional.ofNullable(resultSet.getString(UsersColumn.CONFIRMATION_TOKEN));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return foundToken;
     }
 
     @Override

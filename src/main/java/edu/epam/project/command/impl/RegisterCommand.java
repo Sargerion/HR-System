@@ -2,17 +2,17 @@ package edu.epam.project.command.impl;
 
 import edu.epam.project.command.*;
 import edu.epam.project.entity.User;
-import edu.epam.project.entity.UserType;
 import edu.epam.project.exception.CommandException;
 
 import edu.epam.project.exception.MailSendException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
 import edu.epam.project.service.impl.UserServiceImpl;
-import edu.epam.project.util.mail.MailSender;
+import edu.epam.project.service.impl.mail.MailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
 import java.util.Optional;
 
 public class RegisterCommand implements Command {
@@ -24,7 +24,7 @@ public class RegisterCommand implements Command {
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        UserService userService = UserServiceImpl.INSTANCE;
+        UserService userService = UserServiceImpl.getInstance();
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
         Optional<String> repeatPassword = requestContext.getRequestParameter(RequestParameter.REPEAT_PASSWORD);
@@ -44,33 +44,35 @@ public class RegisterCommand implements Command {
         }
         CommandResult commandResult = null;
         Optional<User> optionalUser = Optional.empty();
+        Optional<String> optionalErrorMessage = Optional.empty();
+        Map<Optional<User>, Optional<String>> registerResult;
         try {
             if (isHR.isPresent()) {
-                optionalUser = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, IS_HR);
+                registerResult = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, IS_HR);
             } else {
-                optionalUser = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, NOT_HR);
+                registerResult = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, NOT_HR);
             }
-        } catch (ServiceException e) {
-            String exception = e.toString();
-            exception = exception.substring(exception.indexOf(":") + 1);
-            requestContext.setRequestAttribute(RequestParameter.ERROR_MESSAGE, exception);
-            commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
-            logger.error(e);
-        }
-        try {
+            for (Map.Entry<Optional<User>, Optional<String>> entry : registerResult.entrySet()) {
+                optionalUser = entry.getKey();
+                optionalErrorMessage = entry.getValue();
+            }
             if (optionalUser.isPresent()) {
-                MailSender mailSender = new MailSender(optionalUser.get().getEmail());
+                MailSender mailSender = MailSender.getInstance();
                 if (isHR.isEmpty()) {
                     mailSender.sendActivationFinder(optionalUser.get());
-                    commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
-                    requestContext.setRequestAttribute(RequestParameter.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
+                    requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
                 } else {
                     mailSender.sendNotificationToHR(optionalUser.get());
-                    commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
-                    requestContext.setRequestAttribute(RequestParameter.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
+                    requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
                 }
+                commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
             }
-        } catch (MailSendException e) {
+            if (optionalErrorMessage.isPresent()) {
+                requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
+                commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
+            }
+        } catch (ServiceException | MailSendException e) {
+            logger.error(e);
             throw new CommandException(e);
         }
         return commandResult;

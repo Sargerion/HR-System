@@ -1,4 +1,4 @@
-package edu.epam.project.util.mail;
+package edu.epam.project.service.impl.mail;
 
 import edu.epam.project.entity.User;
 import edu.epam.project.exception.MailSendException;
@@ -14,42 +14,33 @@ import javax.mail.internet.MimeMessage;
 
 public class MailSender {
 
+    private static final MailSender instance = new MailSender();
     private static final Logger logger = LogManager.getLogger();
-
     private MimeMessage mimeMessage;
     private String sendToEmail;
     private String mailSubject;
     private String mailBody;
 
-    public MailSender(String sendToEmail) {
-        this.sendToEmail = sendToEmail;
+    private MailSender() {
+
     }
 
-    public MailSender(String sendToEmail, String mailSubject, String mailBody) {
-        this.sendToEmail = sendToEmail;
-        this.mailSubject = mailSubject;
-        this.mailBody = mailBody;
-    }
-
-    public void send() throws MailSendException {
-        try {
-            initializeMessage();
-            Transport.send(mimeMessage);
-        } catch (MessagingException e) {
-            throw new MailSendException(e);
-        }
+    public static MailSender getInstance() {
+        return instance;
     }
 
     public void sendActivationFinder(User user) throws MailSendException {
+        setSendToEmail(user.getEmail());
         setMailSubject(MessageСontent.ACTIVATE_MESSAGE_FINDER);
-        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getUserId() + "&confirm_token=" + user.getConfirmationToken());
+        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
         send();
         logger.info("Activation sent to finder with login -> {}", user.getLogin());
     }
 
     public void sendActivationHR(User user) throws MailSendException {
+        setSendToEmail(user.getEmail());
         setMailSubject(MessageСontent.ACTIVATE_MESSAGE_HR);
-        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getUserId() + "&confirm_token=" + user.getConfirmationToken());
+        setMailBody(MessageСontent.ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
         send();
         logger.info("Activation sent to HR with login -> {}", user.getLogin());
     }
@@ -85,5 +76,22 @@ public class MailSender {
 
     public void setMailBody(String mailBody) {
         this.mailBody = mailBody;
+    }
+
+    public String getSendToEmail() {
+        return sendToEmail;
+    }
+
+    public void setSendToEmail(String sendToEmail) {
+        this.sendToEmail = sendToEmail;
+    }
+
+    private void send() throws MailSendException {
+        try {
+            initializeMessage();
+            Transport.send(mimeMessage);
+        } catch (MessagingException e) {
+            throw new MailSendException(e);
+        }
     }
 }
