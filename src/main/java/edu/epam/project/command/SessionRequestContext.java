@@ -23,7 +23,7 @@ public class SessionRequestContext {
 
     public void insertAttributes(HttpServletRequest request) {
         requestAttributes.forEach(request::setAttribute);
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         sessionAttributes.forEach(session::setAttribute);
     }
 
@@ -74,7 +74,7 @@ public class SessionRequestContext {
 
     private Map<String, Object> extractSessionAttributes(HttpServletRequest request) {
         Map<String, Object> attributes = new HashMap<>();
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Enumeration<String> attributeNames = session.getAttributeNames();
         while (attributeNames.hasMoreElements()) {
             String name = attributeNames.nextElement();
@@ -84,7 +84,7 @@ public class SessionRequestContext {
     }
 
     private String extractLocale(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         String currentLocale = (String) session.getAttribute(SessionAttribute.LOCALE);
         return currentLocale != null ? currentLocale : "ru_RU";
     }
