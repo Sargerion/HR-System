@@ -25,8 +25,8 @@ public class ConnectionPool {
     private static final int RETURN_CONNECTION_PERIOD_MINUTES = 4;
     private static final int VALUE_TO_DOWNSIZE_POOL = 150;
     private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
-    private static final Lock lock_instance = new ReentrantLock();
-    private final Lock lock_connection = new ReentrantLock();
+    private static final Lock lockInstance = new ReentrantLock();
+    private final Lock lockConnection = new ReentrantLock();
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
     private final ConnectionBuilder connectionBuilder = new ConnectionBuilder();
@@ -41,12 +41,12 @@ public class ConnectionPool {
 
     public static ConnectionPool getInstance() {
         if (isPoolInitialize.get()) {
-            lock_instance.lock();
+            lockInstance.lock();
             if (instance == null) {
                 instance = new ConnectionPool();
                 isPoolInitialize.set(false);
             }
-            lock_instance.unlock();
+            lockInstance.unlock();
         }
         return instance;
     }
@@ -55,26 +55,26 @@ public class ConnectionPool {
         ProxyConnection proxyConnection = null;
         if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
             try {
-                lock_connection.lock();
+                lockConnection.lock();
                 proxyConnection = freeConnections.take();
                 givenAwayConnections.offer(proxyConnection);
                 logger.info("Get connection from full pool");
             } catch (InterruptedException e) {
                 logger.error(e);
             } finally {
-                lock_connection.unlock();
+                lockConnection.unlock();
             }
         } else {
             ProxyConnection nextProxyConnection;
             try {
-                lock_connection.lock();
+                lockConnection.lock();
                 nextProxyConnection = new ProxyConnection(connectionBuilder.create());
                 givenAwayConnections.offer(nextProxyConnection);
                 proxyConnection = nextProxyConnection;
                 logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
                 logger.info("Connection created");
             } finally {
-                lock_connection.unlock();
+                lockConnection.unlock();
             }
         }
         givenPerPeriodConnection.incrementAndGet();
@@ -84,7 +84,7 @@ public class ConnectionPool {
 
     public void releaseConnection(Connection connection) throws ConnectionException {
         try {
-            lock_connection.lock();
+            lockConnection.lock();
             if (!(connection instanceof ProxyConnection)) {
                 throw new ConnectionException("It's not a proxy");
             } else {
@@ -94,7 +94,7 @@ public class ConnectionPool {
                 }
             }
         } finally {
-            lock_connection.unlock();
+            lockConnection.unlock();
         }
     }
 
