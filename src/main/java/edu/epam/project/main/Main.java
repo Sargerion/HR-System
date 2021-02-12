@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 public class Main {
@@ -41,5 +44,6 @@ public class Main {
 //        }
 //        ScheduledExecutorService executorService =Executors.newSingleThreadScheduledExecutor();
 //        System.out.println("edu.epam.project.exception.ServiceException: Incorrect password".substring("edu.epam.project.exception.ServiceException: Incorrect password".indexOf(":") + 1));
+        List<String> list = new ArrayList<>();
     }
 }

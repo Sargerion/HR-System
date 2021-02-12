@@ -4,6 +4,7 @@ import edu.epam.project.command.*;
 import edu.epam.project.entity.User;
 import edu.epam.project.exception.CommandException;
 
+import edu.epam.project.exception.ExceptionMessage;
 import edu.epam.project.exception.MailSendException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.service.UserService;
@@ -12,8 +13,7 @@ import edu.epam.project.service.impl.mail.MailSender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class RegisterCommand implements Command {
 
@@ -45,8 +45,9 @@ public class RegisterCommand implements Command {
             getEmail = email.get();
         }
         Optional<User> optionalUser = Optional.empty();
-        Optional<String> optionalErrorMessage = Optional.empty();
-        Map<Optional<User>, Optional<String>> registerResult;
+        List<String> errorMessages = new ArrayList<>();
+        Map<String, String> correctFields = new HashMap<>();
+        Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult;
         try {
             if (!getLogin.isEmpty() && !getPassword.isEmpty() && !getRepeatPassword.isEmpty() && !getEmail.isEmpty()) {
                 if (isHR.isPresent()) {
@@ -54,9 +55,27 @@ public class RegisterCommand implements Command {
                 } else {
                     registerResult = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, NOT_HR);
                 }
-                for (Map.Entry<Optional<User>, Optional<String>> entry : registerResult.entrySet()) {
+                for (Map.Entry<Optional<User>, Map<List<String>, Map<String, String>>> entry : registerResult.entrySet()) {
                     optionalUser = entry.getKey();
-                    optionalErrorMessage = entry.getValue();
+                    for (Map.Entry<List<String>, Map<String, String>> listListEntry : entry.getValue().entrySet()) {
+                        errorMessages = listListEntry.getKey();
+                        correctFields = listListEntry.getValue();
+                    }
+                }
+                if (correctFields.containsKey(RequestAttribute.CORRECT_LOGIN)) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctFields.get(RequestAttribute.CORRECT_LOGIN));
+                }
+                if (correctFields.containsKey(RequestAttribute.CORRECT_PASSWORD)) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_PASSWORD));
+                }
+                if (correctFields.containsKey(RequestAttribute.CORRECT_REPEAT_PASSWORD)) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_REPEAT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_REPEAT_PASSWORD));
+                }
+                if (correctFields.containsKey(RequestAttribute.CORRECT_EMAIL)) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_EMAIL, correctFields.get(RequestAttribute.CORRECT_EMAIL));
+                }
+                if (correctFields.containsKey(RequestAttribute.HR_CHECK)) {
+                    requestContext.setRequestAttribute(RequestAttribute.HR_CHECK, correctFields.get(RequestAttribute.HR_CHECK));
                 }
                 if (optionalUser.isPresent()) {
                     MailSender mailSender = MailSender.getInstance();
@@ -69,8 +88,21 @@ public class RegisterCommand implements Command {
                     }
                     commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
                 }
-                if (optionalErrorMessage.isPresent()) {
-                    requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
+                if (!errorMessages.isEmpty()) {
+                    for (int i = 0; i < errorMessages.size(); ) {
+                        if (errorMessages.contains(ExceptionMessage.REGISTER_FAIL_INPUT)) {
+                            requestContext.setRequestAttribute(RequestAttribute.ERROR_REG_FAIL, errorMessages.get(i));
+                            i++;
+                        }
+                        if (errorMessages.contains(ExceptionMessage.LOGIN_ALREADY_EXISTS)) {
+                            requestContext.setRequestAttribute(RequestAttribute.ERROR_LOGIN, errorMessages.get(i));
+                            i++;
+                        }
+                        if (errorMessages.contains((ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS))) {
+                            requestContext.setRequestAttribute(RequestAttribute.ERROR_DIFFERENT_PASSWORDS, errorMessages.get(i));
+                            i++;
+                        }
+                    }
                     commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
                 }
             }

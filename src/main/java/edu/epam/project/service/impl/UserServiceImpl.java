@@ -1,5 +1,6 @@
 package edu.epam.project.service.impl;
 
+import edu.epam.project.command.RequestAttribute;
 import edu.epam.project.dao.UserDao;
 import edu.epam.project.dao.impl.UsersDaoImpl;
 import edu.epam.project.entity.User;
@@ -108,26 +109,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Optional<User>, Optional<String>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
+    public Map<Optional<User>, Map<List<String>, Map<String, String>>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
         Optional<User> user = Optional.empty();
-        Optional<String> errorMessage = Optional.empty();
-        Map<Optional<User>, Optional<String>> registerResult = new HashMap<>();
+        List<String> errorMessages = new ArrayList<>();
+        Map<String, String> correctFields = new HashMap<>();
+        Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult = new HashMap<>();
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
-            errorMessage = Optional.of(ExceptionMessage.REGISTER_FAIL_INPUT);
+            errorMessages.add(ExceptionMessage.REGISTER_FAIL_INPUT);
         }
         try {
-            if (userDao.existsLogin(login)) {
-                errorMessage = Optional.of(ExceptionMessage.LOGIN_ALREADY_EXISTS);
-            } else if (!repeatPassword.equals(password)) {
-                errorMessage = Optional.of(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
+            if (userDao.existsLogin(login) && !repeatPassword.equals(password)) {
+                errorMessages.add(ExceptionMessage.LOGIN_ALREADY_EXISTS);
+                errorMessages.add(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
+            }
+            else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
+                correctFields.put(RequestAttribute.CORRECT_LOGIN, login);
+                errorMessages.add(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
+            }
+            else if(userDao.existsLogin(login) && repeatPassword.equals(password)) {
+                errorMessages.add(ExceptionMessage.LOGIN_ALREADY_EXISTS);
+                correctFields.put(RequestAttribute.CORRECT_PASSWORD, password);
+                correctFields.put(RequestAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
+            }
+            correctFields.put(RequestAttribute.CORRECT_EMAIL, email);
+            if (isHR) {
+                correctFields.put(RequestAttribute.HR_CHECK, "on");
             } else {
+                correctFields.put(RequestAttribute.HR_CHECK, "");
+            }
+            if(!userDao.existsLogin(login) && repeatPassword.equals(password)) {
                 user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
                         : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
                 String encryptedPassword = Encrypter.encryptPassword(password);
                 user.get().setConfirmationToken(UUID.randomUUID().toString());
                 userDao.addUser(user.get(), encryptedPassword);
             }
-            registerResult.put(user, errorMessage);
+            registerResult.put(user, Map.of(errorMessages, correctFields));
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

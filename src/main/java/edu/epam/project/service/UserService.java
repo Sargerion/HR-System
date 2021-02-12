@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface UserService extends BaseService<Integer, User> {
     Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginUser(String login, String password) throws ServiceException;
 
-    Map<Optional<User>, Optional<String>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException;
+    Map<Optional<User>, Map<List<String>, Map<String, String>>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException;
 }
