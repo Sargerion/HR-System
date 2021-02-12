@@ -16,7 +16,8 @@
         <h1><fmt:message key="login_page"/></h1>
         <h5><fmt:message key="login_needs"/></h5>
         <div class="form-group">
-            <input type="text" name="login" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>">
+            <input type="text" name="login" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>"
+            value=<c:if test="${requestScope.correct_login != null}">${requestScope.correct_login}</c:if>>
         </div>
         <h5><fmt:message key="password_needs"/></h5>
         <div class="form-group">

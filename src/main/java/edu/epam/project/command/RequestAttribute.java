@@ -7,7 +7,7 @@ public class RequestAttribute {
     public static final String CONFIRM_MAIL_MESSAGE = "confirmMailMessage";
     public static final String CURRENT_PAGE = "current_page";
     public static final String LOCALE = "locale";
-
+    public static final String CORRECT_LOGIN = "correct_login";
     private RequestAttribute() {
 
     }

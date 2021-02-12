@@ -36,36 +36,45 @@ public class LogInCommand implements Command {
         }
         Optional<User> optionalUser = Optional.empty();
         Optional<String> optionalErrorMessage = Optional.empty();
-        Map<Optional<User>, Optional<String>> loginResult;
+        Optional<String> correctLogin = Optional.empty();
+        Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginResult;
         try {
-            if(!getLogin.isEmpty() && !getPassword.isEmpty()) {
+            if (!getLogin.isEmpty() && !getPassword.isEmpty()) {
                 loginResult = userService.loginUser(getLogin, getPassword);
-                for (Map.Entry<Optional<User>, Optional<String>> entry : loginResult.entrySet()) {
+                for (Map.Entry<Optional<User>, Map<Optional<String>, Optional<String>>> entry : loginResult.entrySet()) {
                     optionalUser = entry.getKey();
-                    optionalErrorMessage = entry.getValue();
-                }
-                if (optionalUser.isPresent()) {
-                    User user = optionalUser.get();
-                    UserType userType = user.getType();
-                    requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                    switch (userType) {
-                        case ADMIN -> {
-                            commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
-                            logger.info("Admin with login -> {} entered", user.getLogin());
-                        }
-                        case COMPANY_HR -> {
-                            commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
-                            logger.info("Company HR with login -> {} entered", user.getLogin());
-                        }
-                        case FINDER -> {
-                            commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
-                            logger.info("Finder with login -> {} entered", user.getLogin());
-                        }
+                    for (Map.Entry<Optional<String>, Optional<String>> entryMessages : entry.getValue().entrySet()) {
+                        optionalErrorMessage = entryMessages.getKey();
+                        correctLogin = entryMessages.getValue();
                     }
+                }
+                if (correctLogin.isPresent()) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctLogin.get());
+                    commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
                 }
                 if (optionalErrorMessage.isPresent()) {
                     requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
                     commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
+                } else {
+                    if (optionalUser.isPresent()) {
+                        User user = optionalUser.get();
+                        UserType userType = user.getType();
+                        requestContext.setSessionAttribute(SessionAttribute.USER, user);
+                        switch (userType) {
+                            case ADMIN -> {
+                                commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
+                                logger.info("Admin with login -> {} entered", user.getLogin());
+                            }
+                            case COMPANY_HR -> {
+                                commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
+                                logger.info("Company HR with login -> {} entered", user.getLogin());
+                            }
+                            case FINDER -> {
+                                commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
+                                logger.info("Finder with login -> {} entered", user.getLogin());
+                            }
+                        }
+                    }
                 }
             }
         } catch (ServiceException e) {

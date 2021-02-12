@@ -73,16 +73,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Optional<User>, Optional<String>> loginUser(String login, String password) throws ServiceException {
+    public Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginUser(String login, String password) throws ServiceException {
         Optional<User> foundUser = Optional.empty();
         Optional<String> errorMessage = Optional.empty();
-        Map<Optional<User>, Optional<String>> loginResult = new HashMap<>();
+        Optional<String> correctLogin = Optional.empty();
+        Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginResult = new HashMap<>();
         Optional<String> userDbPassword;
         if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password)) {
             errorMessage = Optional.of(ExceptionMessage.INVALID_LOGIN_OR_PASSWORD);
         }
         try {
             if (userDao.existsLogin(login)) {
+                correctLogin = Optional.of(login);
                 if (userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
                     userDbPassword = userDao.findUserPasswordByLogin(login);
                     if (userDbPassword.isPresent()) {
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 errorMessage = Optional.of(ExceptionMessage.NO_LOGIN);
             }
-            loginResult.put(foundUser, errorMessage);
+            loginResult.put(foundUser, Map.of(errorMessage, correctLogin));
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
