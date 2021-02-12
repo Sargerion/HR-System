@@ -9,9 +9,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,55 +19,65 @@ public class ConnectionPool {
 
     private static ConnectionPool instance;
     private static final Logger logger = LogManager.getLogger();
-    private static final AtomicBoolean isInit = new AtomicBoolean(true);
-    private static final int DEFAULT_POOL_SIZE = 8;
+    private static final AtomicBoolean isPoolInitialize = new AtomicBoolean(true);
+    private static final int MAX_POOL_SIZE = 8;
+    private static final int MIN_POOL_SIZE = 2;
+    private static final int RETURN_CONNECTION_PERIOD_MINUTES = 5;
+    private static final int VALUE_TO_DOWNSIZE_POOL = 150;
+    private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
     private static final Lock lock_instance = new ReentrantLock();
     private final Lock lock_connection = new ReentrantLock();
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
+    private final ConnectionBuilder connectionBuilder = new ConnectionBuilder();
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private AtomicInteger givenPerPeriodConnection = new AtomicInteger(0);
 
     private ConnectionPool() {
-        freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        givenAwayConnections = new ArrayDeque<>();
+        freeConnections = new LinkedBlockingDeque<>(MAX_POOL_SIZE);
+        givenAwayConnections = new ArrayDeque<>(MAX_POOL_SIZE);
         initializePool();
     }
 
     public static ConnectionPool getInstance() {
-        if (isInit.get()) {
+        if (isPoolInitialize.get()) {
             lock_instance.lock();
             if (instance == null) {
                 instance = new ConnectionPool();
-                isInit.set(false);
+                isPoolInitialize.set(false);
             }
             lock_instance.unlock();
         }
         return instance;
     }
 
-    private void initializePool() {
-        ConnectionBuilder connectionBuilder = new ConnectionBuilder();
-        for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-            ProxyConnection proxyConnection;
-            try {
-                proxyConnection = new ProxyConnection(connectionBuilder.create());
-                freeConnections.offer(proxyConnection);
-            } catch (ConnectionException e) {
-                logger.error(e);
-            }
-        }
-    }
-
     public Connection getConnection() throws ConnectionException {
         ProxyConnection proxyConnection = null;
-        try {
-            lock_connection.lock();
-            proxyConnection = freeConnections.take();
-            givenAwayConnections.offer(proxyConnection);
-        } catch (InterruptedException e) {
-            logger.error(e);
-        } finally {
-            lock_connection.unlock();
+        if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
+            try {
+                lock_connection.lock();
+                proxyConnection = freeConnections.take();
+                givenAwayConnections.offer(proxyConnection);
+                logger.info("Get connection from full pool");
+            } catch (InterruptedException e) {
+                logger.error(e);
+            } finally {
+                lock_connection.unlock();
+            }
+        } else {
+            ProxyConnection nextProxyConnection;
+            try {
+                lock_connection.lock();
+                nextProxyConnection = new ProxyConnection(connectionBuilder.create());
+                givenAwayConnections.offer(nextProxyConnection);
+                proxyConnection = nextProxyConnection;
+                logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
+            } finally {
+                lock_connection.unlock();
+            }
         }
+        givenPerPeriodConnection.incrementAndGet();
+        logger.debug("Connection per period -> {}", givenPerPeriodConnection);
         return proxyConnection;
     }
 
@@ -88,7 +98,7 @@ public class ConnectionPool {
     }
 
     public void destroyPool() throws ConnectionException {
-        for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
+        for (int i = 0; i < detectPoolSize().get(); i++) {
             try {
                 freeConnections.take().realClose();
             } catch (SQLException e) {
@@ -99,6 +109,43 @@ public class ConnectionPool {
             }
         }
         deregisterDrivers();
+    }
+
+    void closeUnnecessaryConnections() {
+        int closeConnections = 0;
+        if (givenPerPeriodConnection.get() < VALUE_TO_DOWNSIZE_POOL) {
+            int connectionsToCloseCount = detectPoolSize().get() - HOW_MUCH_DOWNSIZE_POOL;
+            while (!freeConnections.isEmpty()) {
+                ProxyConnection proxyConnection;
+                try {
+                    freeConnections.take().realClose();
+                    closeConnections++;
+                    connectionsToCloseCount--;
+                } catch (InterruptedException | SQLException e) {
+                    logger.error(e);
+                }
+            }
+        }
+        givenPerPeriodConnection.set(0);
+        logger.info("Pool size decreased by -> {}, current pool size -> {}", HOW_MUCH_DOWNSIZE_POOL, detectPoolSize());
+    }
+
+    private void initializePool() {
+        for (int i = 0; i < MIN_POOL_SIZE; i++) {
+            ProxyConnection proxyConnection;
+            try {
+                proxyConnection = new ProxyConnection(connectionBuilder.create());
+                freeConnections.offer(proxyConnection);
+            } catch (ConnectionException e) {
+                logger.error(e);
+            }
+        }
+        UnnecessaryConnectionsReturner connectionsReturner = new UnnecessaryConnectionsReturner();
+        scheduledExecutorService.scheduleAtFixedRate(connectionsReturner, 0, RETURN_CONNECTION_PERIOD_MINUTES, TimeUnit.MINUTES);
+    }
+
+    private AtomicInteger detectPoolSize() {
+        return new AtomicInteger(freeConnections.size() + givenAwayConnections.size());
     }
 
     private void deregisterDrivers() {
