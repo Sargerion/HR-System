@@ -53,7 +53,6 @@ public class ConnectionPool {
 
     public Connection getConnection() throws ConnectionException {
         ProxyConnection proxyConnection = null;
-        logger.debug("getting connection started");
         if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
             try {
                 lock_connection.lock();
@@ -73,7 +72,7 @@ public class ConnectionPool {
                 givenAwayConnections.offer(nextProxyConnection);
                 proxyConnection = nextProxyConnection;
                 logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
-                logger.info("Connection cteated");
+                logger.info("Connection created");
             } finally {
                 lock_connection.unlock();
             }
@@ -118,7 +117,6 @@ public class ConnectionPool {
         if (givenPerPeriodConnection.get() < VALUE_TO_DOWNSIZE_POOL) {
             int connectionsToCloseCount = detectPoolSize().get() - HOW_MUCH_DOWNSIZE_POOL;
             while (!freeConnections.isEmpty()) {
-                ProxyConnection proxyConnection;
                 try {
                     freeConnections.take().realClose();
                     closeConnections++;
