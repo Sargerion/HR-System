@@ -47,8 +47,8 @@ public class LogInCommand implements Command {
                         correctLogin = entryMessages.getValue();
                     }
                 }
+                correctLogin.ifPresent(s -> requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, s));
                 if (optionalErrorMessage.isPresent()) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctLogin.get());
                     requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
                     commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
                 } else {

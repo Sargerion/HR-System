@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService {
             }
             loginResult.put(foundUser, Map.of(errorMessage, correctLogin));
         } catch (DaoException e) {
+            logger.error(e);
             throw new ServiceException(e);
         }
         return loginResult;
@@ -145,6 +146,7 @@ public class UserServiceImpl implements UserService {
             }
             registerResult.put(user, Map.of(errorMessages, correctFields));
         } catch (DaoException e) {
+            logger.error(e);
             throw new ServiceException(e);
         }
         return registerResult;
