@@ -11,7 +11,6 @@ import edu.epam.project.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.security.KeyStore;
 import java.util.*;
 
 public class LogInCommand implements Command {
