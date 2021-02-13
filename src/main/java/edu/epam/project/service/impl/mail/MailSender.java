@@ -22,7 +22,6 @@ public class MailSender {
     private String mailBody;
 
     private MailSender() {
-
     }
 
     public static MailSender getInstance() {
@@ -46,6 +45,7 @@ public class MailSender {
     }
 
     public void sendNotificationToHR(User user) throws MailSendException {
+        setSendToEmail(user.getEmail());
         setMailSubject(MessageСontent.NOTIFICATION_MESSAGE_HR);
         setMailBody(MessageСontent.NOTIFICATION_BODY);
         send();

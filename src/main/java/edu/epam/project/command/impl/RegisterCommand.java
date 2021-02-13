@@ -62,33 +62,12 @@ public class RegisterCommand implements Command {
                         correctFields = listListEntry.getValue();
                     }
                 }
-                if (correctFields.containsKey(RequestAttribute.CORRECT_LOGIN)) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctFields.get(RequestAttribute.CORRECT_LOGIN));
-                }
-                if (correctFields.containsKey(RequestAttribute.CORRECT_PASSWORD)) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_PASSWORD));
-                }
-                if (correctFields.containsKey(RequestAttribute.CORRECT_REPEAT_PASSWORD)) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_REPEAT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_REPEAT_PASSWORD));
-                }
-                if (correctFields.containsKey(RequestAttribute.CORRECT_EMAIL)) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_EMAIL, correctFields.get(RequestAttribute.CORRECT_EMAIL));
-                }
-                if (correctFields.containsKey(RequestAttribute.HR_CHECK)) {
-                    requestContext.setRequestAttribute(RequestAttribute.HR_CHECK, correctFields.get(RequestAttribute.HR_CHECK));
-                }
-                if (optionalUser.isPresent()) {
-                    MailSender mailSender = MailSender.getInstance();
-                    if (isHR.isEmpty()) {
-                        mailSender.sendActivationFinder(optionalUser.get());
-                        requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
-                    } else {
-                        mailSender.sendNotificationToHR(optionalUser.get());
-                        requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
-                    }
-                    commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
-                }
                 if (!errorMessages.isEmpty()) {
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctFields.get(RequestAttribute.CORRECT_LOGIN));
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_PASSWORD));
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_REPEAT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_REPEAT_PASSWORD));
+                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_EMAIL, correctFields.get(RequestAttribute.CORRECT_EMAIL));
+                    requestContext.setRequestAttribute(RequestAttribute.HR_CHECK, correctFields.get(RequestAttribute.HR_CHECK));
                     for (int i = 0; i < errorMessages.size(); ) {
                         if (errorMessages.contains(ExceptionMessage.REGISTER_FAIL_INPUT)) {
                             requestContext.setRequestAttribute(RequestAttribute.ERROR_REG_FAIL, errorMessages.get(i));
@@ -104,6 +83,18 @@ public class RegisterCommand implements Command {
                         }
                     }
                     commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
+                } else {
+                    if (optionalUser.isPresent()) {
+                        MailSender mailSender = MailSender.getInstance();
+                        if (isHR.isEmpty()) {
+                            mailSender.sendActivationFinder(optionalUser.get());
+                            requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
+                        } else {
+                            mailSender.sendNotificationToHR(optionalUser.get());
+                            requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
+                        }
+                        commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
+                    }
                 }
             }
         } catch (ServiceException | MailSendException e) {

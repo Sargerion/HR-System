@@ -39,7 +39,7 @@
             <input type="email" name="email" class="form-control" required pattern="^([a-z0-9_\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,6})$" placeholder="<fmt:message key="email_placeholder"/>"
                    value=<c:if test="${requestScope.correct_email != null}">${requestScope.correct_email}</c:if>>>
         </div>
-        <input type="checkbox" name="hr_option" class="form-control" value=<c:if test="${requestScope.hr_check != null}">"${requestScope.hr_check}"</c:if>><h5 style="text-align: center"><fmt:message key="like_hr"/></h5><br/>
+        <input type="checkbox" name="hr_option" class="form-control" <c:if test="${requestScope.hr_check != null}">${requestScope.hr_check}</c:if>><h5 style="text-align: center"><fmt:message key="like_hr"/></h5><br/>
         <input style="width: 40%;" type="submit" class="btn" value=<fmt:message key="register"/>>
         <br/>
     </form>

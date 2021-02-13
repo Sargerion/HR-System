@@ -1,6 +1,7 @@
 package edu.epam.project.service.impl;
 
 import edu.epam.project.command.RequestAttribute;
+import edu.epam.project.command.RequestParameter;
 import edu.epam.project.dao.UserDao;
 import edu.epam.project.dao.impl.UsersDaoImpl;
 import edu.epam.project.entity.User;
@@ -121,23 +122,21 @@ public class UserServiceImpl implements UserService {
             if (userDao.existsLogin(login) && !repeatPassword.equals(password)) {
                 errorMessages.add(ExceptionMessage.LOGIN_ALREADY_EXISTS);
                 errorMessages.add(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
-            }
-            else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
+            } else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
                 correctFields.put(RequestAttribute.CORRECT_LOGIN, login);
                 errorMessages.add(ExceptionMessage.REGISTER_DIFFERENT_PASSWORDS);
-            }
-            else if(userDao.existsLogin(login) && repeatPassword.equals(password)) {
+            } else if (userDao.existsLogin(login) && repeatPassword.equals(password)) {
                 errorMessages.add(ExceptionMessage.LOGIN_ALREADY_EXISTS);
                 correctFields.put(RequestAttribute.CORRECT_PASSWORD, password);
                 correctFields.put(RequestAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
             }
             correctFields.put(RequestAttribute.CORRECT_EMAIL, email);
             if (isHR) {
-                correctFields.put(RequestAttribute.HR_CHECK, "on");
+                correctFields.put(RequestAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
             } else {
                 correctFields.put(RequestAttribute.HR_CHECK, "");
             }
-            if(!userDao.existsLogin(login) && repeatPassword.equals(password)) {
+            if (!userDao.existsLogin(login) && repeatPassword.equals(password)) {
                 user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
                         : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
                 String encryptedPassword = Encrypter.encryptPassword(password);
