@@ -1,15 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" errorPage="/jsp/error/500.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<c:set var="current_page" value="/jsp/admin/welcomeAdmin.jsp" scope="request"/>
+<%@ taglib prefix="ctag" uri="custom_tag" %>
+<c:set var="current_page" value="/jsp/admin/hrRequestsView.jsp" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
-
 <html>
 <head>
+    <title><fmt:message key="see_hrs"/></title>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet">
-    <title><fmt:message key="home"/></title>
 </head>
 <body>
 <header class="page-header">
@@ -28,15 +27,7 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/jsp/admin/hrRequestsView.jsp"><fmt:message key="see_hrs"/></a></li>
-                    <li>
-                        <form style="position:relative;" name="user_list_form" method="post" action="<c:url value="/controller"/>">
-                            <input type="hidden" name="command" value="user_list">
-                            <input type="hidden" name="command" value="forward_to_user_list">
-                            <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: aliceblue;
-                            cursor: pointer;font-size: 16px;color: royalblue;border-radius: 4px;transition: .3s;" value="<fmt:message key="all_users"/>">
-                        </form>
-                    </li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/admin/hrRequestsView.jsp" ><fmt:message key="see_hrs"/></a></li>
                     <li>
                         <a href="#">More<span class="picture"></span></a>
                         <ul>
@@ -56,6 +47,7 @@
         </ul>
     </nav>
 </header>
+<ctag:not_active_hr_list/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

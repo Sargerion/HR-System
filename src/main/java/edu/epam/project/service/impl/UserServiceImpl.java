@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() throws ServiceException {
+    public List<User> findAll(int start, int end) throws ServiceException {
         return null;
     }
 

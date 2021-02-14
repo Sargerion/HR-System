@@ -11,7 +11,7 @@ public interface BaseDao<K, T extends Entity> {
 
     Optional<T> findById(K entityId) throws DaoException;
 
-    List<T> findAll() throws DaoException;
+    List<T> findAll(int start, int end) throws DaoException;
 
     void update(T entity) throws DaoException;
 

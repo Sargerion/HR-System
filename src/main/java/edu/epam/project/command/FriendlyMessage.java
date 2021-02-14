@@ -7,6 +7,7 @@ public class FriendlyMessage {
     public static final String CORRECT_ACTIVATE_FINDER = "Congrats, you've successfully confirm registration, now you're active";
     public static final String LOCALE_CHANGED = "Locale has changed:)";
     public static final String LOG_OUT = "Exit from account";
+    public static final String EMPTY_USER_LIST = "Unfortunately, there are no users";
 
     private FriendlyMessage() {
 

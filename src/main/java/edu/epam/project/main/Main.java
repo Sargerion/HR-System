@@ -1,5 +1,6 @@
 package edu.epam.project.main;
 
+import edu.epam.project.command.CommandName;
 import edu.epam.project.entity.User;
 import edu.epam.project.entity.UserType;
 import edu.epam.project.exception.ConnectionException;

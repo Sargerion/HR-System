@@ -10,4 +10,6 @@ public interface AdminService extends BaseService<Integer, User> {
     boolean activateHR(User user) throws ServiceException;
 
     List<User> findNotActiveHRList() throws ServiceException;
+
+    int countUsers() throws ServiceException;
 }

@@ -44,7 +44,7 @@
 <c:import url="/jsp/modules/part/message_part.jsp"/>
 <c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <br/>
-<div style="display:flex;align-items:center;justify-content: center;margin:140px;">
+<div style="display:flex;align-items:center;justify-content: center;margin:140px;background-size: cover;">
     <%@include file="/images/svg/hr_system.svg"%>
 </div>
 <c:import url="/jsp/modules/footer.jsp"/>

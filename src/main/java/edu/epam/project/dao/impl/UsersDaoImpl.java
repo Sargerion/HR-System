@@ -183,7 +183,7 @@ public class UsersDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DaoException {
+    public List<User> findAll(int start, int end) throws DaoException {
         return null;
     }
 

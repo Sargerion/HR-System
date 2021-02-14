@@ -15,6 +15,6 @@ public class LogOutCommand implements Command {
         String locale = requestContext.getLocale();
         requestContext.setRequestAttribute(RequestAttribute.LOCALE, locale);
         logger.info(FriendlyMessage.LOG_OUT);
-        return new CommandResult(PathJsp.HOME_PAGE, TransitionType.REDIRECT);
+        return new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
     }
 }

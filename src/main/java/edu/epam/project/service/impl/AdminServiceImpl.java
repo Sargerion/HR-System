@@ -69,8 +69,27 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<User> findAll() throws ServiceException {
-        return null;
+    public List<User> findAll(int start, int end) throws ServiceException {
+        List<User> allUsers;
+        try {
+            allUsers = new ArrayList<>(adminDao.findAll(start, end));
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return allUsers;
+    }
+
+    @Override
+    public int countUsers() throws ServiceException {
+        int usersCount;
+        try {
+            usersCount = adminDao.countUsers();
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return usersCount;
     }
 
     @Override

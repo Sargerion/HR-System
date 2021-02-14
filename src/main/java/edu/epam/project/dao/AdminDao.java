@@ -9,4 +9,5 @@ public interface AdminDao extends BaseDao<Integer, User> {
 
     List<User> findNotActiveHRs() throws DaoException;
 
+    int countUsers() throws DaoException;
 }

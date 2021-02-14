@@ -13,4 +13,9 @@ public class RequestParameter {
     public static final String HR_OPTION_CHECK = "hr_option";
     public static final String CONFIRMATION_TOKEN = "confirm_token";
     public static final String HR_CHECK_BOX = "checked";
+    public static final String NEW_PAGE = "newPage";
+
+    private RequestParameter() {
+
+    }
 }

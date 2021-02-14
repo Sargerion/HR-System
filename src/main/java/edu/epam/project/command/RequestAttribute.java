@@ -15,6 +15,7 @@ public class RequestAttribute {
     public static final String CORRECT_REPEAT_PASSWORD = "correct_rep_password";
     public static final String CORRECT_EMAIL = "correct_email";
     public static final String HR_CHECK = "hr_check";
+
     private RequestAttribute() {
 
     }

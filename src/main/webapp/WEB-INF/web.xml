@@ -11,4 +11,10 @@
         <error-code>500</error-code>
         <location>/jsp/error/500.jsp</location>
     </error-page>
+    <jsp-config>
+        <taglib>
+            <taglib-uri>custom_tag</taglib-uri>
+            <taglib-location>WEB-INF/tag/tag_descriptor.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

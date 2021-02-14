@@ -43,10 +43,10 @@ public class Controller extends HttpServlet {
             throw new ServletException(e);
         }
         logger.info(commandResult.toString());
+        requestContext.insertAttributes(request);
         if(request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
             request.getSession().invalidate();
         }
-        requestContext.insertAttributes(request);
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {
             RequestDispatcher dispatcher = request.getRequestDispatcher(commandResult.getPage());
             dispatcher.forward(request, response);
