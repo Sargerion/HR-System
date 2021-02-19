@@ -20,6 +20,7 @@ public class UploadAvatarCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String UPLOAD_AVATAR_DIRECTORY = "D:/project_directory/user_avatars";
+    private static final String UPLOAD_AVATAR_DIRECTORY_FOR_VIEW = "user_avatars";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
@@ -41,6 +42,7 @@ public class UploadAvatarCommand implements Command {
         }
         try {
             if (!fileName.isEmpty()) {
+                requestContext.setRequestAttribute(RequestAttribute.VIEW_IMAGE, fileName.substring(fileName.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW)));
                 user.setAvatarName(UPLOAD_AVATAR_DIRECTORY + "/" + fileName);
                 userService.updateAvatar(user);
                 UserType userType = user.getType();
