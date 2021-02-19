@@ -39,7 +39,7 @@
                     <li><c:import url="/jsp/modules/locale.jsp"/></li>
                 </ul>
             </li>
-            <li><c:import url="/jsp/modules/part/logoutForm.jsp"/></li>
+            <li><c:import url="/jsp/modules/logoutForm.jsp"/></li>
         </ul>
     </nav>
 </header>
