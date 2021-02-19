@@ -42,7 +42,7 @@ public class UploadAvatarCommand implements Command {
         }
         try {
             if (!fileName.isEmpty()) {
-                requestContext.setRequestAttribute(RequestAttribute.VIEW_IMAGE, fileName.substring(fileName.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW)));
+                requestContext.setRequestAttribute(RequestAttribute.VIEW_IMAGE, UPLOAD_AVATAR_DIRECTORY.substring(UPLOAD_AVATAR_DIRECTORY.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW)));
                 user.setAvatarName(UPLOAD_AVATAR_DIRECTORY + "/" + fileName);
                 userService.updateAvatar(user);
                 UserType userType = user.getType();

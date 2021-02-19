@@ -15,7 +15,6 @@ public class RequestParameter {
     public static final String CONFIRMATION_TOKEN = "confirm_token";
     public static final String HR_CHECK_BOX = "checked";
     public static final String NEW_PAGE = "newPage";
-    public static final String USER_AVATAR_NAME = "user_avatar_name";
 
     private RequestParameter() {
 
