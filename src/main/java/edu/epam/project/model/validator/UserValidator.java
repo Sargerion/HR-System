@@ -2,8 +2,8 @@ package edu.epam.project.model.validator;
 
 public class UserValidator {
 
-    private static final String LOGIN_REGEX = "^[a-zA-Z0-9_-]{6,15}$";
-    private static final String PASSWORD_REGEX = "^[a-zA-Z0-9_-]{6,15}$";
+    private static final String LOGIN_REGEX = "^[a-zA-Zа-яА-Я0-9_-]{6,15}$";
+    private static final String PASSWORD_REGEX = "^[a-zA-Zа-яА-Я0-9_-]{6,15}$";
     private static final String EMAIL_REGEX = "^([a-z0-9_\\.-]+)@([a-z0-9_\\.-]+)\\.([a-z\\.]{2,6})$";
 
     public static boolean isValidLogin(String login) {

@@ -16,18 +16,18 @@
         <label style="color: red">*</label>
         <h5><fmt:message key="login_needs"/></h5>
         <div class="form-group">
-            <input type="text" name="login" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>"
+            <input type="text" name="login" class="form-control" required pattern="^[a-zA-Zа-яА-Я0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>"
                    value=<c:if test="${requestScope.correct_login != null}">${requestScope.correct_login}</c:if>>
         </div>
         <label style="color: red">*</label>
         <h5><fmt:message key="password_needs"/></h5>
         <div class="form-group">
-            <input type="password" name="password" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="password_placeholder"/>"
+            <input type="password" name="password" class="form-control" required pattern="^[a-zA-Zа-яА-Я0-9_-]{6,15}$" placeholder="<fmt:message key="password_placeholder"/>"
                    value=<c:if test="${requestScope.correct_password != null}">${requestScope.correct_password}</c:if>>
         </div>
         <label style="color: red">*</label>
         <div class="form-group">
-            <input type="password" name="repeat_password" class="form-control" required pattern="^[a-zA-Z0-9_-]{6,15}$" placeholder="<fmt:message key="password_repeat"/>"
+            <input type="password" name="repeat_password" class="form-control" required pattern="^[a-zA-Zа-яА-Я0-9_-]{6,15}$" placeholder="<fmt:message key="password_repeat"/>"
                    value=<c:if test="${requestScope.correct_rep_password != null}">${requestScope.correct_rep_password}</c:if>>
         </div>
         <label style="color: red">*</label>
