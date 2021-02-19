@@ -6,9 +6,6 @@
 <fmt:setBundle basename="property.pagecontent"/>
 
 <html>
-<head>
-    <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet">
-</head>
 <body>
 <div class="container" style="max-height: 90%">
     <form style="height: 86%" name="registerForm" method="post" action="<c:url value="/controller"/>">

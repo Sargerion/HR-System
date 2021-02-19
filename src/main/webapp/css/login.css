@@ -38,23 +38,28 @@
     color: dimgray;
 }
 .container form .btn{
-    display:inline-block;
+    display:block;
+    position: relative;
     padding:0.3em 1.2em;
-    margin:0 0.1em 0.1em 0;
     border:0.16em solid rgba(255,255,255,0);
     border-radius:2em;
     box-sizing: border-box;
     text-decoration:none;
     font-family:'Roboto',sans-serif;
     font-weight:300;
+    font-size: 20px;
+    line-height: 20px;
+    width: 60%;
+    height: 40%;
     color:#FFFFFF;
     text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
     text-align:center;
     transition: all 0.2s;
     background: #4ef18f;
+    margin:0 auto;
 }
 .container form .btn:hover {
-    border-color: rgba(255, 255, 255, 1);
+    border-color: rgba(25, 181, 254, 1);
 }
 @media all and (max-width:30em) {
     .btn {

@@ -6,9 +6,6 @@
 <fmt:setBundle basename="property.pagecontent"/>
 
 <html>
-<head>
-    <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet">
-</head>
 <body>
 <div class="container">
     <form style="position:relative;" name="logInForm" method="post" action="<c:url value="/controller"/>">
