@@ -45,21 +45,8 @@ public class UploadAvatarCommand implements Command {
                 requestContext.setRequestAttribute(RequestAttribute.VIEW_IMAGE, UPLOAD_AVATAR_DIRECTORY.substring(UPLOAD_AVATAR_DIRECTORY.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW)));
                 user.setAvatarName(UPLOAD_AVATAR_DIRECTORY + "/" + fileName);
                 userService.updateAvatar(user);
-                UserType userType = user.getType();
-                switch (userType) {
-                    case ADMIN -> {
-                        commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
-                        logger.info("Admin with login -> {} change avatar", user.getLogin());
-                    }
-                    case COMPANY_HR -> {
-                        commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
-                        logger.info("Company HR with login -> {} change avatar", user.getLogin());
-                    }
-                    case FINDER -> {
-                        commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
-                        logger.info("Finder with login -> {} change avatar", user.getLogin());
-                    }
-                }
+                commandResult = new CommandResult(PathJsp.CHANGE_AVATAR_PAGE, TransitionType.FORWARD);
+                logger.info("User -> {}, change avatar", user);
             } else {
                 requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, ErrorMessage.ERROR_WITH_UPLOAD);
                 commandResult = new CommandResult(PathJsp.CHANGE_AVATAR_PAGE, TransitionType.FORWARD);
