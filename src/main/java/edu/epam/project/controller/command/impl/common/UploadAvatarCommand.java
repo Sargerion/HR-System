@@ -2,7 +2,6 @@ package edu.epam.project.controller.command.impl.common;
 
 import edu.epam.project.controller.command.*;
 import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
@@ -26,7 +25,7 @@ public class UploadAvatarCommand implements Command {
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         UserService userService = UserServiceImpl.getInstance();
         User user = (User) requestContext.getSessionAttribute(SessionAttribute.USER);
-        CommandResult commandResult = null;
+        CommandResult commandResult;
         List<Part> fileParts = requestContext.getFileParts();
         String fileName = null;
         try {
