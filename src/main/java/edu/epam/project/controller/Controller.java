@@ -11,10 +11,10 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Optional;
 
-@WebServlet(name = "controller", urlPatterns = {"/controller","*.do"})
+@WebServlet(name = "controller", urlPatterns = {"/controller"})
+@MultipartConfig(maxFileSize = 1024 * 1024 * 2,maxRequestSize = 1024 * 1024 * 8)
 public class Controller extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger();
@@ -44,7 +44,7 @@ public class Controller extends HttpServlet {
         }
         logger.info(commandResult.toString());
         requestContext.insertAttributes(request);
-        if(request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
+        if (request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
             request.getSession().invalidate();
         }
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {

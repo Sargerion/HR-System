@@ -1,24 +1,30 @@
 package edu.epam.project.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.*;
 
 public class SessionRequestContext {
 
+    private static final Logger logger = LogManager.getLogger();
     private Map<String, Object> requestAttributes;
     private Map<String, String[]> requestParameters;
     private Map<String, Object> sessionAttributes;
     private String locale;
+    private List<Part> fileParts;
 
     public SessionRequestContext(HttpServletRequest request) {
         requestAttributes = extractRequestAttributes(request);
         requestParameters = extractRequestParameters(request);
         sessionAttributes = extractSessionAttributes(request);
         locale = extractLocale(request);
+        fileParts = extractFileParts(request);
     }
 
     public void insertAttributes(HttpServletRequest request) {
@@ -58,6 +64,10 @@ public class SessionRequestContext {
         sessionAttributes.put(key, value);
     }
 
+    public List<Part> getFileParts() {
+        return fileParts;
+    }
+
     private Map<String, Object> extractRequestAttributes(HttpServletRequest request) {
         Map<String, Object> attributes = new HashMap<>();
         Enumeration<String> attributeNames = request.getAttributeNames();
@@ -87,6 +97,18 @@ public class SessionRequestContext {
         HttpSession session = request.getSession();
         String currentLocale = (String) session.getAttribute(SessionAttribute.LOCALE);
         return currentLocale != null ? currentLocale : "ru_RU";
+    }
+
+    private List<Part> extractFileParts(HttpServletRequest request) {
+        List<Part> fileParts = new ArrayList<>();
+        try {
+            if (request.getContentType() != null && request.getContentType().toLowerCase().contains("multipart/form-data")) {
+                fileParts.addAll(request.getParts());
+            }
+        } catch (IOException | ServletException e) {
+            logger.error(e);
+        }
+        return fileParts;
     }
 
     @Override

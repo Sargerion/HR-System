@@ -7,6 +7,7 @@ public class User extends Entity {
     private UserType type;
     private UserStatus status;
     private String confirmationToken;
+    private String avatarName;
 
     public User() {
     }
@@ -66,6 +67,14 @@ public class User extends Entity {
 
     public void setConfirmationToken(String confirmationToken) {
         this.confirmationToken = confirmationToken;
+    }
+
+    public String getAvatarName() {
+        return avatarName;
+    }
+
+    public void setAvatarName(String avatarName) {
+        this.avatarName = avatarName;
     }
 
     @Override

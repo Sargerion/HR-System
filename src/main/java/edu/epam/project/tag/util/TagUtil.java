@@ -38,7 +38,6 @@ public class TagUtil {
             writer.write("</ul>");
             writer.write("</form>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }
@@ -47,9 +46,14 @@ public class TagUtil {
         try {
             writer.write("<th>" + content + "</th>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
+    }
+
+    public static void showImage(PageContext pageContext, String imageName) throws IOException {
+        JspWriter writer = pageContext.getOut();
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + imageName + "\">");
     }
 
     private static void createButton(JspWriter writer, int pageNumber) throws IOException {

@@ -19,7 +19,20 @@
         </div>
         <h2><fmt:message key="error_page_message_oops"/></h2>
         <p><fmt:message key="error_page_message_sorry"/></p>
-        <a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="move_from_error_page_button"/></a>
+        <a href=<c:choose>
+                     <c:when test="${sessionScope.user.getType() eq 'ADMIN'}">
+                            "${pageContext.request.contextPath}/jsp/admin/welcomeAdmin.jsp"
+                     </c:when>
+                     <c:when test="${sessionScope.user.getType() eq 'COMPANY_HR'}">
+                            "${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"
+                     </c:when>
+                     <c:when test="${sessionScope.user.getType() eq 'FINDER'}">
+                            "${pageContext.request.contextPath}/jsp/welcomeFinder.jsp"
+                     </c:when>
+                     <c:otherwise>
+                            "${pageContext.request.contextPath}/jsp/home.jsp"
+                     </c:otherwise>
+        </c:choose>><fmt:message key="move_from_error_page_button"/></a>
     </div>
 </div>
 </body>

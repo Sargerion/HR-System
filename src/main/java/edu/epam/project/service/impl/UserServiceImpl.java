@@ -65,6 +65,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateAvatar(User user) throws ServiceException {
+        try {
+            userDao.updateAvatar(user);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean delete(User entity) throws ServiceException {
         return false;
     }
@@ -150,5 +160,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return registerResult;
+    }
+
+    @Override
+    public Optional<String> findUserAvatar(User user) throws ServiceException {
+        Optional<String> userAvatar;
+        try {
+            userAvatar = userDao.findUserAvatar(user);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return userAvatar;
     }
 }

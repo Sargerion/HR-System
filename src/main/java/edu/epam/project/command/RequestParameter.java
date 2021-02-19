@@ -1,6 +1,7 @@
 package edu.epam.project.command;
 
 public class RequestParameter {
+
     public static final String COMMAND = "command";
     public static final String LOCALE = "locale";
     public static final String CURRENT_PAGE = "current_page";
@@ -14,6 +15,7 @@ public class RequestParameter {
     public static final String CONFIRMATION_TOKEN = "confirm_token";
     public static final String HR_CHECK_BOX = "checked";
     public static final String NEW_PAGE = "newPage";
+    public static final String USER_AVATAR_NAME = "user_avatar_name";
 
     private RequestParameter() {
 

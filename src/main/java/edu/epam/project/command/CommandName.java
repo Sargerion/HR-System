@@ -14,7 +14,8 @@ public enum CommandName {
     ACTIVATE(new ActivateCommand()),
     ACTIVATE_HR(new ActivateHRCommand()),
     FORWARD_TO_USER_LIST(new ForwardToUserListCommand()),
-    USER_LIST(new FindUserListCommand());
+    USER_LIST(new FindUserListCommand()),
+    UPLOAD_AVATAR(new UploadAvatarCommand());
 
     private Command command;
 

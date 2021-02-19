@@ -12,36 +12,7 @@
     <title><fmt:message key="registerTitle"/></title>
 </head>
 <body>
-<header class="page-header">
-    <nav>
-        <div class="logo"><fmt:message key="logo"/></div>
-        <ul>
-            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
-            <li>
-                <a href="#"><fmt:message key="languages_list_name"/></a href="#">
-                <ul>
-                    <li><c:import url="modules/locale.jsp"/></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" ><fmt:message key="service"/></a>
-                <ul>
-                    <li><a href="#" >Something</a></li>
-                    <li>
-                        <a href="#">More<span class="picture"></span></a>
-                        <ul>
-                            <li><a href="#">Sub1</a></li>
-                            <li><a href="#">Sub2</a></li>
-                            <li><a href="#">Sub3</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="${pageContext.request.contextPath}/jsp/login.jsp" class="delim"><fmt:message key="login"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/jsp/register.jsp"><fmt:message key="register"/></a></li>
-        </ul>
-    </nav>
-</header>
+<c:import url="modules/commonHeader.jsp"/>
 <c:import url="modules/registerForm.jsp"/>
 <c:import url="modules/footer.jsp"/>
 </body>

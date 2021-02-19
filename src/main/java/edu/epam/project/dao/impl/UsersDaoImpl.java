@@ -66,6 +66,12 @@ public class UsersDaoImpl implements UserDao {
     private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses " +
             "ON users.user_status_id = user_statuses.user_status_id WHERE user_login = ?;";
 
+    @Language("SQL")
+    private static final String UPDATE_AVATAR_PATH_BY_ID = "UPDATE users SET user_avatar_path = ? WHERE user_id = ?;";
+
+    @Language("SQL")
+    private static final String SELECT_AVATAR_PATH_BY_USER_ID = "SELECT user_avatar_path FROM users WHERE user_id = ?;";
+
     @Override
     public boolean add(User entity) throws DaoException {
         throw new UnsupportedOperationException("You can't add user in UsersDaoImpl by this way");
@@ -74,7 +80,7 @@ public class UsersDaoImpl implements UserDao {
     @Override
     public Optional<User> addUser(User user, String encryptedPassword) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, encryptedPassword);
             preparedStatement.setString(3, user.getEmail());
@@ -88,7 +94,8 @@ public class UsersDaoImpl implements UserDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
-            user.setEntityId((resultSet.getInt(1)));
+            int userId = (resultSet.getInt(1));
+            user.setEntityId(userId);
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -243,6 +250,18 @@ public class UsersDaoImpl implements UserDao {
             throw new DaoException(e);
         }
     }
+    @Override
+    public void updateAvatar(User user) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_AVATAR_PATH_BY_ID)) {
+            preparedStatement.setString(1, user.getAvatarName());
+            preparedStatement.setInt(2, user.getEntityId());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
 
     @Override
     public boolean delete(User entity) throws DaoException {
@@ -252,6 +271,22 @@ public class UsersDaoImpl implements UserDao {
     @Override
     public boolean deleteById(Integer entityId) throws DaoException {
         return false;
+    }
+
+    @Override
+    public Optional<String> findUserAvatar(User user) throws DaoException {
+        Optional<String> userAvatar;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_AVATAR_PATH_BY_USER_ID)) {
+            preparedStatement.setInt(1, user.getEntityId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            userAvatar = Optional.ofNullable(resultSet.getString(UsersColumn.AVATAR));
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return userAvatar;
     }
 
     private boolean isExist(String value, String sqlQuery) throws DaoException {

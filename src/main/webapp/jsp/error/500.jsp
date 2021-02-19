@@ -26,7 +26,20 @@
         <h4><fmt:message key="error505_exception"/> ${pageContext.exception}</h4>
         <br/>
         <h4><fmt:message key="error505_mess_from_exc"/> ${pageContext.exception.message}</h4>
-        <a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="move_from_error_page_button"/></a>
+        <a href=<c:choose>
+                    <c:when test="${sessionScope.user.getType() eq 'ADMIN'}">
+                        "${pageContext.request.contextPath}/jsp/admin/welcomeAdmin.jsp"
+                    </c:when>
+                    <c:when test="${sessionScope.user.getType() eq 'COMPANY_HR'}">
+                        "${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"
+                    </c:when>
+                    <c:when test="${sessionScope.user.getType() eq 'FINDER'}">
+                        "${pageContext.request.contextPath}/jsp/welcomeFinder.jsp"
+                    </c:when>
+                    <c:otherwise>
+                        "${pageContext.request.contextPath}/jsp/home.jsp"
+                    </c:otherwise>
+        </c:choose>><fmt:message key="move_from_error_page_button"/></a>
     </div>
 </div>
 </body>

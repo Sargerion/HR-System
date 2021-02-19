@@ -23,6 +23,7 @@ public class LogInCommand implements Command {
         UserService userService = UserServiceImpl.getInstance();
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
+        Optional<String> userAvatar;
         String getLogin = "";
         String getPassword = "";
         CommandResult commandResult = null;
@@ -55,6 +56,8 @@ public class LogInCommand implements Command {
                     if (optionalUser.isPresent()) {
                         User user = optionalUser.get();
                         UserType userType = user.getType();
+                        userAvatar = userService.findUserAvatar(user);
+                        userAvatar.ifPresent(user::setAvatarName);
                         requestContext.setSessionAttribute(SessionAttribute.USER, user);
                         switch (userType) {
                             case ADMIN -> {

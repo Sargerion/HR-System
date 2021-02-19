@@ -1,14 +1,12 @@
 package edu.epam.project.tag;
 
 import edu.epam.project.command.CommandName;
-import edu.epam.project.command.RequestAttribute;
 import edu.epam.project.command.SessionAttribute;
 import edu.epam.project.command.SessionRequestContext;
 import edu.epam.project.entity.User;
 import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -43,12 +41,6 @@ public class ViewAllUsersTag extends TagSupport {
         return SKIP_BODY;
     }
 
-
-    @Override
-    public int doEndTag() throws JspException {
-        return EVAL_PAGE;
-    }
-
     private void createList(JspWriter writer, SessionRequestContext sessionRequestContext) throws JspException {
         try {
             writer.write("<table id=\"customers\">");
@@ -72,10 +64,6 @@ public class ViewAllUsersTag extends TagSupport {
             String userEmail = resourceBundle.getString(USER_EMAIL_BUNDLE);
             String userType = resourceBundle.getString(USER_TYPE_BUNDLE);
             String userStatus = resourceBundle.getString(USER_STATUS_BUNDLE);
-            String contextPath = pageContext.getServletContext().getContextPath();
-            writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
-            writer.write("<input type=\"hidden\" name=\"command\" value=\"");
-            writer.write(CommandName.USER_LIST.toString().toLowerCase() + "\">");
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
             TagUtil.createTableHeadItem(writer, userID);
@@ -83,7 +71,7 @@ public class ViewAllUsersTag extends TagSupport {
             TagUtil.createTableHeadItem(writer, userEmail);
             TagUtil.createTableHeadItem(writer, userType);
             TagUtil.createTableHeadItem(writer, userStatus);
-            writer.write("</tr></thead></form>");
+            writer.write("</tr></thead>");
         } catch (IOException e) {
             logger.error(e);
             throw new JspException(e);
@@ -107,7 +95,7 @@ public class ViewAllUsersTag extends TagSupport {
                         writer.write("<td>" + user.getStatus() + "</td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
-                        writer.write("<td></td><td></td><td></td><td></td>");
+                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td>");
                     }
                     writer.write("</tr>");
                 }
