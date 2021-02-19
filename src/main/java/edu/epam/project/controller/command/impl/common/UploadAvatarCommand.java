@@ -1,4 +1,4 @@
-package edu.epam.project.controller.command.impl;
+package edu.epam.project.controller.command.impl.common;
 
 import edu.epam.project.controller.command.*;
 import edu.epam.project.model.entity.User;

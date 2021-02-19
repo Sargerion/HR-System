@@ -1,9 +1,9 @@
 package edu.epam.project.controller.command;
 
-import edu.epam.project.controller.command.impl.*;
 import edu.epam.project.controller.command.impl.admin.ActivateHRCommand;
 import edu.epam.project.controller.command.impl.admin.FindUserListCommand;
 import edu.epam.project.controller.command.impl.admin.ForwardToUserListCommand;
+import edu.epam.project.controller.command.impl.common.*;
 
 public enum CommandName {
 
