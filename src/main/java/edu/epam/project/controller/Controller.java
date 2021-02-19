@@ -1,9 +1,9 @@
 package edu.epam.project.controller;
 
-import edu.epam.project.command.*;
+import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ConnectionException;
-import edu.epam.project.pool.ConnectionPool;
+import edu.epam.project.model.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

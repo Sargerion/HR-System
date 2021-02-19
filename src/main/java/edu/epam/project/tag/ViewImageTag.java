@@ -1,8 +1,8 @@
 package edu.epam.project.tag;
 
-import edu.epam.project.command.SessionAttribute;
-import edu.epam.project.command.SessionRequestContext;
-import edu.epam.project.entity.User;
+import edu.epam.project.controller.command.SessionAttribute;
+import edu.epam.project.controller.command.SessionRequestContext;
+import edu.epam.project.model.entity.User;
 import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
