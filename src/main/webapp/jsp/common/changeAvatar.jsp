@@ -28,7 +28,7 @@
                                 "${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"
                             </c:when>
                             <c:otherwise>
-                                "${pageContext.request.contextPath}/jsp/welcomeFinder.jsp"
+                                "${pageContext.request.contextPath}/jsp/finder/welcomeFinder.jsp"
                             </c:otherwise>
                         </c:choose>>
                 <fmt:message key="home"/>

@@ -31,7 +31,7 @@
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/jsp/admin/hrRequestsView.jsp"><fmt:message key="see_hrs"/></a></li>
                     <li><c:import url="/jsp/admin/part/userListForm.jsp"/></li>
-                    <li><a href="${pageContext.request.contextPath}/jsp/user-finder/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: normal"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: normal"><fmt:message key="upload_title"/></h5></a></li>
                     <li>
                         <a href="#">More<span class="picture"></span></a>
                         <ul>

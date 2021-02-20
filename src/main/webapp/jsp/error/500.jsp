@@ -34,7 +34,7 @@
                         "${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"
                     </c:when>
                     <c:when test="${sessionScope.user.getType() eq 'FINDER'}">
-                        "${pageContext.request.contextPath}/jsp/user-finder/welcomeFinder.jsp"
+                        "${pageContext.request.contextPath}/jsp/finder/welcomeFinder.jsp"
                     </c:when>
                     <c:otherwise>
                         "${pageContext.request.contextPath}/jsp/guest/home.jsp"
