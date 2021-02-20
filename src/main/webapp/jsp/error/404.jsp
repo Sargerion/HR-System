@@ -12,6 +12,7 @@
     <title><fmt:message key="error_page_title"/></title>
 </head>
 <body>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <div id="notfound">
     <div class="notfound">
         <div class="notfound-404">

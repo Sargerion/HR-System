@@ -17,6 +17,7 @@
 <h2 style="text-align: center; font-weight: bold"><fmt:message key="all_users"/></h2>
 <ctag:all_users_list/>
 <c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

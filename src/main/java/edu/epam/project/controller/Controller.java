@@ -38,7 +38,7 @@ public class Controller extends HttpServlet {
             commandResult = command.execute(requestContext);
         } catch (CommandException e) {
             logger.error(e);
-            throw new ServletException(e);
+            commandResult = new CommandResult(PathJsp.ERROR_404_PAGE, TransitionType.FORWARD);
         }
         requestContext.insertAttributes(request);
         if (request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {

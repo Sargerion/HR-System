@@ -11,6 +11,7 @@ public class ErrorMessage {
     public static final String LOGIN_ALREADY_EXISTS = "Login has already existed";
     public static final String ERROR_SECOND_TRANSIT_BY_LINK = "You've already active, you can just login";
     public static final String ERROR_WITH_UPLOAD = "Please select file, you choose nothing";
+    public static final String ERROR_ACCESS = "Access denied";
 
     private ErrorMessage() {
 

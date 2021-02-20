@@ -4,20 +4,61 @@ import edu.epam.project.controller.command.impl.admin.ActivateHRCommand;
 import edu.epam.project.controller.command.impl.admin.FindUserListCommand;
 import edu.epam.project.controller.command.impl.admin.ForwardToUserListCommand;
 import edu.epam.project.controller.command.impl.common.*;
+import edu.epam.project.model.entity.UserType;
+
+import java.util.Arrays;
+import java.util.EnumSet;
 
 public enum CommandName {
 
-    LOG_IN(new LogInCommand()),
-    LOG_OUT(new LogOutCommand()),
-    CHANGE_LANGUAGE(new LanguageCommand()),
-    REGISTER(new RegisterCommand()),
-    ACTIVATE(new ActivateCommand()),
-    ACTIVATE_HR(new ActivateHRCommand()),
-    FORWARD_TO_USER_LIST(new ForwardToUserListCommand()),
-    USER_LIST(new FindUserListCommand()),
-    UPLOAD_AVATAR(new UploadAvatarCommand());
+    LOG_IN(new LogInCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER, UserType.GUEST);
+        }
+    },
+    LOG_OUT(new LogOutCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
+        }
+    },
+    CHANGE_LANGUAGE(new LanguageCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER, UserType.GUEST);
+        }
+    },
+    REGISTER(new RegisterCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER, UserType.GUEST);
+        }
+    },
+    ACTIVATE(new ActivateCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER, UserType.GUEST);
+        }
+    },
+    ACTIVATE_HR(new ActivateHRCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    FORWARD_TO_USER_LIST(new ForwardToUserListCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    USER_LIST(new FindUserListCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    UPLOAD_AVATAR(new UploadAvatarCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
+        }
+    };
 
     private Command command;
+    EnumSet<UserType> allowedUserTypes = EnumSet.noneOf(UserType.class);
 
     CommandName(Command command) {
         this.command = command;
@@ -25,5 +66,13 @@ public enum CommandName {
 
     public Command getCommand() {
         return command;
+    }
+
+    public void setAllowedUserTypes(UserType... userTypes) {
+        allowedUserTypes.addAll(Arrays.asList(userTypes));
+    }
+
+    public boolean isTypeAllowed(UserType userType) {
+        return allowedUserTypes.contains(userType);
     }
 }
