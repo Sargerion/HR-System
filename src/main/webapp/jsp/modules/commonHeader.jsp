@@ -14,7 +14,7 @@
     <nav>
         <div class="logo"><fmt:message key="logo"/></div>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/jsp/home.jsp"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/guest/home.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a>
                 <ul>
@@ -27,8 +27,8 @@
                     <li><a href="#" >Something</a></li>
                 </ul>
             </li>
-            <li><a href="${pageContext.request.contextPath}/jsp/login.jsp" class="delim"><fmt:message key="login"/></a></li>
-            <li><a href="${pageContext.request.contextPath}/jsp/register.jsp"><fmt:message key="register"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/guest/login.jsp" class="delim"><fmt:message key="login"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/guest/register.jsp"><fmt:message key="register"/></a></li>
         </ul>
     </nav>
 </header>

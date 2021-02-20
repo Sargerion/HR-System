@@ -27,10 +27,10 @@
                             "${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"
                      </c:when>
                      <c:when test="${sessionScope.user.getType() eq 'FINDER'}">
-                            "${pageContext.request.contextPath}/jsp/welcomeFinder.jsp"
+                            "${pageContext.request.contextPath}/jsp/user-finder/welcomeFinder.jsp"
                      </c:when>
                      <c:otherwise>
-                            "${pageContext.request.contextPath}/jsp/home.jsp"
+                            "${pageContext.request.contextPath}/jsp/guest/home.jsp"
                      </c:otherwise>
         </c:choose>><fmt:message key="move_from_error_page_button"/></a>
     </div>

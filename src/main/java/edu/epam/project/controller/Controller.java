@@ -31,10 +31,8 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionRequestContext requestContext = new SessionRequestContext(request);
-        logger.info(requestContext.toString());
         Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter(RequestParameter.COMMAND));
-        logger.info(optionalCommand);
-        Command command = optionalCommand.orElseThrow(IllegalAccessError::new);
+        Command command = optionalCommand.orElseThrow(IllegalArgumentException::new);
         CommandResult commandResult;
         try {
             commandResult = command.execute(requestContext);
@@ -42,7 +40,6 @@ public class Controller extends HttpServlet {
             logger.error(e);
             throw new ServletException(e);
         }
-        logger.info(commandResult.toString());
         requestContext.insertAttributes(request);
         if (request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
             request.getSession().invalidate();

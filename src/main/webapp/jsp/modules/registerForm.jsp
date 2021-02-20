@@ -40,7 +40,6 @@
         <input style="display:block;
     position: relative;
     padding:0.3em 1.2em;
-    border:0.16em solid rgba(255,255,255,0);
     border-radius:2em;
     box-sizing: border-box;
     text-decoration:none;
@@ -51,7 +50,6 @@
     width: 60%;
     height: 5%;
     color:#FFFFFF;
-    text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
     text-align:center;
     transition: all 0.2s;
     background: #4ef18f;

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="current_page" value="/jsp/home.jsp" scope="request"/>
+<c:set var="current_page" value="/jsp/guest/home.jsp" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
 
@@ -11,7 +11,7 @@
     <title><fmt:message key="home"/></title>
 </head>
 <body>
-<c:import url="modules/commonHeader.jsp"/>
+<c:import url="/jsp/modules/commonHeader.jsp"/>
 <c:import url="/jsp/modules/part/message_part.jsp"/>
 <c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <br/>
