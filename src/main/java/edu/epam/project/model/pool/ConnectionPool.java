@@ -86,6 +86,7 @@ public class ConnectionPool {
         try {
             lockConnection.lock();
             if (!(connection instanceof ProxyConnection)) {
+                logger.error("Not proxy trying release");
                 throw new ConnectionException("It's not a proxy");
             } else {
                 if (givenAwayConnections.contains(connection)) {

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ctag" uri="custom_tag" %>
 
-<c:set var="current_page" value="/jsp/user-finder/changeAvatar.jsp" scope="request"/>
+<c:set var="current_page" value="/jsp/common/changeAvatar.jsp" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
 
