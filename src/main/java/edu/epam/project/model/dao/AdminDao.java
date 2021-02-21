@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface AdminDao extends BaseDao<Integer, User> {
 
-    List<User> findNotActiveHRs() throws DaoException;
+    List<User> findNotActiveHRs(int start, int end) throws DaoException;
 
     int countUsers() throws DaoException;
+
+    int countNotActiveHRs() throws DaoException;
 }

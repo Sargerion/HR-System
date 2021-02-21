@@ -28,9 +28,10 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/jsp/admin/hrRequestsView.jsp"><fmt:message key="see_hrs"/></a></li>
+                    <li><c:import url="/jsp/admin/part/hrListForm.jsp"/></li>
                     <li><c:import url="/jsp/admin/part/userListForm.jsp"/></li>
-                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: normal"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: bold"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/admin/addCompany.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: bold"><fmt:message key="company_add_title"/></h5></a></li>
                     <li>
                         <a href="#">More</a>
                         <ul>

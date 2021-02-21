@@ -33,11 +33,10 @@ public class ViewAllUsersTag extends TagSupport {
         JspWriter writer = pageContext.getOut();
         SessionRequestContext sessionRequestContext = new SessionRequestContext(request);
         createList(writer, sessionRequestContext);
-        int currentPage = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.ALL_USERS_CURRENT_PAGE);
         int usersCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.USERS_COUNT);
         int pagesCount = usersCount % LIST_LINES_COUNT == 0 ? usersCount / LIST_LINES_COUNT : usersCount / LIST_LINES_COUNT + 1;
         String command = CommandName.USER_LIST.toString().toLowerCase();
-        TagUtil.paginate(pageContext, currentPage, pagesCount, command);
+        TagUtil.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
 

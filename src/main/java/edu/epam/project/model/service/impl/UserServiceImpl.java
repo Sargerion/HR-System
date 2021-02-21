@@ -12,7 +12,7 @@ import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.util.Encrypter;
-import edu.epam.project.model.validator.UserValidator;
+import edu.epam.project.model.validator.UserInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         Optional<String> correctLogin = Optional.empty();
         Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginResult = new HashMap<>();
         Optional<String> userDbPassword;
-        if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password)) {
+        if (!UserInputValidator.isValidLogin(login) || !UserInputValidator.isValidPassword(password)) {
             errorMessage = Optional.of(ErrorMessage.INVALID_LOGIN_OR_PASSWORD);
         }
         try {
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         List<String> errorMessages = new ArrayList<>();
         Map<String, String> correctFields = new HashMap<>();
         Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult = new HashMap<>();
-        if (!UserValidator.isValidLogin(login) || !UserValidator.isValidPassword(password) || !UserValidator.isValidEmail(email)) {
+        if (!UserInputValidator.isValidLogin(login) || !UserInputValidator.isValidPassword(password) || !UserInputValidator.isValidEmail(email)) {
             errorMessages.add(ErrorMessage.REGISTER_FAIL_INPUT);
         }
         try {

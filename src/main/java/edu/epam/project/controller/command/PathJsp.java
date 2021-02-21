@@ -20,6 +20,7 @@ public class PathJsp {
     public static final String ERROR_URL_PART = "jsp/error";
     public static final String MODULES_URL_PART = "jsp/modules";
     public static final String GUEST_URL_PART = "jsp/guest";
+    public static final String ADD_COMPANY_PAGE = "/jsp/admin/addCompany.jsp";
 
     private PathJsp() {
 

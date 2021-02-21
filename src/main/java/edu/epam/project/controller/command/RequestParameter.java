@@ -15,6 +15,11 @@ public class RequestParameter {
     public static final String CONFIRMATION_TOKEN = "confirm_token";
     public static final String HR_CHECK_BOX = "checked";
     public static final String NEW_PAGE = "newPage";
+    public static final String COMPANY_NAME = "company_name";
+    public static final String COMPANY_OWNER = "company_owner";
+    public static final String COMPANY_TOWN = "company_town";
+
+    public static final String COMPANY_HR_LOGIN = "company_hr_login";
 
     private RequestParameter() {
 

@@ -25,7 +25,7 @@ public class TagUtil {
         return resourceBundle;
     }
 
-    public static void paginate(PageContext pageContext, int currentPage, int pagesCount, String command) throws JspException {
+    public static void paginate(PageContext pageContext, int pagesCount, String command) throws JspException {
         try {
             JspWriter writer = pageContext.getOut();
             String contextPath = pageContext.getServletContext().getContextPath();

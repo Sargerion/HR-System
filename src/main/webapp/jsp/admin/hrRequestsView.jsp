@@ -10,14 +10,14 @@
 <html>
 <head>
     <title><fmt:message key="see_hrs"/></title>
-    <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/tables.css" rel="stylesheet">
 </head>
 <body>
 <c:import url="part/adminHeader.jsp"/>
-
-
-
+<h2 style="text-align: center; font-weight: bold"><fmt:message key="hr_list"/></h2>
 <ctag:not_active_hr_list/>
+<c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

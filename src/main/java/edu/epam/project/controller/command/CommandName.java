@@ -1,8 +1,6 @@
 package edu.epam.project.controller.command;
 
-import edu.epam.project.controller.command.impl.admin.ActivateHRCommand;
-import edu.epam.project.controller.command.impl.admin.FindUserListCommand;
-import edu.epam.project.controller.command.impl.admin.ForwardToUserListCommand;
+import edu.epam.project.controller.command.impl.admin.*;
 import edu.epam.project.controller.command.impl.common.*;
 import edu.epam.project.model.entity.UserType;
 
@@ -54,6 +52,21 @@ public enum CommandName {
     UPLOAD_AVATAR(new UploadAvatarCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
+        }
+    },
+    NOT_ACTIVE_HR_LIST(new FindNotActiveHRListCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    FORWARD_TO_HR_LIST(new ForwardToHRListCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    ADD_COMPANY(new AddCompanyCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
         }
     };
 
