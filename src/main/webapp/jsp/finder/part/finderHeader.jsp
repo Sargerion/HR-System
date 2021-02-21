@@ -5,7 +5,6 @@
 
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
-
 <html>
 <head>
     <link href="${pageContext.request.contextPath}/css/home.css" rel="stylesheet">
@@ -18,7 +17,7 @@
         <h2 class="logo" style="font-size: 19px; "><fmt:message key="login_placeholder"/>:${sessionScope.user.getLogin()}</h2>
         <h2 class="logo" style="font-size: 19px;"><fmt:message key="user_role"/>:${sessionScope.user.getType()}</h2>
         <ul>
-            <li><a href="${pageContext.request.contextPath}/jsp/admin/welcomeAdmin.jsp"><fmt:message key="home"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/jsp/finder/welcomeFinder.jsp"><fmt:message key="home"/></a></li>
             <li>
                 <a href="#"><fmt:message key="languages_list_name"/></a>
                 <ul>
@@ -28,8 +27,6 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/jsp/admin/hrRequestsView.jsp"><fmt:message key="see_hrs"/></a></li>
-                    <li><c:import url="/jsp/admin/part/userListForm.jsp"/></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: normal"><fmt:message key="upload_title"/></h5></a></li>
                     <li>
                         <a href="#">More</a>
