@@ -27,9 +27,6 @@ public class AdminDaoImpl implements AdminDao {
     private static final Logger logger = LogManager.getLogger();
     private static final EntityBuilder<User> userBuilder = new UserBuilder();
 
-    private AdminDaoImpl() {
-    }
-
     public static AdminDaoImpl getInstance() {
         return instance;
     }
@@ -47,6 +44,9 @@ public class AdminDaoImpl implements AdminDao {
 
     @Language("SQL")
     private static final String COUNT_USERS = "SELECT COUNT(*) AS users_count FROM users";
+
+    private AdminDaoImpl() {
+    }
 
     @Override
     public boolean add(User entity) throws DaoException {

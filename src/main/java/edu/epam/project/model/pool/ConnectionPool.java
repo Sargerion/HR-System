@@ -115,8 +115,8 @@ public class ConnectionPool {
     void closeUnnecessaryConnections() {
         int closeConnections = 0;
         if (givenPerPeriodConnection.get() < VALUE_TO_DOWNSIZE_POOL) {
-            int connectionsToCloseCount = detectPoolSize().get() - HOW_MUCH_DOWNSIZE_POOL;
-            while (!freeConnections.isEmpty()) {
+            int connectionsToCloseCount = HOW_MUCH_DOWNSIZE_POOL;
+            while (connectionsToCloseCount != 0 && !freeConnections.isEmpty()) {
                 try {
                     freeConnections.take().realClose();
                     closeConnections++;
@@ -128,6 +128,7 @@ public class ConnectionPool {
         }
         givenPerPeriodConnection.set(0);
         logger.info("Pool size decreased by -> {}, current pool size -> {}", HOW_MUCH_DOWNSIZE_POOL, detectPoolSize());
+        logger.info("Closed -> {} connections", closeConnections);
     }
 
     private void initializePool() {

@@ -26,9 +26,6 @@ public class UsersDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger();
     private static final EntityBuilder<User> userBuilder = new UserBuilder();
 
-    private UsersDaoImpl() {
-    }
-
     public static UsersDaoImpl getInstance() {
         return instance;
     }
@@ -71,6 +68,9 @@ public class UsersDaoImpl implements UserDao {
 
     @Language("SQL")
     private static final String SELECT_AVATAR_PATH_BY_USER_ID = "SELECT user_avatar_path FROM users WHERE user_id = ?;";
+
+    private UsersDaoImpl() {
+    }
 
     @Override
     public boolean add(User entity) throws DaoException {

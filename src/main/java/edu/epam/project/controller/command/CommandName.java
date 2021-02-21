@@ -6,8 +6,8 @@ import edu.epam.project.controller.command.impl.admin.ForwardToUserListCommand;
 import edu.epam.project.controller.command.impl.common.*;
 import edu.epam.project.model.entity.UserType;
 
-import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 public enum CommandName {
 
@@ -69,7 +69,7 @@ public enum CommandName {
     }
 
     public void setAllowedUserTypes(UserType... userTypes) {
-        allowedUserTypes.addAll(Arrays.asList(userTypes));
+        allowedUserTypes.addAll(List.of(userTypes));
     }
 
     public boolean isTypeAllowed(UserType userType) {
