@@ -57,6 +57,7 @@ public class ActivateCommand implements Command {
             } catch (ServiceException e) {
                 logger.error(e);
                 requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, INCORRECT_ACTIVATE_PARAMETERS);
+                commandResult = defineCommandResult(userType);
             }
         }
         return commandResult;

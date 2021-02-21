@@ -26,7 +26,15 @@ public class CommandAccessFilter implements Filter {
             userType = user.getType();
         }
         String command = httpRequest.getParameter(RequestParameter.COMMAND);
-        CommandName commandName = CommandName.valueOf(command.toUpperCase());
+        CommandName commandName;
+        try {
+            commandName = CommandName.valueOf(command.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            httpRequest.setAttribute(RequestAttribute.ERROR_MESSAGE, ErrorMessage.ERROR_COMMAND);
+            RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(PathJsp.ERROR_404_PAGE);
+            dispatcher.forward(httpRequest, httpResponse);
+            return;
+        }
         if (!commandName.isTypeAllowed(userType)) {
             httpRequest.setAttribute(RequestAttribute.ERROR_MESSAGE, ErrorMessage.ERROR_ACCESS);
             RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(PathJsp.ERROR_404_PAGE);
