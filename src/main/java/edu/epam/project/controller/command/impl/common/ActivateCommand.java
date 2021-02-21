@@ -54,7 +54,7 @@ public class ActivateCommand implements Command {
                         logger.info(FriendlyMessage.CORRECT_ACTIVATE_FINDER);
                     }
                 }
-            } catch (ServiceException e) {
+            } catch (ServiceException | NumberFormatException e) {
                 logger.error(e);
                 requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, INCORRECT_ACTIVATE_PARAMETERS);
                 commandResult = defineCommandResult(userType);
