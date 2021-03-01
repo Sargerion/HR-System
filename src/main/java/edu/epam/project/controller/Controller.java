@@ -11,10 +11,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @WebServlet(name = "controller", urlPatterns = {"/controller"})
 @MultipartConfig(maxFileSize = 1024 * 1024 * 2,maxRequestSize = 1024 * 1024 * 8)
@@ -34,8 +30,8 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionRequestContext requestContext = new SessionRequestContext(request);
-        Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter(RequestParameter.COMMAND));
-        Command command = optionalCommand.orElseThrow(IllegalArgumentException::new);
+        CommandName commandName = CommandName.valueOf(request.getParameter(RequestParameter.COMMAND).toUpperCase());
+        Command command = commandName.getCommand();
         CommandResult commandResult;
         try {
             commandResult = command.execute(requestContext);
