@@ -22,8 +22,8 @@ public class LanguageCommand implements Command {
         Optional<String> currentPage = requestContext.getRequestParameter(RequestParameter.CURRENT_PAGE);
         User user = (User) requestContext.getSessionAttribute(SessionAttribute.USER);
         UserType userType = UserType.GUEST;
-        String getToChangeLocale = "";
-        String getCurrentPage = "";
+        String getToChangeLocale;
+        String getCurrentPage;
         CommandResult commandResult = null;
         if (user != null) {
             userType = user.getType();
@@ -36,7 +36,6 @@ public class LanguageCommand implements Command {
             getCurrentPage = currentPage.get();
             if (!getCurrentPage.isEmpty() && !getToChangeLocale.isEmpty()) {
                 requestContext.setSessionAttribute(SessionAttribute.LOCALE, getToChangeLocale);
-                requestContext.setRequestAttribute(RequestAttribute.CURRENT_PAGE, getCurrentPage);
                 commandResult = new CommandResult(getCurrentPage, TransitionType.FORWARD);
                 logger.info(FriendlyMessage.LOCALE_CHANGED);
             }

@@ -15,11 +15,19 @@ public class RequestParameter {
     public static final String CONFIRMATION_TOKEN = "confirm_token";
     public static final String HR_CHECK_BOX = "checked";
     public static final String NEW_PAGE = "newPage";
+
+    public static final String SPECIALTY = "specialty";
+
     public static final String COMPANY_NAME = "company_name";
     public static final String COMPANY_OWNER = "company_owner";
     public static final String COMPANY_TOWN = "company_town";
 
     public static final String COMPANY_HR_LOGIN = "company_hr_login";
+    public static final String VACANCY_MONEY = "vacancy_money";
+    public static final String VACANCY_EXPERIENCE = "vacancy_experience";
+
+    public static final String FINDER_REQUIRE_SALARY = "finder_require_salary";
+    public static final String FINDER_WORK_EXPERIENCE = "finder_work_experience";
 
     private RequestParameter() {
 

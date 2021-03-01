@@ -10,6 +10,8 @@ public class SessionAttribute {
     public static final String HR_LIST_CURRENT_PAGE = "hr_table_current_page";
     public static final String HR_LIST = "hr_list";
     public static final String NOT_ACTIVE_HRs_COUNT = "hr_count";
+    public static final String SPECIALTY_LIST = "specialties";
+
 
     private SessionAttribute() {
 

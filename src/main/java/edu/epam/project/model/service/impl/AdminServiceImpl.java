@@ -3,7 +3,7 @@ package edu.epam.project.model.service.impl;
 import edu.epam.project.model.dao.AdminDao;
 import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.AdminDaoImpl;
-import edu.epam.project.model.dao.impl.UsersDaoImpl;
+import edu.epam.project.model.dao.impl.UserDaoImpl;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserStatus;
 import edu.epam.project.exception.DaoException;
@@ -20,7 +20,7 @@ public class AdminServiceImpl implements AdminService {
 
     private static final AdminServiceImpl instance = new AdminServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private final UserDao userDao = UsersDaoImpl.getInstance();
+    private final UserDao userDao = UserDaoImpl.getInstance();
     private final AdminDao adminDao = AdminDaoImpl.getInstance();
 
     private AdminServiceImpl() {

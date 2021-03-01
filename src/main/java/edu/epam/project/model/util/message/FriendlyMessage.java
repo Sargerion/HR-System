@@ -9,6 +9,8 @@ public class FriendlyMessage {
     public static final String LOG_OUT = "Exit from account";
     public static final String EMPTY_USER_LIST = "Unfortunately, there are no users";
     public static final String EMPTY_HR_LIST = "Unfortunately, there are no not active HR users";
+    public static final String ADD_FINDER = "Finder info added correctly";
+    public static final String UPDATE_FINDER = "Finder info updated correctly";
 
     private FriendlyMessage() {
 

@@ -32,7 +32,15 @@
         <input type="text" name="company_town" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{20}$" placeholder="<fmt:message key="company_form_town_placeholder"/>"
                value=<c:if test="${requestScope.correct_company_town != null}">${requestScope.correct_company_town}</c:if>>
     </div>
-<%--    достать из бд список вакансий, скорее всего тегом--%>
+    <label style="color: red">*</label>
+    <h5><fmt:message key="company_form_list_needs"/></h5>
+    <div class="form-group">
+    <select name="vacancy" size="1" required>
+        <c:forEach items="${vacancies}" var="vacancy">
+            <option value="${vacancy.getEntityId()}">${vacancy.name}</option>
+        </c:forEach>
+    </select>
+    </div>
     <label style="color: red">*</label>
     <h5><fmt:message key="login_needs"/></h5>
     <div class="form-group">

@@ -2,18 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="current_page" value="/jsp/admin/addCompany.jsp" scope="request"/>
+<c:set var="current_page" value="/jsp/admin/hrActivate.jsp" scope="request"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="property.pagecontent"/>
 
 <html>
 <head>
-    <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet">
-    <title><fmt:message key="company_add_title"/></title>
+    <%--styles--%>
+    <title><fmt:message key="hr_activate_title"/></title>
 </head>
 <body>
 <c:import url="part/adminHeader.jsp"/>
-<c:import url="part/addCompanyForm.jsp"/>
+
+<c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>

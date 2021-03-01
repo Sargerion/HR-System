@@ -46,7 +46,7 @@ public class UploadAvatarCommand implements Command {
             logger.error(e);
         }
         if (fileName == null) {
-            commandResult = defineWithoutGuestCommandResult(userType);
+            commandResult = defineCommandResult(userType);
             requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_UPLOAD_FILE_PARAMETERS);
         } else {
             try {
@@ -69,7 +69,8 @@ public class UploadAvatarCommand implements Command {
         return commandResult;
     }
 
-    private CommandResult defineWithoutGuestCommandResult(UserType userType) {
+    @Override
+    public CommandResult defineCommandResult(UserType userType) {
         CommandResult commandResult = null;
         switch (userType) {
             case ADMIN -> {

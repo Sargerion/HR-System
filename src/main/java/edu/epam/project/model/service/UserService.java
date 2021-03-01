@@ -1,5 +1,6 @@
 package edu.epam.project.model.service;
 
+import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.ServiceException;
 
@@ -15,4 +16,10 @@ public interface UserService extends BaseService<Integer, User> {
     void updateAvatar(User user) throws ServiceException;
 
     Optional<String> findUserAvatar(User user) throws ServiceException;
+
+    List<Specialty> findAllSpecialties() throws ServiceException;
+
+    Optional<Specialty> findSpecialtyByName(String specialtyName) throws ServiceException;
+
+    Specialty findSpecialtyById(Integer specialtyId) throws ServiceException;
 }

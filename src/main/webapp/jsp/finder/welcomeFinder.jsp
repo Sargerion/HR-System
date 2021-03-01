@@ -8,10 +8,12 @@
 
 <html>
 <head>
+    <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet">
     <title><fmt:message key="home"/></title>
 </head>
 <body>
 <c:import url="part/finderHeader.jsp"/>
+<c:import url="part/finderAddInfoForm.jsp"/>
 <c:import url="/jsp/modules/part/message_part.jsp"/>
 <c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>

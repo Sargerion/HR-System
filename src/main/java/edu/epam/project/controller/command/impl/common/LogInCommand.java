@@ -1,6 +1,7 @@
 package edu.epam.project.controller.command.impl.common;
 
 import edu.epam.project.controller.command.*;
+import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
@@ -69,6 +70,8 @@ public class LogInCommand implements Command {
                                 logger.info("Company HR with login -> {} entered", user.getLogin());
                             }
                             case FINDER -> {
+                                List<Specialty> specialties = userService.findAllSpecialties();
+                                requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
                                 commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
                                 logger.info("Finder with login -> {} entered", user.getLogin());
                             }

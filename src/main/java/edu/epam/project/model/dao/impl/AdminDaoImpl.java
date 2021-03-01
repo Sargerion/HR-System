@@ -35,18 +35,16 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Language("SQL")
-    private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, " +
-            "US.user_status_name, U.confirmation_token FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
-            "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id LIMIT ?, ?;";
+    private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
+            "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id LIMIT ?, ?;";
 
     @Language("SQL")
     private static final String COUNT_USERS = "SELECT COUNT(*) AS users_count FROM users";
 
     @Language("SQL")
-    private static final String SELECT_NOT_ACTIVE_HR_LIST_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, " +
-            "US.user_status_name, U.confirmation_token FROM users U INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
-            "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE UT.user_type_name = ? " +
-            "AND US.user_status_name = ? LIMIT ?, ?;";
+    private static final String SELECT_NOT_ACTIVE_HR_LIST_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
+            "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
+            "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE UT.user_type_name = ? AND US.user_status_name = ? LIMIT ?, ?;";
 
     @Language("SQL")
     private static final String COUNT_NOT_ACTIVE_HRS = "SELECT COUNT(*) FROM users WHERE user_status_id = ? AND user_type_id = ?;";
@@ -55,8 +53,8 @@ public class AdminDaoImpl implements AdminDao {
     }
 
     @Override
-    public boolean add(User entity) throws DaoException {
-        return false;
+    public void add(User entity) throws DaoException {
+
     }
 
     @Override

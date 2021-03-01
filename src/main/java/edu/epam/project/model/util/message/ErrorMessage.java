@@ -13,6 +13,7 @@ public class ErrorMessage {
     public static final String ERROR_WITH_UPLOAD = "Please select file, you choose nothing";
     public static final String ERROR_ACCESS = "Access denied";
     public static final String ERROR_COMMAND = "No such command";
+    public static final String ERROR_ADD_FINDER_INFO = "Incorrect adding info parameters";
 
     private ErrorMessage() {
 

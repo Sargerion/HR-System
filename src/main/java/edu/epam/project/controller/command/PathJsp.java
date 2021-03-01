@@ -21,6 +21,9 @@ public class PathJsp {
     public static final String MODULES_URL_PART = "jsp/modules";
     public static final String GUEST_URL_PART = "jsp/guest";
     public static final String ADD_COMPANY_PAGE = "/jsp/admin/addCompany.jsp";
+    public static final String CREATE_VACANCY_PAGE = "/jsp/hr/createVacancy.jsp";
+    public static final String HR_ACTIVATE_PAGE = "/jsp/admin/hrActivate.jsp";
+    public static final String ADD_FINDER_INFO_PAGE = "/jsp/finder/addFinderInfo.jsp";
 
     private PathJsp() {
 

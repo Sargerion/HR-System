@@ -3,10 +3,8 @@ package edu.epam.project.model.service.impl;
 import edu.epam.project.controller.command.RequestAttribute;
 import edu.epam.project.controller.command.RequestParameter;
 import edu.epam.project.model.dao.UserDao;
-import edu.epam.project.model.dao.impl.UsersDaoImpl;
-import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.UserStatus;
-import edu.epam.project.model.entity.UserType;
+import edu.epam.project.model.dao.impl.UserDaoImpl;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
@@ -22,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private static final UserServiceImpl instance = new UserServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private final UserDao userDao = UsersDaoImpl.getInstance();
+    private final UserDao userDao = UserDaoImpl.getInstance();
 
     private UserServiceImpl() {
     }
@@ -93,30 +91,31 @@ public class UserServiceImpl implements UserService {
         Optional<String> userDbPassword;
         if (!UserInputValidator.isValidLogin(login) || !UserInputValidator.isValidPassword(password)) {
             errorMessage = Optional.of(ErrorMessage.INVALID_LOGIN_OR_PASSWORD);
-        }
-        try {
-            if (userDao.existsLogin(login)) {
-                correctLogin = Optional.of(login);
-                if (userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
-                    userDbPassword = userDao.findUserPasswordByLogin(login);
-                    if (userDbPassword.isPresent()) {
-                        if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
-                            foundUser = userDao.findUserByLogin(login);
-                        } else {
-                            errorMessage = Optional.of(ErrorMessage.INCORRECT_PASSWORD);
+        } else {
+            try {
+                if (userDao.existsLogin(login)) {
+                    correctLogin = Optional.of(login);
+                    if (userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
+                        userDbPassword = userDao.findUserPasswordByLogin(login);
+                        if (userDbPassword.isPresent()) {
+                            if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
+                                foundUser = userDao.findUserByLogin(login);
+                            } else {
+                                errorMessage = Optional.of(ErrorMessage.INCORRECT_PASSWORD);
+                            }
                         }
+                    } else {
+                        errorMessage = Optional.of(ErrorMessage.NOT_ACTIVE_ACCOUNT);
                     }
                 } else {
-                    errorMessage = Optional.of(ErrorMessage.NOT_ACTIVE_ACCOUNT);
+                    errorMessage = Optional.of(ErrorMessage.NO_LOGIN);
                 }
-            } else {
-                errorMessage = Optional.of(ErrorMessage.NO_LOGIN);
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
             }
-            loginResult.put(foundUser, Map.of(errorMessage, correctLogin));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
         }
+        loginResult.put(foundUser, Map.of(errorMessage, correctLogin));
         return loginResult;
     }
 
@@ -128,37 +127,38 @@ public class UserServiceImpl implements UserService {
         Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult = new HashMap<>();
         if (!UserInputValidator.isValidLogin(login) || !UserInputValidator.isValidPassword(password) || !UserInputValidator.isValidEmail(email)) {
             errorMessages.add(ErrorMessage.REGISTER_FAIL_INPUT);
+        } else {
+            try {
+                if (userDao.existsLogin(login) && !repeatPassword.equals(password)) {
+                    errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
+                    errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
+                } else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
+                    correctFields.put(RequestAttribute.CORRECT_LOGIN, login);
+                    errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
+                } else if (userDao.existsLogin(login) && repeatPassword.equals(password)) {
+                    errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
+                    correctFields.put(RequestAttribute.CORRECT_PASSWORD, password);
+                    correctFields.put(RequestAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
+                }
+                correctFields.put(RequestAttribute.CORRECT_EMAIL, email);
+                if (isHR) {
+                    correctFields.put(RequestAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
+                } else {
+                    correctFields.put(RequestAttribute.HR_CHECK, "");
+                }
+                if (!userDao.existsLogin(login) && repeatPassword.equals(password)) {
+                    user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
+                            : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
+                    String encryptedPassword = Encrypter.encryptPassword(password);
+                    user.get().setConfirmationToken(UUID.randomUUID().toString());
+                    userDao.addUser(user.get(), encryptedPassword);
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
         }
-        try {
-            if (userDao.existsLogin(login) && !repeatPassword.equals(password)) {
-                errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
-                errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
-            } else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
-                correctFields.put(RequestAttribute.CORRECT_LOGIN, login);
-                errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
-            } else if (userDao.existsLogin(login) && repeatPassword.equals(password)) {
-                errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
-                correctFields.put(RequestAttribute.CORRECT_PASSWORD, password);
-                correctFields.put(RequestAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
-            }
-            correctFields.put(RequestAttribute.CORRECT_EMAIL, email);
-            if (isHR) {
-                correctFields.put(RequestAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
-            } else {
-                correctFields.put(RequestAttribute.HR_CHECK, "");
-            }
-            if (!userDao.existsLogin(login) && repeatPassword.equals(password)) {
-                user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
-                        : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
-                String encryptedPassword = Encrypter.encryptPassword(password);
-                user.get().setConfirmationToken(UUID.randomUUID().toString());
-                userDao.addUser(user.get(), encryptedPassword);
-            }
-            registerResult.put(user, Map.of(errorMessages, correctFields));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
+        registerResult.put(user, Map.of(errorMessages, correctFields));
         return registerResult;
     }
 
@@ -172,5 +172,41 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return userAvatar;
+    }
+
+    @Override
+    public List<Specialty> findAllSpecialties() throws ServiceException {
+        List<Specialty> specialties;
+        try {
+            specialties = new ArrayList<>(userDao.findAllSpecialties());
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return specialties;
+    }
+
+    @Override
+    public Optional<Specialty> findSpecialtyByName(String specialtyName) throws ServiceException {
+        Optional<Specialty> findSpecialty;
+        try {
+            findSpecialty = userDao.findSpecialtyByName(specialtyName);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return findSpecialty;
+    }
+
+    @Override
+    public Specialty findSpecialtyById(Integer specialtyId) throws ServiceException {
+        Specialty findSpecialty;
+        try {
+            findSpecialty = userDao.findSpecialtyById(specialtyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return findSpecialty;
     }
 }

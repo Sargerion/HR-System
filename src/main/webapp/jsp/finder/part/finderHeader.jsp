@@ -27,7 +27,8 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: normal"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: bold;white-space: normal;"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 12px; line-height: 8px; font-weight: bold;white-space: normal;"><fmt:message key="add_finder_info_title"/></h5></a></li>
                     <li>
                         <a href="#">More</a>
                         <ul>

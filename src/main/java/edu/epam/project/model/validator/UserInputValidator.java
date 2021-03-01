@@ -8,6 +8,11 @@ public class UserInputValidator {
     private static final String COMPANY_REGEX = "^[a-zA-Zа-яА-Я]{10}$";
     private static final String OWNER_REGEX = "^[a-zA-Zа-яА-Я]{25}$";
     private static final String TOWN_REGEX = "^[a-zA-Zа-яА-Я]{20}$";
+    private static final String DIGIT_REGEX = "\\d+";
+    private static final int SALARY_LOWER_BOUND = 500;
+    private static final int SALARY_UPPER_BOUND = 100000;
+    private static final int WORK_EXPERIENCE_LOWER_BOUND = 1;
+    private static final int WORK_EXPERIENCE_UPPER_BOUND = 60;
 
     public static boolean isValidLogin(String login) {
         return login.matches(LOGIN_REGEX);
@@ -31,5 +36,31 @@ public class UserInputValidator {
 
     public static boolean isValidTown(String town) {
         return town.matches(TOWN_REGEX);
+    }
+
+    public static boolean isValidSalary(String salary) {
+        boolean result = false;
+        if (salary.matches(DIGIT_REGEX)) {
+            int checkSalary = Integer.parseInt(salary);
+            if (checkSalary >= SALARY_LOWER_BOUND && checkSalary <= SALARY_UPPER_BOUND) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isValidWorkExperience(String workExperience) {
+        boolean result = false;
+        if (workExperience.matches(DIGIT_REGEX)) {
+            int checkWorkExperience = Integer.parseInt(workExperience);
+            if (checkWorkExperience >= WORK_EXPERIENCE_LOWER_BOUND && checkWorkExperience <= WORK_EXPERIENCE_UPPER_BOUND) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isValidId(String id) {
+        return id.matches(DIGIT_REGEX);
     }
 }

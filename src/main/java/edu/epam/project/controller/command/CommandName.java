@@ -2,6 +2,7 @@ package edu.epam.project.controller.command;
 
 import edu.epam.project.controller.command.impl.admin.*;
 import edu.epam.project.controller.command.impl.common.*;
+import edu.epam.project.controller.command.impl.finder.AddInfoCommand;
 import edu.epam.project.model.entity.UserType;
 
 import java.util.EnumSet;
@@ -67,6 +68,11 @@ public enum CommandName {
     ADD_COMPANY(new AddCompanyCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    ADD_FINDER_INFO(new AddInfoCommand()) {
+        {
+            setAllowedUserTypes(UserType.FINDER);
         }
     };
 
