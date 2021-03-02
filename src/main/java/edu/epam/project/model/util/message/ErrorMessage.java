@@ -14,6 +14,7 @@ public class ErrorMessage {
     public static final String ERROR_ACCESS = "Access denied";
     public static final String ERROR_COMMAND = "No such command";
     public static final String ERROR_ADD_FINDER_INFO = "Incorrect adding info parameters";
+    public static final String ADD_VACANCY_INCORRECT_PARAMETERS = "Incorrect adding vacancy parameters";
 
     private ErrorMessage() {
 

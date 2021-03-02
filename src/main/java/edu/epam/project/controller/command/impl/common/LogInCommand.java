@@ -25,23 +25,17 @@ public class LogInCommand implements Command {
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
         Optional<String> userAvatar;
-        String getLogin = "";
-        String getPassword = "";
         CommandResult commandResult = null;
         if (login.isEmpty() || password.isEmpty()) {
             requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_LOGIN_PARAMETERS);
             commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
         } else {
-            getLogin = login.get();
-            getPassword = password.get();
-        }
-        Optional<User> optionalUser = Optional.empty();
-        Optional<String> optionalErrorMessage = Optional.empty();
-        Optional<String> correctLogin = Optional.empty();
-        Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginResult;
-        try {
-            if (!getLogin.isEmpty() && !getPassword.isEmpty()) {
-                loginResult = userService.loginUser(getLogin, getPassword);
+            Optional<User> optionalUser = Optional.empty();
+            Optional<String> optionalErrorMessage = Optional.empty();
+            Optional<String> correctLogin = Optional.empty();
+            Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginResult;
+            try {
+                loginResult = userService.loginUser(login.get(), password.get());
                 for (Map.Entry<Optional<User>, Map<Optional<String>, Optional<String>>> entry : loginResult.entrySet()) {
                     optionalUser = entry.getKey();
                     for (Map.Entry<Optional<String>, Optional<String>> entryMessages : entry.getValue().entrySet()) {
@@ -79,10 +73,10 @@ public class LogInCommand implements Command {
                         }
                     }
                 }
+            } catch (ServiceException e) {
+                logger.error(e);
+                throw new CommandException(e);
             }
-        } catch (ServiceException e) {
-            logger.error(e);
-            throw new CommandException(e);
         }
         return commandResult;
     }

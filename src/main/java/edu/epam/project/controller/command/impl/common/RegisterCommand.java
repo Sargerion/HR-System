@@ -32,30 +32,20 @@ public class RegisterCommand implements Command {
         Optional<String> repeatPassword = requestContext.getRequestParameter(RequestParameter.REPEAT_PASSWORD);
         Optional<String> email = requestContext.getRequestParameter(RequestParameter.EMAIL);
         Optional<String> isHR = requestContext.getRequestParameter(RequestParameter.HR_OPTION_CHECK);
-        String getLogin = "";
-        String getPassword = "";
-        String getRepeatPassword = "";
-        String getEmail = "";
         CommandResult commandResult = null;
         if (login.isEmpty() || password.isEmpty() || repeatPassword.isEmpty() || email.isEmpty()) {
             requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_SIGN_UP_PARAMETERS);
             commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
         } else {
-            getLogin = login.get();
-            getPassword = password.get();
-            getRepeatPassword = repeatPassword.get();
-            getEmail = email.get();
-        }
-        Optional<User> optionalUser = Optional.empty();
-        List<String> errorMessages = new ArrayList<>();
-        Map<String, String> correctFields = new HashMap<>();
-        Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult;
-        try {
-            if (!getLogin.isEmpty() && !getPassword.isEmpty() && !getRepeatPassword.isEmpty() && !getEmail.isEmpty()) {
+            Optional<User> optionalUser = Optional.empty();
+            List<String> errorMessages = new ArrayList<>();
+            Map<String, String> correctFields = new HashMap<>();
+            Map<Optional<User>, Map<List<String>, Map<String, String>>> registerResult;
+            try {
                 if (isHR.isPresent()) {
-                    registerResult = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, IS_HR);
+                    registerResult = userService.registerUser(login.get(), password.get(), repeatPassword.get(), email.get(), IS_HR);
                 } else {
-                    registerResult = userService.registerUser(getLogin, getPassword, getRepeatPassword, getEmail, NOT_HR);
+                    registerResult = userService.registerUser(login.get(), password.get(), repeatPassword.get(), email.get(), NOT_HR);
                 }
                 for (Map.Entry<Optional<User>, Map<List<String>, Map<String, String>>> entry : registerResult.entrySet()) {
                     optionalUser = entry.getKey();
@@ -98,10 +88,10 @@ public class RegisterCommand implements Command {
                         commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
                     }
                 }
+            } catch (ServiceException | MailSendException e) {
+                logger.error(e);
+                throw new CommandException(e);
             }
-        } catch (ServiceException | MailSendException e) {
-            logger.error(e);
-            throw new CommandException(e);
         }
         return commandResult;
     }

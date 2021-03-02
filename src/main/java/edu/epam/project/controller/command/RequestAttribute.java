@@ -22,6 +22,12 @@ public class RequestAttribute {
 
     public static final String CORRECT_COMPANY_HR_LOGIN = "correct_company_hr_login";
 
+    public static final String CORRECT_VACANCY_NAME = "correct_vacancy_name";
+    public static final String CORRECT_VACANCY_SPECIALTY_ID = "correct_vacancy_specialty_id";
+    public static final String CORRECT_VACANCY_SALARY = "correct_vacancy_salary";
+    public static final String CORRECT_VACANCY_WORK_EXPERIENCE = "correct_vacancy_work_experience";
+
+
     private RequestAttribute() {
 
     }

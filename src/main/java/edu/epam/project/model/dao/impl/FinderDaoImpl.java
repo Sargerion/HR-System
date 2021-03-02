@@ -5,6 +5,7 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.pool.ConnectionPool;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;

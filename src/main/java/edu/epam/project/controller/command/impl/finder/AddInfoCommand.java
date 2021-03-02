@@ -8,6 +8,7 @@ import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.service.FinderService;
 import edu.epam.project.model.service.impl.FinderServiceImpl;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,24 +27,16 @@ public class AddInfoCommand implements Command {
         Optional<String> finderRequireSalary = requestContext.getRequestParameter(RequestParameter.FINDER_REQUIRE_SALARY);
         Optional<String> finderWorkExperience = requestContext.getRequestParameter(RequestParameter.FINDER_WORK_EXPERIENCE);
         Optional<String> specialtyId = requestContext.getRequestParameter(RequestParameter.SPECIALTY);
-        String getFinderRequireSalary = "";
-        String getFinderWorkExperience = "";
-        String getSpecialtyId = "";
         CommandResult commandResult = new CommandResult(PathJsp.ADD_FINDER_INFO_PAGE, TransitionType.FORWARD);
         if (finderRequireSalary.isEmpty() || finderWorkExperience.isEmpty() || specialtyId.isEmpty()) {
             requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_ADDING_INFO_PARAMETERS);
         } else {
-            getFinderRequireSalary = finderRequireSalary.get();
-            getFinderWorkExperience = finderWorkExperience.get();
-            getSpecialtyId = specialtyId.get();
-        }
-        Optional<Finder> optionalFinder = Optional.empty();
-        Optional<String> errorMessage = Optional.empty();
-        Map<Optional<Finder>, Optional<String>> addingResult;
-        if (!getFinderRequireSalary.isEmpty() && !getFinderWorkExperience.isEmpty() && !getSpecialtyId.isEmpty()) {
+            Optional<Finder> optionalFinder = Optional.empty();
+            Optional<String> errorMessage = Optional.empty();
+            Map<Optional<Finder>, Optional<String>> addingResult;
             try {
                 User user = (User) requestContext.getSessionAttribute(SessionAttribute.USER);
-                addingResult = finderService.addFinder(user.getEntityId(), getFinderRequireSalary, getFinderWorkExperience, getSpecialtyId);
+                addingResult = finderService.addFinder(user.getEntityId(), finderRequireSalary.get(), finderWorkExperience.get(), specialtyId.get());
                 for (Map.Entry<Optional<Finder>, Optional<String>> entry : addingResult.entrySet()) {
                     optionalFinder = entry.getKey();
                     errorMessage = entry.getValue();

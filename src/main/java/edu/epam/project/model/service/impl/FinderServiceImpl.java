@@ -69,8 +69,7 @@ public class FinderServiceImpl implements FinderService {
         Optional<String> errorMessage = Optional.empty();
         Specialty specialty;
         Map<Optional<Finder>, Optional<String>> addResult = new HashMap<>();
-        if (!UserInputValidator.isValidSalary(requireSalary) || !UserInputValidator.isValidWorkExperience(workExperience)
-                || !UserInputValidator.isValidId(specialtyId)) {
+        if (!UserInputValidator.isValidSalary(requireSalary) || !UserInputValidator.isValidWorkExperience(workExperience) || !UserInputValidator.isValidId(specialtyId)) {
             errorMessage = Optional.of(ErrorMessage.ERROR_ADD_FINDER_INFO);
         } else {
             try {
