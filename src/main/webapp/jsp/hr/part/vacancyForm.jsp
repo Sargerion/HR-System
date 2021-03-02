@@ -25,7 +25,7 @@
         <h5><fmt:message key="vacancy_specialty_title"/></h5>
         <div class="form-group">
         <select name="specialty" size="1" required>
-            <c:forEach items="${specialties}" var="specialty">
+            <c:forEach items="${sessionScope.specialties}" var="specialty">
                 <option value="${specialty.getEntityId()}">${specialty.specialtyName}</option>
             </c:forEach>
         </select>
