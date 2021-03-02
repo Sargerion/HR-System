@@ -51,7 +51,8 @@ public class HrServiceImpl implements HrService {
     }
 
     @Override
-    public Map<Optional<Vacancy>, Map<Optional<String>, Optional<String>>> addVacancy(String vacancyName, String specialtyId, String requireSalary, String workExperience) throws ServiceException {
+    public Map<Optional<Vacancy>, Map<List<String>, Map<String, String>>> addVacancy(String vacancyName, String specialtyId, String requireSalary, String workExperience) throws ServiceException {
+        Optional<Vacancy> vacancy = Optional.empty();
         return null;
     }
 }
