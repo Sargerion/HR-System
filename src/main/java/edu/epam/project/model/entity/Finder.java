@@ -77,6 +77,7 @@ public class Finder extends Entity{
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Finder{");
+        sb.append(super.toString());
         sb.append("requireSalary=").append(requireSalary);
         sb.append(", workExperience=").append(workExperience);
         sb.append(", specialty='").append(specialty).append('\'');

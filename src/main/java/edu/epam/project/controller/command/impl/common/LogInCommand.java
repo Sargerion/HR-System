@@ -60,17 +60,18 @@ public class LogInCommand implements Command {
                         userAvatar = userService.findUserAvatar(user);
                         userAvatar.ifPresent(user::setAvatarName);
                         requestContext.setSessionAttribute(SessionAttribute.USER, user);
+                        List<Specialty> specialties = userService.findAllSpecialties();
                         switch (userType) {
                             case ADMIN -> {
                                 commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
                                 logger.info("Admin with login -> {} entered", user.getLogin());
                             }
                             case COMPANY_HR -> {
+                                requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
                                 commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
                                 logger.info("Company HR with login -> {} entered", user.getLogin());
                             }
                             case FINDER -> {
-                                List<Specialty> specialties = userService.findAllSpecialties();
                                 requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
                                 commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
                                 logger.info("Finder with login -> {} entered", user.getLogin());

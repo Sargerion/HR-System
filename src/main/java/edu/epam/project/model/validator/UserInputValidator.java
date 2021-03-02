@@ -13,6 +13,7 @@ public class UserInputValidator {
     private static final int SALARY_UPPER_BOUND = 100000;
     private static final int WORK_EXPERIENCE_LOWER_BOUND = 1;
     private static final int WORK_EXPERIENCE_UPPER_BOUND = 60;
+    private static final String VACANCY_NAME_REGEX = "^[a-zA-Zа-яА-Я]{40}$";
 
     public static boolean isValidLogin(String login) {
         return login.matches(LOGIN_REGEX);
@@ -62,5 +63,9 @@ public class UserInputValidator {
 
     public static boolean isValidId(String id) {
         return id.matches(DIGIT_REGEX);
+    }
+
+    public static boolean isValidVacancyName(String vacancyName) {
+        return vacancyName.matches(VACANCY_NAME_REGEX);
     }
 }

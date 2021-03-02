@@ -23,6 +23,7 @@ public class RequestParameter {
     public static final String COMPANY_TOWN = "company_town";
 
     public static final String COMPANY_HR_LOGIN = "company_hr_login";
+    public static final String VACANCY_NAME = "vacancy_name";
     public static final String VACANCY_MONEY = "vacancy_money";
     public static final String VACANCY_EXPERIENCE = "vacancy_experience";
 

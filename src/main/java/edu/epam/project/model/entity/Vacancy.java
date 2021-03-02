@@ -5,17 +5,16 @@ import java.math.BigDecimal;
 public class Vacancy extends Entity {
 
     private String name;
-    private String specialty;
+    private Specialty specialty;
     private BigDecimal salary;
     private Integer needWorkExperience;
 
     public Vacancy() {
     }
 
-    public Vacancy(Integer specialtyId,String name, String specialty, BigDecimal salary, Integer needWorkExperience) {
-        super(specialtyId);
+    public Vacancy(Integer vacancyId, String name, BigDecimal salary, Integer needWorkExperience) {
+        super(vacancyId);
         this.name = name;
-        this.specialty = specialty;
         this.salary = salary;
         this.needWorkExperience = needWorkExperience;
     }
@@ -28,11 +27,11 @@ public class Vacancy extends Entity {
         this.name = name;
     }
 
-    public String getSpecialty() {
+    public Specialty getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(String specialty) {
+    public void setSpecialty(Specialty specialty) {
         this.specialty = specialty;
     }
 
@@ -80,6 +79,7 @@ public class Vacancy extends Entity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Vacancy{");
+        sb.append(super.toString());
         sb.append("name= ").append(name).append(", ");
         sb.append("specialty='").append(specialty).append('\'');
         sb.append(", salary=").append(salary);

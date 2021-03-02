@@ -11,6 +11,7 @@ import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.pool.ConnectionPool;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
@@ -103,7 +104,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
-            int userId = (resultSet.getInt(1));
+            int userId = resultSet.getInt(1);
             user.setEntityId(userId);
         } catch (ConnectionException | SQLException e) {
             logger.error(e);

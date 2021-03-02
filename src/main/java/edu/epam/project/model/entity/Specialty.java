@@ -45,6 +45,7 @@ public class Specialty extends Entity{
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Specialty{");
+        sb.append(super.toString());
         sb.append("specialtyName='").append(specialtyName).append('\'');
         sb.append('}');
         return sb.toString();
