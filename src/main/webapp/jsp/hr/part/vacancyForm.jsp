@@ -7,19 +7,15 @@
 
 <html>
 <body>
-<div class="container" style="max-height: 100%">
-    <form style="height: 80%" name="addVacancyForm" method="post" action="<c:url value="/controller"/>">
+<div class="container" style="max-height: 80%">
+    <form style="height: 65%" name="addVacancyForm" method="post" action="<c:url value="/controller"/>">
         <input type="hidden" name="command" value="add_vacancy">
         <h1><fmt:message key="vacancy_form_title"/></h1>
-        <c:import url="/jsp/error/error_parts/error_part.jsp"/>
-        <c:import url="/jsp/modules/part/message_part.jsp"/>
         <br/>
         <label style="color: red">*</label>
         <h5><fmt:message key="vacancy_name_needs"/></h5>
         <div class="form-group">
-            <input type="text" name="vacancy_name" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{40}$" placeholder="<fmt:message key="vacancy_name_placeholder"/>"
-
-            >
+            <input type="text" name="vacancy_name" class="form-control" required pattern="^[a-zA-Zа-яА-Я_-]{1,40}$" placeholder="<fmt:message key="vacancy_name_placeholder"/>">
         </div>
         <label style="color: red">*</label>
         <h5><fmt:message key="vacancy_specialty_title"/></h5>
@@ -65,7 +61,11 @@
                onmouseover="this.style.borderColor='rgba(25, 181, 254, 1)';"
                onmouseout="this.style.borderColor='#4ef18f';"
                value="<fmt:message key="form_create_vacancy"/>">
+        <br/>
     </form>
+    <br/>
+    <c:import url="/jsp/modules/part/message_part.jsp"/>
+    <c:import url="/jsp/error/error_parts/error_part.jsp"/>
 </div>
 </body>
 </html>

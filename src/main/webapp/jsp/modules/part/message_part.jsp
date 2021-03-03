@@ -7,3 +7,7 @@
 <c:if test="${not empty requestScope.confirmMailMessage}">
     <p style="color: deepskyblue; font-size: 20px; text-align: center;border: 1px solid green;padding: 35px;">${requestScope.confirmMailMessage}</p>
 </c:if>
+<c:if test="${not empty sessionScope.confirmMessage}">
+    <p style="color: deepskyblue; font-size: 20px; text-align: center;border: 1px solid green;padding: 35px;">${sessionScope.confirmMessage}</p>
+</c:if>
+<c:remove var="confirmMessage" scope="session"/>

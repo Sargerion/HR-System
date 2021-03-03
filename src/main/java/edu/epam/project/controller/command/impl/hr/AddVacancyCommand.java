@@ -1,14 +1,18 @@
 package edu.epam.project.controller.command.impl.hr;
 
-import edu.epam.project.controller.command.Command;
-import edu.epam.project.controller.command.CommandResult;
-import edu.epam.project.controller.command.SessionRequestContext;
+import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 
+import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.HrService;
 import edu.epam.project.model.service.impl.HrServiceImpl;
+import edu.epam.project.model.util.message.FriendlyMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Map;
+import java.util.Optional;
 
 public class AddVacancyCommand implements Command {
 
@@ -18,7 +22,35 @@ public class AddVacancyCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         HrService hrService = HrServiceImpl.getInstance();
-
-        return null;
+        Optional<String> vacancyName = requestContext.getRequestParameter(RequestParameter.VACANCY_NAME);
+        Optional<String> vacancySpecialtyId = requestContext.getRequestParameter(RequestParameter.SPECIALTY);
+        Optional<String> vacancySalary = requestContext.getRequestParameter(RequestParameter.VACANCY_MONEY);
+        Optional<String> vacancyWorkExperience = requestContext.getRequestParameter(RequestParameter.VACANCY_EXPERIENCE);
+        CommandResult commandResult = new CommandResult(PathJsp.CREATE_VACANCY_PAGE, TransitionType.REDIRECT);
+        if (vacancyName.isEmpty() || vacancySpecialtyId.isEmpty() || vacancySalary.isEmpty() || vacancyWorkExperience.isEmpty()) {
+            requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, EMPTY_ADDING_VACANCY_PARAMETERS);
+        } else {
+            Optional<Vacancy> vacancy = Optional.empty();
+            Optional<String> errorMessage = Optional.empty();
+            Map<Optional<Vacancy>, Optional<String>> addResult;
+            try {
+                addResult = hrService.addVacancy(vacancyName.get(), vacancySpecialtyId.get(), vacancySalary.get(), vacancyWorkExperience.get());
+                for (Map.Entry<Optional<Vacancy>, Optional<String>> entry : addResult.entrySet()) {
+                    vacancy = entry.getKey();
+                    errorMessage = entry.getValue();
+                }
+                if (errorMessage.isPresent()) {
+                    requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, errorMessage.get());
+                } else {
+                    if (vacancy.isPresent()) {
+                        requestContext.setSessionAttribute(SessionAttribute.CONFIRM_MESSAGE, FriendlyMessage.ADD_VACANCY);
+                    }
+                }
+            } catch (ServiceException e) {
+                logger.error(e);
+                throw new CommandException(e);
+            }
+        }
+        return commandResult;
     }
 }

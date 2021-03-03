@@ -1,8 +1,6 @@
 package edu.epam.project.model.pool;
 
 import edu.epam.project.exception.ConnectionException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,23 +13,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ConnectionPool {
 
     private static ConnectionPool instance;
     private static final Logger logger = LogManager.getLogger();
     private static final AtomicBoolean isPoolInitialize = new AtomicBoolean(true);
     private static final int MAX_POOL_SIZE = 8;
-    private static final int MIN_POOL_SIZE = 2;
+    private static final int MIN_POOL_SIZE = 4;
     private static final int RETURN_CONNECTION_PERIOD_MINUTES = 2;
-    private static final int VALUE_TO_DOWNSIZE_POOL = 60;
+    private static final int WAIT_BEFORE_START_REMOVE_CONNECTIONS_MINUTES = 1;
+    private static final int CONDITIONAL_VALUE_TO_DOWNSIZE_POOL = 50;
     private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
-    private static final Lock lockInstance = new ReentrantLock();
-    private final Lock lockConnection = new ReentrantLock();
+    private static final Lock lockInstance = new ReentrantLock(true);
+    private final Lock lockConnection = new ReentrantLock(true);
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
     private final ConnectionBuilder connectionBuilder = new ConnectionBuilder();
     private final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    private AtomicInteger givenPerPeriodConnection = new AtomicInteger(0);
+    private AtomicInteger givenPerPeriodConnectionCount = new AtomicInteger(0);
 
     private ConnectionPool() {
         freeConnections = new LinkedBlockingDeque<>(MAX_POOL_SIZE);
@@ -71,13 +73,13 @@ public class ConnectionPool {
                 proxyConnection = new ProxyConnection(connectionBuilder.create());
                 givenAwayConnections.offer(proxyConnection);
                 logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
-                logger.info("Connection created");
+                logger.info("New connection created and gone");
             } finally {
                 lockConnection.unlock();
             }
         }
-        givenPerPeriodConnection.incrementAndGet();
-        logger.debug("Connection per period -> {}", givenPerPeriodConnection);
+        givenPerPeriodConnectionCount.incrementAndGet();
+        logger.debug("Connection per period -> {}", givenPerPeriodConnectionCount);
         return proxyConnection;
     }
 
@@ -107,6 +109,7 @@ public class ConnectionPool {
                 throw new ConnectionException(e);
             } catch (InterruptedException e) {
                 logger.error(e);
+                Thread.currentThread().interrupt();
             }
         }
         deregisterDrivers();
@@ -114,19 +117,22 @@ public class ConnectionPool {
 
     void closeUnnecessaryConnections() {
         int closeConnections = 0;
-        if (givenPerPeriodConnection.get() < VALUE_TO_DOWNSIZE_POOL) {
+        if (givenPerPeriodConnectionCount.get() < CONDITIONAL_VALUE_TO_DOWNSIZE_POOL) {
             int connectionsToCloseCount = HOW_MUCH_DOWNSIZE_POOL;
             while (connectionsToCloseCount != 0 && !freeConnections.isEmpty()) {
                 try {
                     freeConnections.take().realClose();
                     closeConnections++;
                     connectionsToCloseCount--;
-                } catch (InterruptedException | SQLException e) {
+                } catch (SQLException e) {
                     logger.error(e);
+                } catch (InterruptedException e) {
+                    logger.error(e);
+                    Thread.currentThread().interrupt();
                 }
             }
         }
-        givenPerPeriodConnection.set(0);
+        givenPerPeriodConnectionCount.set(0);
         logger.info("Pool size decreased by -> {}, current pool size -> {}", HOW_MUCH_DOWNSIZE_POOL, detectPoolSize());
         logger.info("Closed -> {} connections", closeConnections);
     }
@@ -138,11 +144,11 @@ public class ConnectionPool {
                 proxyConnection = new ProxyConnection(connectionBuilder.create());
                 freeConnections.offer(proxyConnection);
             } catch (ConnectionException e) {
-                logger.error(e);
+                logger.fatal(e);
             }
         }
         UnnecessaryConnectionsReturner connectionsReturner = new UnnecessaryConnectionsReturner();
-        scheduledExecutorService.scheduleAtFixedRate(connectionsReturner, 0, RETURN_CONNECTION_PERIOD_MINUTES, TimeUnit.MINUTES);
+        scheduledExecutorService.scheduleAtFixedRate(connectionsReturner, WAIT_BEFORE_START_REMOVE_CONNECTIONS_MINUTES, RETURN_CONNECTION_PERIOD_MINUTES, TimeUnit.MINUTES);
     }
 
     private AtomicInteger detectPoolSize() {

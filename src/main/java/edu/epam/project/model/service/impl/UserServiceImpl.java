@@ -9,8 +9,9 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
-import edu.epam.project.model.util.Encrypter;
+import edu.epam.project.model.util.Encryptor;
 import edu.epam.project.model.validator.UserInputValidator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
                     if (userDao.detectUserStatusByLogin(login) == UserStatus.ACTIVE) {
                         userDbPassword = userDao.findUserPasswordByLogin(login);
                         if (userDbPassword.isPresent()) {
-                            if (Encrypter.checkInputPassword(password, userDbPassword.get())) {
+                            if (Encryptor.checkInputPassword(password, userDbPassword.get())) {
                                 foundUser = userDao.findUserByLogin(login);
                             } else {
                                 errorMessage = Optional.of(ErrorMessage.INCORRECT_PASSWORD);
@@ -149,7 +150,7 @@ public class UserServiceImpl implements UserService {
                 if (!userDao.existsLogin(login) && repeatPassword.equals(password)) {
                     user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
                             : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
-                    String encryptedPassword = Encrypter.encryptPassword(password);
+                    String encryptedPassword = Encryptor.encryptPassword(password);
                     user.get().setConfirmationToken(UUID.randomUUID().toString());
                     userDao.addUser(user.get(), encryptedPassword);
                 }

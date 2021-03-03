@@ -10,6 +10,7 @@ import edu.epam.project.model.service.FinderService;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.model.validator.UserInputValidator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,12 +45,24 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public Optional<Finder> findById(Integer entityId) throws ServiceException {
-        return Optional.empty();
+        Optional<Finder> foundFinder;
+        try {
+            foundFinder = finderDao.findById(entityId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return foundFinder;
     }
 
     @Override
     public void update(Finder entity) throws ServiceException {
-
+        try {
+            finderDao.update(entity);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
@@ -83,5 +96,17 @@ public class FinderServiceImpl implements FinderService {
         }
         addResult.put(finder, errorMessage);
         return addResult;
+    }
+
+    @Override
+    public boolean existsFinder(Integer finderId) throws ServiceException {
+        boolean isExist;
+        try {
+            isExist = finderDao.existsFinder(finderId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return isExist;
     }
 }

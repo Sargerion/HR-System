@@ -7,6 +7,7 @@ import edu.epam.project.model.entity.Hr;
 import edu.epam.project.model.entity.Vacancy;
 
 import edu.epam.project.model.pool.ConnectionPool;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;

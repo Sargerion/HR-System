@@ -11,7 +11,8 @@ public class SessionAttribute {
     public static final String HR_LIST = "hr_list";
     public static final String NOT_ACTIVE_HRs_COUNT = "hr_count";
     public static final String SPECIALTY_LIST = "specialties";
-
+    public static final String CONFIRM_MESSAGE = "confirmMessage";
+    public static final String ERROR_MESSAGE = "errorMessage";
 
     private SessionAttribute() {
 

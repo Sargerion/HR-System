@@ -15,6 +15,7 @@ public class ErrorMessage {
     public static final String ERROR_COMMAND = "No such command";
     public static final String ERROR_ADD_FINDER_INFO = "Incorrect adding info parameters";
     public static final String ADD_VACANCY_INCORRECT_PARAMETERS = "Incorrect adding vacancy parameters";
+    public static final String ALREADY_ADD_FINDER_INFO = "Finder info have already existed, please go to edit info page, if you need";
 
     private ErrorMessage() {
 

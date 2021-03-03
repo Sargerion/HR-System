@@ -13,7 +13,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 
 @WebServlet(name = "controller", urlPatterns = {"/controller"})
-@MultipartConfig(maxFileSize = 1024 * 1024 * 2,maxRequestSize = 1024 * 1024 * 8)
+@MultipartConfig(maxFileSize = 1024 * 1024 * 2, maxRequestSize = 1024 * 1024 * 8)
 public class Controller extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger();

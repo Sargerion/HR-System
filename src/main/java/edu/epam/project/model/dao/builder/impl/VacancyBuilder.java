@@ -15,7 +15,6 @@ public class VacancyBuilder implements EntityBuilder<Vacancy> {
         String vacancyName = resultSet.getString(VacanciesColumn.NAME);
         BigDecimal vacancySalary = resultSet.getBigDecimal(VacanciesColumn.SALARY);
         Integer vacancyNeedWorkExperience = resultSet.getInt(VacanciesColumn.NEED_WORK_EXPERIENCE);
-        //return new Vacancy(vacancyId, vacancyName, vacancySalary, vacancyNeedWorkExperience);
-        return null;
+        return new Vacancy(vacancyId, vacancyName, vacancySalary, vacancyNeedWorkExperience);
     }
 }

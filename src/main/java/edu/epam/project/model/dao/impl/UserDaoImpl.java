@@ -25,8 +25,8 @@ public class UserDaoImpl implements UserDao {
 
     private static final UserDaoImpl instance = new UserDaoImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final EntityBuilder<User> userBuilder = new UserBuilder();
-    private static final EntityBuilder<Specialty> specialtyBuilder = new SpecialtyBuilder();
+    private final EntityBuilder<User> userBuilder = new UserBuilder();
+    private final EntityBuilder<Specialty> specialtyBuilder = new SpecialtyBuilder();
 
     @Language("SQL")
     private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
@@ -114,7 +114,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean existId(Integer userId) throws DaoException {
-        boolean isExists = isExistID(userId, CONTAINS_USER_ID);
+        boolean isExists = isExistId(userId, CONTAINS_USER_ID);
         return isExists;
     }
 

@@ -43,7 +43,6 @@
         </ul>
     </nav>
 </header>
-<c:import url="/jsp/modules/part/message_part.jsp"/>
 <c:import url="/jsp/modules/avatarUpload.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>

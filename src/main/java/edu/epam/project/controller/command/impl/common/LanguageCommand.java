@@ -6,6 +6,7 @@ import edu.epam.project.exception.CommandException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.util.message.FriendlyMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

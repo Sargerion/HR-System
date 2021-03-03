@@ -2,6 +2,7 @@ package edu.epam.project.model.pool;
 
 import com.mysql.cj.jdbc.Driver;
 import edu.epam.project.exception.ConnectionException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

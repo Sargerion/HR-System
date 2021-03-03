@@ -5,8 +5,6 @@ import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.tag.util.TagUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -18,7 +16,6 @@ import java.util.ResourceBundle;
 
 public class ViewHrRequestsTag extends TagSupport {
 
-    private static final Logger logger = LogManager.getLogger();
     public static final int LIST_LINES_COUNT = 2;
     private static final String USER_ID_BUNDLE = "all_users_table_id";
     private static final String USER_LOGIN_BUNDLE = "all_users_table_login";
@@ -48,7 +45,6 @@ public class ViewHrRequestsTag extends TagSupport {
             createLines(writer, sessionRequestContext, notActiveHRs);
             writer.write("</tbody></table>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }
@@ -71,7 +67,6 @@ public class ViewHrRequestsTag extends TagSupport {
             TagUtil.createTableHeadItem(writer, userStatus);
             writer.write("</tr></thead>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }
@@ -97,11 +92,8 @@ public class ViewHrRequestsTag extends TagSupport {
                     }
                     writer.write("</tr>");
                 }
-            } else {
-                logger.error("HR list -> null");
             }
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }

@@ -25,7 +25,7 @@ public interface BaseDao<K, T extends Entity> {
 
     boolean deleteById(K entityId) throws DaoException;
 
-    default boolean isExistID(Integer value, String sqlQuery) throws DaoException {
+    default boolean isExistId(Integer value, String sqlQuery) throws DaoException {
         boolean result;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {

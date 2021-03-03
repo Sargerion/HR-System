@@ -15,3 +15,7 @@
     <p style="color: red; font-size: 13px; text-align: center;border: 1px solid red;padding: 10px;">${requestScope.error_dif_passws}</p>
 </c:if>
 
+<c:if test="${not empty sessionScope.errorMessage}">
+    <p style="color: red; font-size: 15px; text-align: center;border: 1px solid red;padding: 15px;">${sessionScope.errorMessage}</p>
+</c:if>
+<c:remove var="errorMessage" scope="session"/>

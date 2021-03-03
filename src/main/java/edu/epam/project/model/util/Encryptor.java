@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class Encrypter {
+public class Encryptor {
 
     private static final Logger logger = LogManager.getLogger();
 

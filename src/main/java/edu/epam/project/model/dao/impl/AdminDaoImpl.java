@@ -5,13 +5,14 @@ import edu.epam.project.model.dao.builder.impl.UserBuilder;
 import edu.epam.project.model.dao.AdminDao;
 import edu.epam.project.model.dao.table.UserStatusesColumn;
 import edu.epam.project.model.dao.table.UserTypesColumn;
-import edu.epam.project.model.dao.table.UsersColumn;
+import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserStatus;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.pool.ConnectionPool;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
@@ -28,11 +29,7 @@ public class AdminDaoImpl implements AdminDao {
 
     private static final AdminDaoImpl instance = new AdminDaoImpl();
     private static final Logger logger = LogManager.getLogger();
-    private static final EntityBuilder<User> userBuilder = new UserBuilder();
-
-    public static AdminDaoImpl getInstance() {
-        return instance;
-    }
+    private final EntityBuilder<User> userBuilder = new UserBuilder();
 
     @Language("SQL")
     private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
@@ -49,7 +46,19 @@ public class AdminDaoImpl implements AdminDao {
     @Language("SQL")
     private static final String COUNT_NOT_ACTIVE_HRS = "SELECT COUNT(*) FROM users WHERE user_status_id = ? AND user_type_id = ?;";
 
+    @Language("SQL")
+    private static final String INSERT_COMPANY = "INSERT INTO companies (company_id, company_name, company_owner, company_addres, vacancy_id, company_hr_login) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
+
+    @Language("SQL")
+    private static final String SELECT_COMPANY = "SELECT company_id, company_name, company_owner, company_addres, vacancy_name, company_hr_login FROM companies " +
+            "INNER JOIN vacancies ON companies.vacancy_id = vacancies.vacancy_id WHERE company_id = ?;";
+
     private AdminDaoImpl() {
+    }
+
+    public static AdminDaoImpl getInstance() {
+        return instance;
     }
 
     @Override
@@ -147,5 +156,22 @@ public class AdminDaoImpl implements AdminDao {
             throw new DaoException(e);
         }
         return notActiveHRsCount;
+    }
+
+    @Override
+    public void addCompany(Company company) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMPANY)) {
+            preparedStatement.setInt(1, company.getEntityId());
+            preparedStatement.setString(2, company.getName());
+            preparedStatement.setString(3, company.getOwner());
+            preparedStatement.setString(4, company.getAddress());
+            preparedStatement.setInt(5, company.getVacancy().getEntityId());
+            preparedStatement.setString(6, company.getHrLogin());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
     }
 }

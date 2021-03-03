@@ -8,6 +8,7 @@ import edu.epam.project.exception.CommandException;
 public class AddCompanyCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
+
         return null;
     }
 }

@@ -17,19 +17,19 @@
     <label style="color: red">*</label>
     <h5><fmt:message key="company_form_name_needs"/></h5>
     <div class="form-group">
-        <input type="text" name="company_name" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{10}$" placeholder="<fmt:message key="company_form_name_placeholder"/>"
+        <input type="text" name="company_name" class="form-control" required pattern="^[a-zA-Zа-яА-Я_-]{1,10}$" placeholder="<fmt:message key="company_form_name_placeholder"/>"
                value=<c:if test="${requestScope.correct_company_name != null}">${requestScope.correct_company_name}</c:if>>
     </div>
     <label style="color: red">*</label>
     <h5><fmt:message key="company_form_owner_needs"/></h5>
     <div class="form-group">
-        <input type="text" name="company_owner" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{25}$" placeholder="<fmt:message key="company_form_owner_placeholder"/>"
+        <input type="text" name="company_owner" class="form-control" required pattern="^[a-zA-Zа-яА-Я_-]{1,25}$" placeholder="<fmt:message key="company_form_owner_placeholder"/>"
                value=<c:if test="${requestScope.correct_company_owner != null}">${requestScope.correct_company_owner}</c:if>>
     </div>
     <label style="color: red">*</label>
     <h5><fmt:message key="company_form_town_needs"/></h5>
     <div class="form-group">
-        <input type="text" name="company_town" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{20}$" placeholder="<fmt:message key="company_form_town_placeholder"/>"
+        <input type="text" name="company_town" class="form-control" required pattern="^[a-zA-Zа-яА-Я]{1,20}$" placeholder="<fmt:message key="company_form_town_placeholder"/>"
                value=<c:if test="${requestScope.correct_company_town != null}">${requestScope.correct_company_town}</c:if>>
     </div>
     <label style="color: red">*</label>

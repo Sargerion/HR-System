@@ -14,12 +14,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.io.IOException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ViewAllUsersTag extends TagSupport {
 
-    private static final Logger logger = LogManager.getLogger();
     public static final int LIST_LINES_COUNT = 2;
     private static final String USER_ID_BUNDLE = "all_users_table_id";
     private static final String USER_LOGIN_BUNDLE = "all_users_table_login";
@@ -49,7 +46,6 @@ public class ViewAllUsersTag extends TagSupport {
             createLines(writer, sessionRequestContext, allUsers);
             writer.write("</tbody></table>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }
@@ -72,7 +68,6 @@ public class ViewAllUsersTag extends TagSupport {
             TagUtil.createTableHeadItem(writer, userStatus);
             writer.write("</tr></thead>");
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }
@@ -98,11 +93,8 @@ public class ViewAllUsersTag extends TagSupport {
                     }
                     writer.write("</tr>");
                 }
-            } else {
-                logger.error("User list -> null");
             }
         } catch (IOException e) {
-            logger.error(e);
             throw new JspException(e);
         }
     }

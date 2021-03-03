@@ -10,4 +10,5 @@ public interface FinderService extends BaseService<Integer, Finder> {
 
     Map<Optional<Finder>, Optional<String>> addFinder(Integer finderId, String requireSalary, String workExperience, String specialtyId) throws ServiceException;
 
+    boolean existsFinder(Integer finderId) throws ServiceException;
 }
