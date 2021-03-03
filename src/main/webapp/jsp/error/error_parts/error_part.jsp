@@ -19,3 +19,12 @@
     <p style="color: red; font-size: 15px; text-align: center;border: 1px solid red;padding: 15px;">${sessionScope.errorMessage}</p>
 </c:if>
 <c:remove var="errorMessage" scope="session"/>
+
+<c:if test="${not empty sessionScope.error_duplicate_company_name}">
+    <p style="color: red; font-size: 15px; text-align: center;border: 1px solid red;padding: 15px;">${sessionScope.error_duplicate_company_name}</p>
+</c:if>
+<c:remove var="error_duplicate_company_name" scope="session"/>
+<c:if test="${not empty sessionScope.error_duplicate_company_hr_login}">
+    <p style="color: red; font-size: 15px; text-align: center;border: 1px solid red;padding: 15px;">${sessionScope.error_duplicate_company_hr_login}</p>
+</c:if>
+<c:remove var="error_duplicate_company_hr_login" scope="session"/>

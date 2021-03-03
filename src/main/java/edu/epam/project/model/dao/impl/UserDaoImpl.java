@@ -4,6 +4,7 @@ import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.SpecialtyBuilder;
 import edu.epam.project.model.dao.builder.impl.UserBuilder;
 import edu.epam.project.model.dao.UserDao;
+import edu.epam.project.model.dao.builder.impl.VacancyBuilder;
 import edu.epam.project.model.dao.table.UserStatusesColumn;
 import edu.epam.project.model.dao.table.UserTypesColumn;
 import edu.epam.project.model.dao.table.UsersColumn;
@@ -27,6 +28,7 @@ public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger();
     private final EntityBuilder<User> userBuilder = new UserBuilder();
     private final EntityBuilder<Specialty> specialtyBuilder = new SpecialtyBuilder();
+    private final EntityBuilder<Vacancy> vacancyBuilder = new VacancyBuilder();
 
     @Language("SQL")
     private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
@@ -70,10 +72,15 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_ALL_SPECIALTIES = "SELECT specialty_id, specialty_name FROM specialties;";
 
     @Language("SQL")
-    private static final String SELECT_SPECIALTY_BY_NAME = "SELECT specialty_id, specialty_name FROM specialties WHERE specialty_name = ?;";
+    private static final String SELECT_SPECIALTY_BY_ID = "SELECT specialty_id, specialty_name FROM specialties WHERE specialty_id = ?;";
 
     @Language("SQL")
-    private static final String SELECT_SPECIALTY_BY_ID = "SELECT specialty_id, specialty_name FROM specialties WHERE specialty_id = ?;";
+    private static final String SELECT_VACANCY_BY_ID = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience " +
+            "FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id WHERE vacancy_id = ?;";
+
+    @Language("SQL")
+    private static final String SELECT_ALL_VACANCIES = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience " +
+            "FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id";
 
     private UserDaoImpl() {
     }
@@ -307,22 +314,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<Specialty> findSpecialtyByName(String specialtyName) throws DaoException {
-        Optional<Specialty> specialty;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SPECIALTY_BY_NAME)) {
-            preparedStatement.setString(1, specialtyName);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            specialty = Optional.ofNullable(specialtyBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return specialty;
-    }
-
-    @Override
     public Specialty findSpecialtyById(Integer specialtyId) throws DaoException {
         Specialty specialty;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -336,6 +327,39 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         }
         return specialty;
+    }
+
+    @Override
+    public Vacancy findVacancyById(Integer vacancyId) throws DaoException {
+        Vacancy vacancy;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_BY_ID)) {
+            preparedStatement.setInt(1, vacancyId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            vacancy = vacancyBuilder.build(resultSet);
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return vacancy;
+    }
+
+    @Override
+    public List<Vacancy> findAllVacancies() throws DaoException {
+        List<Vacancy> vacancies = new ArrayList<>();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_VACANCIES)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Vacancy vacancy = vacancyBuilder.build(resultSet);
+                vacancies.add(vacancy);
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return vacancies;
     }
 
     private boolean isExist(String value, String sqlQuery) throws DaoException {

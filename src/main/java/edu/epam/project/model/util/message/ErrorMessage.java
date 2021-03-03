@@ -13,9 +13,12 @@ public class ErrorMessage {
     public static final String ERROR_WITH_UPLOAD = "Please select file, you choose nothing";
     public static final String ERROR_ACCESS = "Access denied";
     public static final String ERROR_COMMAND = "No such command";
-    public static final String ERROR_ADD_FINDER_INFO = "Incorrect adding info parameters";
+    public static final String ERROR_ADD_FINDER_INFO = "Incorrect adding finder info parameters";
     public static final String ADD_VACANCY_INCORRECT_PARAMETERS = "Incorrect adding vacancy parameters";
     public static final String ALREADY_ADD_FINDER_INFO = "Finder info have already existed, please go to edit info page, if you need";
+    public static final String INCORRECT_ADD_COMPANY_PARAMETERS = "Incorrect adding company parameters";
+    public static final String COMPANY_NAME_DUPLICATE = "Company with this name has already existed";
+    public static final String COMPANY_HR_LOGIN_DUPLICATE = "Hr with this login has already worked in company";
 
     private ErrorMessage() {
 

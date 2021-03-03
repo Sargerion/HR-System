@@ -6,6 +6,7 @@ import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 
@@ -55,18 +56,19 @@ public class LogInCommand implements Command {
                         userAvatar.ifPresent(user::setAvatarName);
                         requestContext.setSessionAttribute(SessionAttribute.USER, user);
                         List<Specialty> specialties = userService.findAllSpecialties();
+                        List<Vacancy> vacancies = userService.findAllVacancies();
+                        requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
+                        requestContext.setSessionAttribute(SessionAttribute.VACANCY_LIST, vacancies);
                         switch (userType) {
                             case ADMIN -> {
                                 commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
                                 logger.info("Admin with login -> {} entered", user.getLogin());
                             }
                             case COMPANY_HR -> {
-                                requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
                                 commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
                                 logger.info("Company HR with login -> {} entered", user.getLogin());
                             }
                             case FINDER -> {
-                                requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
                                 commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
                                 logger.info("Finder with login -> {} entered", user.getLogin());
                             }

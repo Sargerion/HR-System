@@ -6,6 +6,7 @@ import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.FinderBuilder;
 import edu.epam.project.model.entity.Finder;
+import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.pool.ConnectionPool;
 
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +34,7 @@ public class FinderDaoImpl implements FinderDao {
     private static final String CONTAINS_FINDER_ID = "SELECT EXISTS(SELECT finder_id FROM finders WHERE finder_id = ?) AS finder_existence;";
 
     @Language("SQL")
-    private static final String SELECT_FINDER_BY_ID = "SELECT finder_id, finder_require_salary, finder_work_experience, specialty_name FROM finders " +
+    private static final String SELECT_FINDER_BY_ID = "SELECT finder_id, finder_require_salary, finder_work_experience, specialty_id, specialty_name FROM finders " +
             "INNER JOIN specialties ON finders.finder_specialty_id = specialties.specialty_id WHERE finder_id = ?;";
 
     private FinderDaoImpl() {

@@ -13,6 +13,15 @@ public class SessionAttribute {
     public static final String SPECIALTY_LIST = "specialties";
     public static final String CONFIRM_MESSAGE = "confirmMessage";
     public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String CORRECT_COMPANY_NAME = "correct_company_name";
+    public static final String CORRECT_COMPANY_OWNER = "correct_company_owner";
+    public static final String CORRECT_COMPANY_TOWN = "correct_company_town";
+    public static final String CORRECT_VACANCY_ID = "correct_vacancy_id";
+    public static final String CORRECT_VACANCY_NAME = "correct_vacancy_name";
+    public static final String CORRECT_COMPANY_HR_LOGIN = "correct_company_hr_login";
+    public static final String VACANCY_LIST = "vacancies";
+    public static final String ERROR_DUPLICATE_COMPANY_NAME = "error_duplicate_company_name";
+    public static final String ERROR_DUPLICATE_COMPANY_HR_LOGIN = "error_duplicate_company_hr_login";
 
     private SessionAttribute() {
 

@@ -188,18 +188,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<Specialty> findSpecialtyByName(String specialtyName) throws ServiceException {
-        Optional<Specialty> findSpecialty;
-        try {
-            findSpecialty = userDao.findSpecialtyByName(specialtyName);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return findSpecialty;
-    }
-
-    @Override
     public Specialty findSpecialtyById(Integer specialtyId) throws ServiceException {
         Specialty findSpecialty;
         try {
@@ -209,5 +197,29 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return findSpecialty;
+    }
+
+    @Override
+    public Vacancy findVacancyById(Integer vacancyId) throws ServiceException {
+        Vacancy vacancy;
+        try {
+            vacancy = userDao.findVacancyById(vacancyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return vacancy;
+    }
+
+    @Override
+    public List<Vacancy> findAllVacancies() throws ServiceException {
+        List<Vacancy> vacancies;
+        try {
+            vacancies = new ArrayList<>(userDao.findAllVacancies());
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return vacancies;
     }
 }

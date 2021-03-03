@@ -10,8 +10,8 @@ import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 import edu.epam.project.model.util.mail.MailSender;
-
 import edu.epam.project.model.util.message.FriendlyMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,9 +49,9 @@ public class RegisterCommand implements Command {
                 }
                 for (Map.Entry<Optional<User>, Map<List<String>, Map<String, String>>> entry : registerResult.entrySet()) {
                     optionalUser = entry.getKey();
-                    for (Map.Entry<List<String>, Map<String, String>> listListEntry : entry.getValue().entrySet()) {
-                        errorMessages = listListEntry.getKey();
-                        correctFields = listListEntry.getValue();
+                    for (Map.Entry<List<String>, Map<String, String>> listMapEntry : entry.getValue().entrySet()) {
+                        errorMessages = listMapEntry.getKey();
+                        correctFields = listMapEntry.getValue();
                     }
                 }
                 if (!errorMessages.isEmpty()) {

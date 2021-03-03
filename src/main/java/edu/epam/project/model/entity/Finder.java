@@ -12,12 +12,6 @@ public class Finder extends Entity{
     public Finder() {
     }
 
-    public Finder(Integer finderId, BigDecimal requireSalary, Integer workExperience) {
-        super(finderId);
-        this.requireSalary = requireSalary;
-        this.workExperience = workExperience;
-    }
-
     public Finder(Integer finderId, BigDecimal requireSalary, Integer workExperience, Specialty specialty) {
         super(finderId);
         this.requireSalary = requireSalary;

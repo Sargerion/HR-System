@@ -12,13 +12,6 @@ public class Vacancy extends Entity {
     public Vacancy() {
     }
 
-    public Vacancy(Integer vacancyId, String name, BigDecimal salary, Integer needWorkExperience) {
-        super(vacancyId);
-        this.name = name;
-        this.salary = salary;
-        this.needWorkExperience = needWorkExperience;
-    }
-
     public Vacancy(Integer vacancyId, String name, Specialty specialty, BigDecimal salary, Integer needWorkExperience) {
         super(vacancyId);
         this.name = name;

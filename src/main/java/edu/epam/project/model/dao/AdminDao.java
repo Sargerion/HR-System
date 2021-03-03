@@ -15,4 +15,8 @@ public interface AdminDao extends BaseDao<Integer, User> {
     int countNotActiveHRs() throws DaoException;
 
     void addCompany(Company company) throws DaoException;
+
+    boolean existsCompanyName(String companyName) throws DaoException;
+
+    boolean existsCompanyHrLogin(String companyHrLogin) throws DaoException;
 }

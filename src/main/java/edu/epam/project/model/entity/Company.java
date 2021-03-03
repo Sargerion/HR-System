@@ -8,6 +8,15 @@ public class Company extends Entity {
     private Vacancy vacancy;
     private String hrLogin;
 
+    public Company(Integer companyId, String name, String owner, String address, Vacancy vacancy, String hrLogin) {
+        super(companyId);
+        this.name = name;
+        this.owner = owner;
+        this.address = address;
+        this.vacancy = vacancy;
+        this.hrLogin = hrLogin;
+    }
+
     public String getName() {
         return name;
     }

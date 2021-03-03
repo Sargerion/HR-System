@@ -1,21 +1,25 @@
 package edu.epam.project.model.service.impl;
 
+import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.model.dao.AdminDao;
 import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.AdminDaoImpl;
 import edu.epam.project.model.dao.impl.UserDaoImpl;
+import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserStatus;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.AdminService;
 
+import edu.epam.project.model.service.UserService;
+import edu.epam.project.model.util.message.ErrorMessage;
+import edu.epam.project.model.validator.UserInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AdminServiceImpl implements AdminService {
 
@@ -102,6 +106,47 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(e);
         }
         return usersCount;
+    }
+
+    @Override
+    public Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String vacancyId, String companyHrLogin) throws ServiceException {
+        UserService userService = UserServiceImpl.getInstance();
+        Vacancy vacancy;
+        Optional<Company> company = Optional.empty();
+        List<String> errorMessages = new ArrayList<>();
+        Map<String, String> correctFields = new HashMap<>();
+        Map<Optional<Company>, Map<List<String>, Map<String, String>>> addResult = new HashMap<>();
+        if (!UserInputValidator.isValidCompanyName(companyName) || !UserInputValidator.isValidCompanyOwner(companyOwner) || !UserInputValidator.isValidCompanyTown(companyAddress) ||
+                !UserInputValidator.isValidId(vacancyId) || !UserInputValidator.isValidLogin(companyHrLogin)) {
+            errorMessages.add(ErrorMessage.INCORRECT_ADD_COMPANY_PARAMETERS);
+        } else {
+            try {
+                if (adminDao.existsCompanyName(companyName) && adminDao.existsCompanyHrLogin(companyHrLogin)) {
+                    errorMessages.add(ErrorMessage.COMPANY_NAME_DUPLICATE);
+                    errorMessages.add(ErrorMessage.COMPANY_HR_LOGIN_DUPLICATE);
+                } else if (adminDao.existsCompanyName(companyName) && !adminDao.existsCompanyHrLogin(companyHrLogin)) {
+                    errorMessages.add(ErrorMessage.COMPANY_NAME_DUPLICATE);
+                    correctFields.put(SessionAttribute.CORRECT_COMPANY_HR_LOGIN, companyHrLogin);
+                } else if (!adminDao.existsCompanyName(companyName) && adminDao.existsCompanyHrLogin(companyHrLogin)) {
+                    errorMessages.add(ErrorMessage.COMPANY_HR_LOGIN_DUPLICATE);
+                    correctFields.put(SessionAttribute.CORRECT_COMPANY_NAME, companyName);
+                }
+                correctFields.put(SessionAttribute.CORRECT_COMPANY_OWNER, companyOwner);
+                correctFields.put(SessionAttribute.CORRECT_COMPANY_TOWN, companyAddress);
+                correctFields.put(SessionAttribute.CORRECT_VACANCY_ID, vacancyId);
+                vacancy = userService.findVacancyById(Integer.parseInt(vacancyId));
+                correctFields.put(SessionAttribute.CORRECT_VACANCY_NAME, vacancy.getName());
+                if (!adminDao.existsCompanyName(companyName) && !adminDao.existsCompanyHrLogin(companyHrLogin)) {
+                    company = Optional.of(new Company(0, companyName, companyOwner, companyAddress, vacancy, companyHrLogin));
+                    adminDao.addCompany(company.get());
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        addResult.put(company, Map.of(errorMessages, correctFields));
+        return addResult;
     }
 
     @Override

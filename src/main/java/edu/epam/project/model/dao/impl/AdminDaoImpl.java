@@ -17,10 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,12 +44,20 @@ public class AdminDaoImpl implements AdminDao {
     private static final String COUNT_NOT_ACTIVE_HRS = "SELECT COUNT(*) FROM users WHERE user_status_id = ? AND user_type_id = ?;";
 
     @Language("SQL")
-    private static final String INSERT_COMPANY = "INSERT INTO companies (company_id, company_name, company_owner, company_addres, vacancy_id, company_hr_login) " +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_COMPANY = "INSERT INTO companies (company_name, company_owner, company_addres, vacancy_id, company_hr_login) " +
+            "VALUES (?, ?, ?, ?, ?)";
 
     @Language("SQL")
-    private static final String SELECT_COMPANY = "SELECT company_id, company_name, company_owner, company_addres, vacancy_name, company_hr_login FROM companies " +
-            "INNER JOIN vacancies ON companies.vacancy_id = vacancies.vacancy_id WHERE company_id = ?;";
+    private static final String CONTAINS_COMPANY_NAME = "SELECT EXISTS(SELECT company_name FROM companies WHERE company_name = ?) AS company_name_existence;";
+
+    @Language("SQL")
+    private static final String CONTAINS_COMPANY_HR_LOGIN = "SELECT EXISTS(SELECT company_hr_login FROM companies WHERE company_hr_login = ?) AS company_hr_login_existence;";
+
+    @Language("SQL")
+    private static final String SELECT_COMPANY = "SELECT company_id, company_name, company_owner, company_addres, " +
+            "vacancies.vacancy_id, vacancy_name, specialties.specialty_id, specialties.specialty_name, vacancies.vacancy_salary_usd, vacancies.vacancy_need_work_experience, company_hr_login FROM companies " +
+            "INNER JOIN vacancies ON companies.vacancy_id = vacancies.vacancy_id " +
+            "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id WHERE company_id = ?;";
 
     private AdminDaoImpl() {
     }
@@ -161,17 +166,47 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public void addCompany(Company company) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMPANY)) {
-            preparedStatement.setInt(1, company.getEntityId());
-            preparedStatement.setString(2, company.getName());
-            preparedStatement.setString(3, company.getOwner());
-            preparedStatement.setString(4, company.getAddress());
-            preparedStatement.setInt(5, company.getVacancy().getEntityId());
-            preparedStatement.setString(6, company.getHrLogin());
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COMPANY, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, company.getName());
+            preparedStatement.setString(2, company.getOwner());
+            preparedStatement.setString(3, company.getAddress());
+            preparedStatement.setInt(4, company.getVacancy().getEntityId());
+            preparedStatement.setString(5, company.getHrLogin());
             preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int companyId = resultSet.getInt(1);
+            company.setEntityId(companyId);
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public boolean existsCompanyName(String companyName) throws DaoException {
+        boolean result = isExist(companyName, CONTAINS_COMPANY_NAME);
+        return result;
+    }
+
+    @Override
+    public boolean existsCompanyHrLogin(String companyHrLogin) throws DaoException {
+        boolean result = isExist(companyHrLogin, CONTAINS_COMPANY_HR_LOGIN);
+        return result;
+    }
+
+    private boolean isExist(String value, String sqlQuery) throws DaoException {
+        boolean result;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, value);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            result = resultSet.getInt(1) != 0;
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return result;
     }
 }

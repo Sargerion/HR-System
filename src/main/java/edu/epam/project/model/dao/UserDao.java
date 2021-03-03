@@ -4,6 +4,7 @@ import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserStatus;
 import edu.epam.project.exception.DaoException;
+import edu.epam.project.model.entity.Vacancy;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,9 @@ public interface UserDao extends BaseDao<Integer, User> {
 
     //todo add specialty
 
-    Optional<Specialty> findSpecialtyByName(String specialtyName) throws DaoException;
-
     Specialty findSpecialtyById(Integer specialtyId) throws DaoException;
+
+    Vacancy findVacancyById(Integer vacancyId) throws DaoException;
+
+    List<Vacancy> findAllVacancies() throws DaoException;
 }

@@ -3,6 +3,7 @@ package edu.epam.project.model.service;
 import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.Vacancy;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ public interface UserService extends BaseService<Integer, User> {
 
     List<Specialty> findAllSpecialties() throws ServiceException;
 
-    Optional<Specialty> findSpecialtyByName(String specialtyName) throws ServiceException;
-
     Specialty findSpecialtyById(Integer specialtyId) throws ServiceException;
+
+    Vacancy findVacancyById(Integer vacancyId) throws ServiceException;
+
+    List<Vacancy> findAllVacancies() throws ServiceException;
 }

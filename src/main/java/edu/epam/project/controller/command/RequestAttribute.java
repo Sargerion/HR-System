@@ -16,11 +16,6 @@ public class RequestAttribute {
     public static final String CORRECT_EMAIL = "correct_email";
     public static final String HR_CHECK = "hr_check";
     public static final String VIEW_IMAGE = "view_image";
-    public static final String CORRECT_COMPANY_NAME = "correct_company_name";
-    public static final String CORRECT_COMPANY_OWNER = "correct_company_owner";
-    public static final String CORRECT_COMPANY_TOWN = "correct_company_town";
-
-    public static final String CORRECT_COMPANY_HR_LOGIN = "correct_company_hr_login";
 
     private RequestAttribute() {
 
