@@ -14,6 +14,7 @@ public class UserInputValidator {
     private static final int WORK_EXPERIENCE_LOWER_BOUND = 1;
     private static final int WORK_EXPERIENCE_UPPER_BOUND = 60;
     private static final String VACANCY_NAME_REGEX = "^[a-zA-Zа-яА-Я_-]{1,40}$";
+    private static final String SPECIALTY_NAME_REGEX = "^[a-zA-Zа-яА-Я_-]{1,15}$";
 
     public static boolean isValidLogin(String login) {
         return login.matches(LOGIN_REGEX);
@@ -67,5 +68,9 @@ public class UserInputValidator {
 
     public static boolean isValidCompanyTown(String town) {
         return town.matches(TOWN_REGEX);
+    }
+
+    public static boolean isValidSpecialtyName(String specialtyName) {
+        return specialtyName.matches(SPECIALTY_NAME_REGEX);
     }
 }

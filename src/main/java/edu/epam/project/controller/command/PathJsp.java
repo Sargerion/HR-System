@@ -24,6 +24,7 @@ public class PathJsp {
     public static final String CREATE_VACANCY_PAGE = "/jsp/hr/createVacancy.jsp";
     public static final String HR_ACTIVATE_PAGE = "/jsp/admin/hrActivate.jsp";
     public static final String ADD_FINDER_INFO_PAGE = "/jsp/finder/addFinderInfo.jsp";
+    public static final String ADD_SPECIALTY_PAGE = "/jsp/admin/addSpecialty.jsp";
 
     private PathJsp() {
 

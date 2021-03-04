@@ -5,12 +5,9 @@ import edu.epam.project.model.dao.AdminDao;
 import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.AdminDaoImpl;
 import edu.epam.project.model.dao.impl.UserDaoImpl;
-import edu.epam.project.model.entity.Company;
-import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.UserStatus;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
-import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.AdminService;
 
 import edu.epam.project.model.service.UserService;
@@ -146,6 +143,30 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         addResult.put(company, Map.of(errorMessages, correctFields));
+        return addResult;
+    }
+
+    @Override
+    public Map<Optional<Specialty>, Optional<String>> addSpecialty(String specialtyName) throws ServiceException {
+        Optional<Specialty> specialty = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Map<Optional<Specialty>, Optional<String>> addResult = new HashMap<>();
+        if (!UserInputValidator.isValidSpecialtyName(specialtyName)) {
+            errorMessage = Optional.of(ErrorMessage.INCORRECT_ADD_SPECIALTY_PARAMETERS);
+        } else {
+            try {
+                if (adminDao.existsSpecialtyName(specialtyName)) {
+                    errorMessage = Optional.of(ErrorMessage.SPECIALTY_NAME_DUPLICATE);
+                } else {
+                    specialty = Optional.of(new Specialty(0, specialtyName));
+                    adminDao.addSpecialty(specialty.get());
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        addResult.put(specialty, errorMessage);
         return addResult;
     }
 

@@ -31,8 +31,6 @@ public interface UserDao extends BaseDao<Integer, User> {
 
     List<Specialty> findAllSpecialties() throws DaoException;
 
-    //todo add specialty
-
     Specialty findSpecialtyById(Integer specialtyId) throws DaoException;
 
     Vacancy findVacancyById(Integer vacancyId) throws DaoException;

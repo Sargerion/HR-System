@@ -80,6 +80,11 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.COMPANY_HR);
         }
+    },
+    ADD_SPECIALTY(new AddSpecialtyCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
     };
 
     private Command command;

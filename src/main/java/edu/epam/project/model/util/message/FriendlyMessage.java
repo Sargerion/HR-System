@@ -16,6 +16,8 @@ public class FriendlyMessage {
 
     public static final String ADD_COMPANY = "Company added correctly";
 
+    public static final String ADD_SPECIALTY = "Specialty added correctly";
+
     private FriendlyMessage() {
 
     }

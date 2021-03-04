@@ -5,10 +5,7 @@ import edu.epam.project.model.dao.builder.impl.UserBuilder;
 import edu.epam.project.model.dao.AdminDao;
 import edu.epam.project.model.dao.table.UserStatusesColumn;
 import edu.epam.project.model.dao.table.UserTypesColumn;
-import edu.epam.project.model.entity.Company;
-import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.UserStatus;
-import edu.epam.project.model.entity.UserType;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.pool.ConnectionPool;
@@ -54,10 +51,16 @@ public class AdminDaoImpl implements AdminDao {
     private static final String CONTAINS_COMPANY_HR_LOGIN = "SELECT EXISTS(SELECT company_hr_login FROM companies WHERE company_hr_login = ?) AS company_hr_login_existence;";
 
     @Language("SQL")
+    private static final String CONTAINS_SPECIALTY_NAME = "SELECT EXISTS(SELECT specialty_name FROM specialties WHERE specialty_name = ?) AS specialty_name_existence;";
+
+    @Language("SQL")
     private static final String SELECT_COMPANY = "SELECT company_id, company_name, company_owner, company_addres, " +
             "vacancies.vacancy_id, vacancy_name, specialties.specialty_id, specialties.specialty_name, vacancies.vacancy_salary_usd, vacancies.vacancy_need_work_experience, company_hr_login FROM companies " +
             "INNER JOIN vacancies ON companies.vacancy_id = vacancies.vacancy_id " +
             "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id WHERE company_id = ?;";
+
+    @Language("SQL")
+    private static final String INSERT_SPECIALTY = "INSERT INTO specialties (specialty_name) VALUES (?)";
 
     private AdminDaoImpl() {
     }
@@ -192,6 +195,28 @@ public class AdminDaoImpl implements AdminDao {
     @Override
     public boolean existsCompanyHrLogin(String companyHrLogin) throws DaoException {
         boolean result = isExist(companyHrLogin, CONTAINS_COMPANY_HR_LOGIN);
+        return result;
+    }
+
+    @Override
+    public void addSpecialty(Specialty specialty) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SPECIALTY, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setString(1, specialty.getSpecialtyName());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int specialtyId = resultSet.getInt(1);
+            specialty.setEntityId(specialtyId);
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean existsSpecialtyName(String specialtyName) throws DaoException {
+        boolean result = isExist(specialtyName, CONTAINS_SPECIALTY_NAME);
         return result;
     }
 
