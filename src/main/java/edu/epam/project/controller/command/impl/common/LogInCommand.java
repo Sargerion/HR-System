@@ -28,8 +28,8 @@ public class LogInCommand implements Command {
         Optional<String> userAvatar;
         CommandResult commandResult = null;
         if (login.isEmpty() || password.isEmpty()) {
-            requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_LOGIN_PARAMETERS);
-            commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
+            requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, EMPTY_LOGIN_PARAMETERS);
+            commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.REDIRECT);
         } else {
             Optional<User> optionalUser = Optional.empty();
             Optional<String> optionalErrorMessage = Optional.empty();
@@ -44,10 +44,10 @@ public class LogInCommand implements Command {
                         correctLogin = entryMessages.getValue();
                     }
                 }
-                correctLogin.ifPresent(s -> requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, s));
+                correctLogin.ifPresent(s -> requestContext.setSessionAttribute(SessionAttribute.CORRECT_LOGIN, s));
                 if (optionalErrorMessage.isPresent()) {
-                    requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
-                    commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.FORWARD);
+                    requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, optionalErrorMessage.get());
+                    commandResult = new CommandResult(PathJsp.LOGIN_PAGE, TransitionType.REDIRECT);
                 } else {
                     if (optionalUser.isPresent()) {
                         User user = optionalUser.get();
@@ -61,15 +61,15 @@ public class LogInCommand implements Command {
                         requestContext.setSessionAttribute(SessionAttribute.VACANCY_LIST, vacancies);
                         switch (userType) {
                             case ADMIN -> {
-                                commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.FORWARD);
+                                commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.REDIRECT);
                                 logger.info("Admin with login -> {} entered", user.getLogin());
                             }
                             case COMPANY_HR -> {
-                                commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.FORWARD);
+                                commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.REDIRECT);
                                 logger.info("Company HR with login -> {} entered", user.getLogin());
                             }
                             case FINDER -> {
-                                commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.FORWARD);
+                                commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.REDIRECT);
                                 logger.info("Finder with login -> {} entered", user.getLogin());
                             }
                         }

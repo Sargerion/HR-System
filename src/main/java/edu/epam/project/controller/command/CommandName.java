@@ -36,11 +36,6 @@ public enum CommandName {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER, UserType.GUEST);
         }
     },
-    ACTIVATE_HR(new ActivateHRCommand()) {
-        {
-            setAllowedUserTypes(UserType.ADMIN);
-        }
-    },
     FORWARD_TO_USER_LIST(new ForwardToUserListCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN);

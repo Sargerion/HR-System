@@ -20,8 +20,13 @@ public class SessionAttribute {
     public static final String CORRECT_VACANCY_NAME = "correct_vacancy_name";
     public static final String CORRECT_COMPANY_HR_LOGIN = "correct_company_hr_login";
     public static final String VACANCY_LIST = "vacancies";
-    public static final String ERROR_DUPLICATE_COMPANY_NAME = "error_duplicate_company_name";
-    public static final String ERROR_DUPLICATE_COMPANY_HR_LOGIN = "error_duplicate_company_hr_login";
+    public static final String ERROR_ADD_COMPANY_LIST = "error_add_company_list";
+    public static final String ERROR_REGISTER_LIST = "error_register_list";
+    public static final String CORRECT_LOGIN = "correct_login";
+    public static final String CORRECT_PASSWORD = "correct_password";
+    public static final String CORRECT_REPEAT_PASSWORD = "correct_rep_password";
+    public static final String CORRECT_EMAIL = "correct_email";
+    public static final String HR_CHECK = "hr_check";
 
     private SessionAttribute() {
 

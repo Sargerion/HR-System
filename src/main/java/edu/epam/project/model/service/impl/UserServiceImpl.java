@@ -1,11 +1,12 @@
 package edu.epam.project.model.service.impl;
 
-import edu.epam.project.controller.command.RequestAttribute;
 import edu.epam.project.controller.command.RequestParameter;
+import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.UserDaoImpl;
 import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
+import edu.epam.project.model.service.AdminService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
@@ -122,6 +123,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<Optional<User>, Map<List<String>, Map<String, String>>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
+        AdminService adminService = AdminServiceImpl.getInstance();
         Optional<User> user = Optional.empty();
         List<String> errorMessages = new ArrayList<>();
         Map<String, String> correctFields = new HashMap<>();
@@ -134,25 +136,33 @@ public class UserServiceImpl implements UserService {
                     errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
                     errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
                 } else if (!repeatPassword.equals(password) && !userDao.existsLogin(login)) {
-                    correctFields.put(RequestAttribute.CORRECT_LOGIN, login);
+                    correctFields.put(SessionAttribute.CORRECT_LOGIN, login);
                     errorMessages.add(ErrorMessage.REGISTER_DIFFERENT_PASSWORDS);
                 } else if (userDao.existsLogin(login) && repeatPassword.equals(password)) {
                     errorMessages.add(ErrorMessage.LOGIN_ALREADY_EXISTS);
-                    correctFields.put(RequestAttribute.CORRECT_PASSWORD, password);
-                    correctFields.put(RequestAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
+                    correctFields.put(SessionAttribute.CORRECT_PASSWORD, password);
+                    correctFields.put(SessionAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
                 }
-                correctFields.put(RequestAttribute.CORRECT_EMAIL, email);
-                if (isHR) {
-                    correctFields.put(RequestAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
+                correctFields.put(SessionAttribute.CORRECT_EMAIL, email);
+                if (isHR && adminService.isCompanyHr(login)) {
+                    correctFields.put(SessionAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
+                } else if (isHR && !adminService.isCompanyHr(login)) {
+                    correctFields.put(SessionAttribute.HR_CHECK, "");
+                    errorMessages.add(ErrorMessage.NOT_REGISTER_LIKE_HR);
                 } else {
-                    correctFields.put(RequestAttribute.HR_CHECK, "");
+                    correctFields.put(SessionAttribute.HR_CHECK, "");
                 }
                 if (!userDao.existsLogin(login) && repeatPassword.equals(password)) {
-                    user = Optional.of((isHR) ? new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE)
-                            : new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
                     String encryptedPassword = Encryptor.encryptPassword(password);
-                    user.get().setConfirmationToken(UUID.randomUUID().toString());
-                    userDao.addUser(user.get(), encryptedPassword);
+                    if (!isHR) {
+                        user = Optional.of(new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
+                        user.get().setConfirmationToken(UUID.randomUUID().toString());
+                        userDao.addUser(user.get(), encryptedPassword);
+                    } else if (adminService.isCompanyHr(login)) {
+                        user = Optional.of(new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE));
+                        user.get().setConfirmationToken(UUID.randomUUID().toString());
+                        userDao.addUser(user.get(), encryptedPassword);
+                    }
                 }
             } catch (DaoException e) {
                 logger.error(e);

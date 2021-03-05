@@ -3,8 +3,6 @@ package edu.epam.project.controller.command.impl.common;
 import edu.epam.project.controller.command.*;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.CommandException;
-
-import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.MailSendException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
@@ -34,8 +32,8 @@ public class RegisterCommand implements Command {
         Optional<String> isHR = requestContext.getRequestParameter(RequestParameter.HR_OPTION_CHECK);
         CommandResult commandResult = null;
         if (login.isEmpty() || password.isEmpty() || repeatPassword.isEmpty() || email.isEmpty()) {
-            requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_SIGN_UP_PARAMETERS);
-            commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
+            requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, EMPTY_SIGN_UP_PARAMETERS);
+            commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.REDIRECT);
         } else {
             Optional<User> optionalUser = Optional.empty();
             List<String> errorMessages = new ArrayList<>();
@@ -55,37 +53,23 @@ public class RegisterCommand implements Command {
                     }
                 }
                 if (!errorMessages.isEmpty()) {
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_LOGIN, correctFields.get(RequestAttribute.CORRECT_LOGIN));
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_PASSWORD));
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_REPEAT_PASSWORD, correctFields.get(RequestAttribute.CORRECT_REPEAT_PASSWORD));
-                    requestContext.setRequestAttribute(RequestAttribute.CORRECT_EMAIL, correctFields.get(RequestAttribute.CORRECT_EMAIL));
-                    requestContext.setRequestAttribute(RequestAttribute.HR_CHECK, correctFields.get(RequestAttribute.HR_CHECK));
-                    for (int i = 0; i < errorMessages.size(); ) {
-                        if (errorMessages.contains(ErrorMessage.REGISTER_FAIL_INPUT)) {
-                            requestContext.setRequestAttribute(RequestAttribute.ERROR_REG_FAIL, errorMessages.get(i));
-                            i++;
-                        }
-                        if (errorMessages.contains(ErrorMessage.LOGIN_ALREADY_EXISTS)) {
-                            requestContext.setRequestAttribute(RequestAttribute.ERROR_LOGIN, errorMessages.get(i));
-                            i++;
-                        }
-                        if (errorMessages.contains((ErrorMessage.REGISTER_DIFFERENT_PASSWORDS))) {
-                            requestContext.setRequestAttribute(RequestAttribute.ERROR_DIFFERENT_PASSWORDS, errorMessages.get(i));
-                            i++;
-                        }
-                    }
-                    commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.FORWARD);
+                    requestContext.setSessionAttribute(SessionAttribute.CORRECT_LOGIN, correctFields.get(SessionAttribute.CORRECT_LOGIN));
+                    requestContext.setSessionAttribute(SessionAttribute.CORRECT_PASSWORD, correctFields.get(SessionAttribute.CORRECT_PASSWORD));
+                    requestContext.setSessionAttribute(SessionAttribute.CORRECT_REPEAT_PASSWORD, correctFields.get(SessionAttribute.CORRECT_REPEAT_PASSWORD));
+                    requestContext.setSessionAttribute(SessionAttribute.CORRECT_EMAIL, correctFields.get(SessionAttribute.CORRECT_EMAIL));
+                    requestContext.setSessionAttribute(SessionAttribute.HR_CHECK, correctFields.get(SessionAttribute.HR_CHECK));
+                    requestContext.setSessionAttribute(SessionAttribute.ERROR_REGISTER_LIST, errorMessages);
+                    commandResult = new CommandResult(PathJsp.REGISTER_PAGE, TransitionType.REDIRECT);
                 } else {
                     if (optionalUser.isPresent()) {
                         MailSender mailSender = MailSender.getInstance();
+                        mailSender.sendActivationUser(optionalUser.get());
                         if (isHR.isEmpty()) {
-                            mailSender.sendActivationFinder(optionalUser.get());
-                            requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
+                            requestContext.setSessionAttribute(SessionAttribute.CONFIRM_MESSAGE, FriendlyMessage.CONFIRM_REGISTER_MESSAGE_FINDER);
                         } else {
-                            mailSender.sendNotificationToHR(optionalUser.get());
-                            requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
+                            requestContext.setSessionAttribute(SessionAttribute.CONFIRM_MESSAGE, FriendlyMessage.REGISTER_MESSAGE_HR);
                         }
-                        commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
+                        commandResult = new CommandResult(PathJsp.HOME_PAGE, TransitionType.REDIRECT);
                     }
                 }
             } catch (ServiceException | MailSendException e) {

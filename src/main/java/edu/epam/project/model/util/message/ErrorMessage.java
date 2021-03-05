@@ -21,6 +21,7 @@ public class ErrorMessage {
     public static final String COMPANY_HR_LOGIN_DUPLICATE = "Hr with this login has already worked in company";
     public static final String INCORRECT_ADD_SPECIALTY_PARAMETERS = "Incorrect adding specialty parameters";
     public static final String SPECIALTY_NAME_DUPLICATE = "Specialty with this name has already existed";
+    public static final String NOT_REGISTER_LIKE_HR = "Btw you can't register like company hr";
 
     private ErrorMessage() {
 

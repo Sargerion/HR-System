@@ -14,7 +14,7 @@
         <h5><fmt:message key="login_needs"/></h5>
         <div class="form-group">
             <input type="text" name="login" class="form-control" required pattern="^[a-zA-Zа-яА-Я0-9_-]{6,15}$" placeholder="<fmt:message key="login_placeholder"/>"
-            value=<c:if test="${requestScope.correct_login != null}">${requestScope.correct_login}</c:if>>
+            value=<c:if test="${sessionScope.correct_login != null}">${sessionScope.correct_login}</c:if>>
         </div>
         <h5><fmt:message key="password_needs"/></h5>
         <div class="form-group">
@@ -44,6 +44,7 @@
         <c:import url="/jsp/modules/part/message_part.jsp"/>
         <c:import url="/jsp/error/error_parts/error_part.jsp"/>
     </form>
+    <c:remove var="correct_login" scope="session"/>
 </div>
 </body>
 </html>

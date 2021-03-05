@@ -2,9 +2,7 @@ package edu.epam.project.model.service.impl;
 
 import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.model.dao.AdminDao;
-import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.AdminDaoImpl;
-import edu.epam.project.model.dao.impl.UserDaoImpl;
 import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
@@ -13,6 +11,7 @@ import edu.epam.project.model.service.AdminService;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.model.validator.UserInputValidator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +21,6 @@ public class AdminServiceImpl implements AdminService {
 
     private static final AdminServiceImpl instance = new AdminServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private final UserDao userDao = UserDaoImpl.getInstance();
     private final AdminDao adminDao = AdminDaoImpl.getInstance();
 
     private AdminServiceImpl() {
@@ -30,26 +28,6 @@ public class AdminServiceImpl implements AdminService {
 
     public static AdminServiceImpl getInstance() {
         return instance;
-    }
-
-    @Override
-    public boolean activateHR(User user) throws ServiceException {
-        boolean activateResult = false;
-        User tryActivateUser;
-        try {
-            Optional<User> foundUser = userDao.findUserByLogin(user.getLogin());
-            if (foundUser.isPresent()) {
-                tryActivateUser = foundUser.get();
-                tryActivateUser.setStatus(UserStatus.ACTIVE);
-                userDao.updateStatus(tryActivateUser);
-                activateResult = true;
-            }
-        } catch (DaoException e) {
-            logger.error("Can't activate HR");
-            throw new ServiceException(e);
-        }
-        logger.info("HR activate");
-        return activateResult;
     }
 
     @Override
@@ -168,6 +146,18 @@ public class AdminServiceImpl implements AdminService {
         }
         addResult.put(specialty, errorMessage);
         return addResult;
+    }
+
+    @Override
+    public boolean isCompanyHr(String companyHrLogin) throws ServiceException {
+        boolean isExists;
+        try {
+            isExists = adminDao.existsCompanyHrLogin(companyHrLogin);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return isExists;
     }
 
     @Override

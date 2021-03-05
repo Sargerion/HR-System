@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public interface AdminService extends BaseService<Integer, User> {
 
-    boolean activateHR(User user) throws ServiceException;
-
     List<User> findNotActiveHRList(int start, int end) throws ServiceException;
 
     int countUsers() throws ServiceException;
@@ -23,4 +21,5 @@ public interface AdminService extends BaseService<Integer, User> {
 
     Map<Optional<Specialty>, Optional<String>> addSpecialty(String specialtyName) throws ServiceException;
 
+    boolean isCompanyHr(String companyHrLogin) throws ServiceException;
 }

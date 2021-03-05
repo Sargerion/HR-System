@@ -2,6 +2,7 @@ package edu.epam.project.model.util.mail;
 
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.MailSendException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,8 @@ public class MailSender {
 
     private static final MailSender instance = new MailSender();
     private static final Logger logger = LogManager.getLogger();
+    private static final String ACTIVATE_MESSAGE_FINDER = "You have registered on CringeLinkedIn, please confirm registration by link";
+    private static final String ACTIVATE_LINK = "http://localhost:8081/cringelinkedin/controller?command=activate&";
     private MimeMessage mimeMessage;
     private String sendToEmail;
     private String mailSubject;
@@ -28,28 +31,12 @@ public class MailSender {
         return instance;
     }
 
-    public void sendActivationFinder(User user) throws MailSendException {
+    public void sendActivationUser(User user) throws MailSendException {
         setSendToEmail(user.getEmail());
-        setMailSubject(MessageContent.ACTIVATE_MESSAGE_FINDER);
-        setMailBody(MessageContent.ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
+        setMailSubject(ACTIVATE_MESSAGE_FINDER);
+        setMailBody(ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
         send();
-        logger.info("Activation sent to finder with login -> {}", user.getLogin());
-    }
-
-    public void sendActivationHR(User user) throws MailSendException {
-        setSendToEmail(user.getEmail());
-        setMailSubject(MessageContent.ACTIVATE_MESSAGE_HR);
-        setMailBody(MessageContent.ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
-        send();
-        logger.info("Activation sent to HR with login -> {}", user.getLogin());
-    }
-
-    public void sendNotificationToHR(User user) throws MailSendException {
-        setSendToEmail(user.getEmail());
-        setMailSubject(MessageContent.NOTIFICATION_MESSAGE_HR);
-        setMailBody(MessageContent.NOTIFICATION_BODY);
-        send();
-        logger.info("Notification sent to HR with login -> {}", user.getLogin());
+        logger.info("Activation sent to user with login -> {}", user.getLogin());
     }
 
     private void initializeMessage() throws MessagingException {

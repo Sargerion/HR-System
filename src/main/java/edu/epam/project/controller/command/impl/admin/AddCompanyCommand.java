@@ -7,9 +7,8 @@ import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.service.AdminService;
 import edu.epam.project.model.service.impl.AdminServiceImpl;
-
-import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.model.util.message.FriendlyMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,16 +51,7 @@ public class AddCompanyCommand implements Command {
                     requestContext.setSessionAttribute(SessionAttribute.CORRECT_VACANCY_ID, correctFields.get(SessionAttribute.CORRECT_VACANCY_ID));
                     requestContext.setSessionAttribute(SessionAttribute.CORRECT_VACANCY_NAME, correctFields.get(SessionAttribute.CORRECT_VACANCY_NAME));
                     requestContext.setSessionAttribute(SessionAttribute.CORRECT_COMPANY_HR_LOGIN, correctFields.get(SessionAttribute.CORRECT_COMPANY_HR_LOGIN));
-                    for (int i = 0; i < errorMessages.size(); ) {
-                        if (errorMessages.contains(ErrorMessage.COMPANY_NAME_DUPLICATE)) {
-                            requestContext.setSessionAttribute(SessionAttribute.ERROR_DUPLICATE_COMPANY_NAME, errorMessages.get(i));
-                            i++;
-                        }
-                        if (errorMessages.contains(ErrorMessage.COMPANY_HR_LOGIN_DUPLICATE)) {
-                            requestContext.setSessionAttribute(SessionAttribute.ERROR_DUPLICATE_COMPANY_HR_LOGIN, errorMessages.get(i));
-                            i++;
-                        }
-                    }
+                    requestContext.setSessionAttribute(SessionAttribute.ERROR_ADD_COMPANY_LIST, errorMessages);
                 } else {
                     if (company.isPresent()) {
                         requestContext.setSessionAttribute(SessionAttribute.CONFIRM_MESSAGE, FriendlyMessage.ADD_COMPANY);
