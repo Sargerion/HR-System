@@ -130,7 +130,7 @@ public class AdminServiceImpl implements AdminService {
                 if (adminDao.existsSpecialtyName(specialtyName)) {
                     errorMessage = Optional.of(ErrorMessage.SPECIALTY_NAME_DUPLICATE);
                 } else {
-                    specialty = Optional.of(new Specialty(0, specialtyName));
+                    specialty = Optional.of(new Specialty(0, specialtyName.toLowerCase()));
                     adminDao.addSpecialty(specialty.get());
                 }
             } catch (DaoException e) {

@@ -7,11 +7,10 @@
 
 <html>
 <body>
-<div class="container" style="max-height: 95%">
-    <form style="height: 86%" name="registerForm" method="post" action="<c:url value="/controller"/>">
+<div class="container" style="max-height: 82%">
+    <form style="height: 72%" name="registerForm" method="post" action="<c:url value="/controller"/>">
         <input type="hidden" name="command" value="register">
         <h1><fmt:message key="registerTitle"/></h1>
-        <c:import url="/jsp/error/error_parts/error_part.jsp"/>
         <br/>
         <label style="color: red">*</label>
         <h5><fmt:message key="login_needs"/></h5>
@@ -59,6 +58,7 @@
                type="submit" value=<fmt:message key="register"/>>
         <br/>
     </form>
+    <c:import url="/jsp/error/error_parts/error_part.jsp"/>
     <c:remove var="correct_login" scope="session"/>
     <c:remove var="correct_password" scope="session"/>
     <c:remove var="correct_rep_password" scope="session"/>
