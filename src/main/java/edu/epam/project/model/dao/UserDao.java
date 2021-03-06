@@ -27,17 +27,15 @@ public interface UserDao extends BaseDao<Integer, User> {
 
     List<Specialty> findAllSpecialties() throws DaoException;
 
-    Specialty findSpecialtyById(Integer specialtyId) throws DaoException;
+    Optional<Specialty> findSpecialtyById(Integer specialtyId) throws DaoException;
 
-    Vacancy findVacancyById(Integer vacancyId) throws DaoException;
-
-    List<Vacancy> findAllVacancies() throws DaoException;
+    Optional<Vacancy> findVacancyById(Integer vacancyId) throws DaoException;
 
     List<Vacancy> findAllVacancies(int start, int end) throws DaoException;
 
     int countVacancies() throws DaoException;
 
-    Company findCompanyById(Integer companyId) throws DaoException;
+    Optional<Company> findCompanyById(Integer companyId) throws DaoException;
 
-    Company findCompanyByHrLogin(String hrLogin) throws DaoException;
+    Optional<Company> findCompanyByHrLogin(String hrLogin) throws DaoException;
 }

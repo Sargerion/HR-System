@@ -21,17 +21,15 @@ public interface UserService extends BaseService<Integer, User> {
 
     List<Specialty> findAllSpecialties() throws ServiceException;
 
-    Specialty findSpecialtyById(Integer specialtyId) throws ServiceException;
+    Optional<Specialty> findSpecialtyById(Integer specialtyId) throws ServiceException;
 
-    Vacancy findVacancyById(Integer vacancyId) throws ServiceException;
-
-    List<Vacancy> findAllVacancies() throws ServiceException;
+    Optional<Vacancy> findVacancyById(Integer vacancyId) throws ServiceException;
 
     List<Vacancy> findAllVacancies(int start, int end) throws ServiceException;
 
     int countVacancies() throws ServiceException;
 
-    Company findCompanyById(Integer companyId) throws ServiceException;
+    Optional<Company> findCompanyById(Integer companyId) throws ServiceException;
 
-    Company findCompanyByHrLogin(String hrLogin) throws ServiceException;
+    Optional<Company> findCompanyByHrLogin(String hrLogin) throws ServiceException;
 }

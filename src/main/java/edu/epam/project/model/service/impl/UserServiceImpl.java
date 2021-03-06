@@ -188,8 +188,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Specialty findSpecialtyById(Integer specialtyId) throws ServiceException {
-        Specialty findSpecialty;
+    public Optional<Specialty> findSpecialtyById(Integer specialtyId) throws ServiceException {
+        Optional<Specialty> findSpecialty;
         try {
             findSpecialty = userDao.findSpecialtyById(specialtyId);
         } catch (DaoException e) {
@@ -200,8 +200,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Vacancy findVacancyById(Integer vacancyId) throws ServiceException {
-        Vacancy vacancy;
+    public Optional<Vacancy> findVacancyById(Integer vacancyId) throws ServiceException {
+        Optional<Vacancy> vacancy;
         try {
             vacancy = userDao.findVacancyById(vacancyId);
         } catch (DaoException e) {
@@ -209,18 +209,6 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return vacancy;
-    }
-
-    @Override
-    public List<Vacancy> findAllVacancies() throws ServiceException {
-        List<Vacancy> vacancies;
-        try {
-            vacancies = new ArrayList<>(userDao.findAllVacancies());
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return vacancies;
     }
 
     @Override
@@ -248,8 +236,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Company findCompanyById(Integer companyId) throws ServiceException {
-        Company company;
+    public Optional<Company> findCompanyById(Integer companyId) throws ServiceException {
+        Optional<Company> company;
         try {
             company = userDao.findCompanyById(companyId);
         } catch (DaoException e) {
@@ -260,8 +248,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Company findCompanyByHrLogin(String hrLogin) throws ServiceException {
-        Company company;
+    public Optional<Company> findCompanyByHrLogin(String hrLogin) throws ServiceException {
+        Optional<Company> company;
         try {
             company = userDao.findCompanyByHrLogin(hrLogin);
         } catch (DaoException e) {

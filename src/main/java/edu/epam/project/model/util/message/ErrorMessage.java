@@ -22,6 +22,11 @@ public class ErrorMessage {
     public static final String INCORRECT_ADD_SPECIALTY_PARAMETERS = "Incorrect adding specialty parameters";
     public static final String SPECIALTY_NAME_DUPLICATE = "Specialty with this name has already existed";
     public static final String NOT_REGISTER_LIKE_HR = "Btw you can't register like company hr";
+    public static final String APPLICATION_INCORRECT_PARAMETERS = "Incorrect add application parameters";
+    public static final String FINDER_WITHOUT_INFO = "If you want to use this service, please fill info about you, on add info page";
+    public static final String NO_FINDER_OR_VACANCY = "No such finder or vacancy";
+    public static final String NO_SUCH_SPECIALTY = "No such specialty";
+    public static final String NO_SUCH_VACANCY_OR_COMPANY = "No such vacancy or company";
 
     private ErrorMessage() {
 

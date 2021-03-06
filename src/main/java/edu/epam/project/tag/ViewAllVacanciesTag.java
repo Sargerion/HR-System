@@ -3,7 +3,12 @@ package edu.epam.project.tag;
 import edu.epam.project.controller.command.CommandName;
 import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
+import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.User;
+import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.entity.Vacancy;
+import edu.epam.project.model.service.FinderService;
+import edu.epam.project.model.service.impl.FinderServiceImpl;
 import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +29,9 @@ public class ViewAllVacanciesTag extends TagSupport {
     private static final String VACANCY_WORK_EXPERIENCE_BUNDLE = "all_vacancies_table_work_experience";
     private static final String VACANCY_COMPANY_NAME = "all_vacancies_table_company_name";
     private static final String VACANCY_AVAILABILITY = "all_vacancies_table_is_active";
+    private static final String APPLY_SENT = "all_vacancies_table_apply_sent";
+    private static final String VACANCY_ACTIVE_STATUS = "all_vacancies_table_status_value_active";
+    private static final String VACANCY_BLOCKED_STATUS = "all_vacancies_table_status_value_block";
 
     @Override
     public int doStartTag() throws JspException {
@@ -33,7 +41,7 @@ public class ViewAllVacanciesTag extends TagSupport {
         createList(writer, sessionRequestContext);
         int vacanciesCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.VACANCIES_COUNT);
         int pagesCount = vacanciesCount % LIST_LINES_COUNT == 0 ? vacanciesCount / LIST_LINES_COUNT : vacanciesCount / LIST_LINES_COUNT + 1;
-        String command = CommandName.FIND_VACANCY_LIST.toString().toLowerCase();
+        String command = CommandName.FIND_VACANCY_LIST.name();
         TagUtil.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
@@ -44,7 +52,16 @@ public class ViewAllVacanciesTag extends TagSupport {
             createTableHeader(writer, sessionRequestContext);
             writer.write("<tbody>");
             List<Vacancy> vacancies = (List<Vacancy>) sessionRequestContext.getSessionAttribute(SessionAttribute.VACANCY_PAGINATE_LIST);
-            createLines(writer, sessionRequestContext, vacancies);
+            User user = (User) sessionRequestContext.getSessionAttribute(SessionAttribute.USER);
+            UserType userType = user.getType();
+            switch (userType) {
+                case ADMIN, COMPANY_HR -> {
+                    createLines(writer, sessionRequestContext, vacancies);
+                }
+                case FINDER -> {
+                    createLines(writer, sessionRequestContext, vacancies, user.getEntityId());
+                }
+            }
             writer.write("</tbody></table>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -61,7 +78,7 @@ public class ViewAllVacanciesTag extends TagSupport {
             String vacancySalary = resourceBundle.getString(VACANCY_SALARY_BUNDLE);
             String vacancyNeedWorkExperience = resourceBundle.getString(VACANCY_WORK_EXPERIENCE_BUNDLE);
             String vacancyCompanyName = resourceBundle.getString(VACANCY_COMPANY_NAME);
-            String vacancyAvaibility = resourceBundle.getString(VACANCY_AVAILABILITY);
+            String vacancyAvailability = resourceBundle.getString(VACANCY_AVAILABILITY);
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
             TagUtil.createTableHeadItem(writer, vacancyID);
@@ -70,7 +87,7 @@ public class ViewAllVacanciesTag extends TagSupport {
             TagUtil.createTableHeadItem(writer, vacancySalary);
             TagUtil.createTableHeadItem(writer, vacancyNeedWorkExperience);
             TagUtil.createTableHeadItem(writer, vacancyCompanyName);
-            TagUtil.createTableHeadItem(writer, vacancyAvaibility);
+            TagUtil.createTableHeadItem(writer, vacancyAvailability);
             writer.write("</tr></thead>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -78,6 +95,8 @@ public class ViewAllVacanciesTag extends TagSupport {
     }
 
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Vacancy> vacancies) throws JspException {
+        String locale = sessionRequestContext.getLocale();
+        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
         try {
             if (vacancies != null) {
                 int size = vacancies.size();
@@ -93,15 +112,62 @@ public class ViewAllVacanciesTag extends TagSupport {
                         writer.write("<td>" + vacancy.getSalary() + "</td>");
                         writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
                         writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
-                        writer.write("<td>" + vacancy.isVacancyActive() + "</td>");
+                        writer.write("<td>");
+                        if (vacancy.isVacancyActive()) {
+                            writer.write(resourceBundle.getString(VACANCY_ACTIVE_STATUS));
+                        } else {
+                            writer.write(resourceBundle.getString(VACANCY_BLOCKED_STATUS));
+                        }
+                        writer.write("</td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
-                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
+                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
                     }
                     writer.write("</tr>");
                 }
             }
         } catch (IOException e) {
+            throw new JspException(e);
+        }
+    }
+
+    private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Vacancy> vacancies, Integer finderId) throws JspException {
+        FinderService finderService = FinderServiceImpl.getInstance();
+        String locale = sessionRequestContext.getLocale();
+        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+        try {
+            if (vacancies != null) {
+                int size = vacancies.size();
+                int currentPage = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.VACANCY_LIST_CURRENT_PAGE);
+                for (int i = 0; i < LIST_LINES_COUNT; i++) {
+                    int lineNumber = LIST_LINES_COUNT * (currentPage - 1) + i + 1;
+                    if (size > i) {
+                        if (vacancies.get(i).isVacancyActive()) {
+                            Vacancy vacancy = vacancies.get(i);
+                            writer.write("<tr><th>" + lineNumber + "</th>");
+                            writer.write("<td>" + vacancy.getEntityId() + "</td>");
+                            writer.write("<td>" + vacancy.getName() + "</td>");
+                            writer.write("<td>" + vacancy.getSpecialty().getSpecialtyName() + "</td>");
+                            writer.write("<td>" + vacancy.getSalary() + "</td>");
+                            writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
+                            writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
+                            writer.write("<td>");
+                            if (!finderService.isFinderApply(finderId)) {
+                                String command = CommandName.APPLY_VACANCY.name();
+                                TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId());
+                            } else {
+                                writer.write(resourceBundle.getString(APPLY_SENT));
+                            }
+                            writer.write("</td>");
+                        }
+                    } else {
+                        writer.write("<tr><th>" + lineNumber + "</th>");
+                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
+                    }
+                    writer.write("</tr>");
+                }
+            }
+        } catch (IOException | ServiceException e) {
             throw new JspException(e);
         }
     }

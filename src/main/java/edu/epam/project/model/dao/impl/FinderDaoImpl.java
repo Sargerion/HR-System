@@ -5,6 +5,7 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.FinderBuilder;
+import edu.epam.project.model.entity.Application;
 import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.pool.ConnectionPool;
 
@@ -35,6 +36,12 @@ public class FinderDaoImpl implements FinderDao {
     @Language("SQL")
     private static final String SELECT_FINDER_BY_ID = "SELECT finder_id, finder_require_salary, finder_work_experience, specialty_id, specialty_name FROM finders " +
             "INNER JOIN specialties ON finders.finder_specialty_id = specialties.specialty_id WHERE finder_id = ?;";
+
+    @Language("SQL")
+    private static final String CONTAINS_FINDER_ID_APPLICATION = "SELECT EXISTS(SELECT application_finder_id FROM applications WHERE application_finder_id = ?) AS application_finder_id_existence;";
+
+    @Language("SQL")
+    private static final String INSERT_APPLICATION = "INSERT INTO applications(application_vacancy_id, application_finder_id, application_is_confirm) VALUES (?, ?, ?)";
 
     private FinderDaoImpl() {
     }
@@ -97,6 +104,30 @@ public class FinderDaoImpl implements FinderDao {
     @Override
     public boolean existsFinder(Integer finderId) throws DaoException {
         boolean isExists = isExistId(finderId, CONTAINS_FINDER_ID);
+        return isExists;
+    }
+
+    @Override
+    public void buildApplication(Application application) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_APPLICATION, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setInt(1, application.getApplicationVacancy().getEntityId());
+            preparedStatement.setInt(2, application.getApplicationFinder().getEntityId());
+            preparedStatement.setBoolean(3, application.isConfirmApplication());
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int applicationId = resultSet.getInt(1);
+            application.setEntityId(applicationId);
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public boolean isFinderApply(Integer finderId) throws DaoException {
+        boolean isExists = isExistId(finderId, CONTAINS_FINDER_ID_APPLICATION);
         return isExists;
     }
 }

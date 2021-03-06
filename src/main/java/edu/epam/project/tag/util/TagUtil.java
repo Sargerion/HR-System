@@ -52,11 +52,32 @@ public class TagUtil {
         writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + imageName + "\">");
     }
 
+    public static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button type=\"submit\" name=\"applyVacancyButton\" ");
+        writer.write("value=\"" + vacancyId + "\" ");
+        writer.write("</button></form>");
+        //todo add value send localize
+    }
+
+    //todo finish it
+    public static void createConfirmAndRejectApplicationButton(JspWriter writer, PageContext pageContext, String command, String buttonValue, String buttonName) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button id=\"apply_button\" type=\"submit\" name=\"activeApplicationButton\" ");
+        writer.write("value=\"" + buttonValue + "\" ");
+        writer.write(buttonName + "</button>");
+        writer.write("</form>");
+    }
+
     private static void createButton(JspWriter writer, int pageNumber) throws IOException {
         writer.write("<li><button type=\"submit\" name=\"newPage\" ");
         writer.write("value=\"" + pageNumber + "\" ");
         writer.write("style=\""
                 + "background-color: #ffffffb8; color: #000" + "\">");
-        writer.write(pageNumber + " </button></li>");
+        writer.write(pageNumber + "</button></li>");
     }
 }

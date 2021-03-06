@@ -11,12 +11,10 @@ public class FriendlyMessage {
     public static final String EMPTY_VACANCY_LIST = "Unfortunately, there are no vacancies";
     public static final String ADD_FINDER_INFO = "Finder info added correctly";
     public static final String UPDATE_FINDER_INFO = "Finder info updated correctly";
-
     public static final String ADD_VACANCY = "Vacancy added correctly";
-
     public static final String ADD_COMPANY = "Company added correctly";
-
     public static final String ADD_SPECIALTY = "Specialty added correctly";
+    public static final String APPLY_FINDER = "Application send correctly";
 
     private FriendlyMessage() {
 

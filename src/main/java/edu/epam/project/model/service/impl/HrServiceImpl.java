@@ -4,10 +4,7 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.dao.HrDao;
 import edu.epam.project.model.dao.impl.HrDaoImpl;
-import edu.epam.project.model.entity.Company;
-import edu.epam.project.model.entity.Specialty;
-import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.Vacancy;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.model.service.HrService;
 
 import edu.epam.project.model.service.UserService;
@@ -57,8 +54,8 @@ public class HrServiceImpl implements HrService {
     public Map<Optional<Vacancy>, Optional<String>> addVacancy(String hrLogin, String vacancyName, String specialtyId, String requireSalary, String workExperience, boolean isVacancyActive) throws ServiceException {
         UserService userService = UserServiceImpl.getInstance();
         Optional<Vacancy> vacancy = Optional.empty();
-        Specialty vacancySpecialty;
-        Company vacancyCompany;
+        Optional<Specialty> vacancySpecialty;
+        Optional<Company> vacancyCompany;
         Optional<String> errorMessage = Optional.empty();
         Map<Optional<Vacancy>, Optional<String>> addResult = new HashMap<>();
         if (!UserInputValidator.isValidLogin(hrLogin) || !UserInputValidator.isValidVacancyName(vacancyName) || !UserInputValidator.isValidId(specialtyId)
@@ -68,8 +65,12 @@ public class HrServiceImpl implements HrService {
             try {
                 vacancySpecialty = userService.findSpecialtyById(Integer.parseInt(specialtyId));
                 vacancyCompany = userService.findCompanyByHrLogin(hrLogin);
-                vacancy = Optional.of(new Vacancy(0, vacancyName, vacancySpecialty, BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), vacancyCompany, isVacancyActive));
-                hrDao.addVacancy(vacancy.get());
+                if (vacancySpecialty.isPresent() && vacancyCompany.isPresent()) {
+                    vacancy = Optional.of(new Vacancy(0, vacancyName, vacancySpecialty.get(), BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), vacancyCompany.get(), isVacancyActive));
+                    hrDao.addVacancy(vacancy.get());
+                } else {
+                    errorMessage = Optional.of(ErrorMessage.NO_SUCH_VACANCY_OR_COMPANY);
+                }
             } catch (DaoException e) {
                 logger.error(e);
                 throw new ServiceException(e);

@@ -3,7 +3,8 @@ package edu.epam.project.controller.command;
 import edu.epam.project.controller.command.impl.admin.*;
 import edu.epam.project.controller.command.impl.common.*;
 import edu.epam.project.controller.command.impl.finder.AddInfoCommand;
-import edu.epam.project.controller.command.impl.hr.AddVacancyCommand;
+import edu.epam.project.controller.command.impl.finder.ApplyVacancyCommand;
+import edu.epam.project.controller.command.impl.hr.*;
 import edu.epam.project.model.entity.UserType;
 
 import java.util.EnumSet;
@@ -79,6 +80,31 @@ public enum CommandName {
     ADD_SPECIALTY(new AddSpecialtyCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    CONFIRM_APPLICATION(new ConfirmApplicationCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
+    },
+    REJECT_APPLICATION(new RejectApplicationCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
+    },
+    FIND_APPLICATION_LIST(new FindApplicationListCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
+    },
+    FORWARD_TO_APPLICATION_LIST(new ForwardToApplicationListCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
+    },
+    APPLY_VACANCY(new ApplyVacancyCommand()) {
+        {
+            setAllowedUserTypes(UserType.FINDER);
         }
     };
 

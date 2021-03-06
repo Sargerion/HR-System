@@ -82,11 +82,6 @@ public class UserDaoImpl implements UserDao {
             "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id WHERE vacancy_id = ?;";
 
     @Language("SQL")
-    private static final String SELECT_ALL_VACANCIES = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience, " +
-            "company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
-            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id;";
-
-    @Language("SQL")
     private static final String SELECT_ALL_VACANCIES_WITH_LIMIT = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience, " +
             "company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
             "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id LIMIT ?, ?;";
@@ -322,14 +317,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Specialty findSpecialtyById(Integer specialtyId) throws DaoException {
-        Specialty specialty;
+    public Optional<Specialty> findSpecialtyById(Integer specialtyId) throws DaoException {
+        Optional<Specialty> specialty;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SPECIALTY_BY_ID)) {
             preparedStatement.setInt(1, specialtyId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            specialty = specialtyBuilder.build(resultSet);
+            specialty = Optional.ofNullable(specialtyBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -338,36 +333,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Vacancy findVacancyById(Integer vacancyId) throws DaoException {
-        Vacancy vacancy;
+    public Optional<Vacancy> findVacancyById(Integer vacancyId) throws DaoException {
+        Optional<Vacancy> vacancy;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_BY_ID)) {
             preparedStatement.setInt(1, vacancyId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            vacancy = vacancyBuilder.build(resultSet);
+            vacancy = Optional.ofNullable(vacancyBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
         return vacancy;
-    }
-
-    @Override
-    public List<Vacancy> findAllVacancies() throws DaoException {
-        List<Vacancy> vacancies = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_VACANCIES)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Vacancy vacancy = vacancyBuilder.build(resultSet);
-                vacancies.add(vacancy);
-            }
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return vacancies;
     }
 
     @Override
@@ -405,14 +383,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Company findCompanyById(Integer companyId) throws DaoException {
-        Company company;
+    public Optional<Company> findCompanyById(Integer companyId) throws DaoException {
+        Optional<Company> company;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)) {
             preparedStatement.setInt(1, companyId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            company = companyBuilder.build(resultSet);
+            company = Optional.ofNullable(companyBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -421,14 +399,14 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Company findCompanyByHrLogin(String hrLogin) throws DaoException {
-        Company company;
+    public Optional<Company> findCompanyByHrLogin(String hrLogin) throws DaoException {
+        Optional<Company> company;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_HR_LOGIN)) {
             preparedStatement.setString(1, hrLogin);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            company = companyBuilder.build(resultSet);
+            company = Optional.ofNullable(companyBuilder.build(resultSet));
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);

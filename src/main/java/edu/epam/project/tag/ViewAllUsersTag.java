@@ -32,7 +32,7 @@ public class ViewAllUsersTag extends TagSupport {
         createList(writer, sessionRequestContext);
         int usersCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.USERS_COUNT);
         int pagesCount = usersCount % LIST_LINES_COUNT == 0 ? usersCount / LIST_LINES_COUNT : usersCount / LIST_LINES_COUNT + 1;
-        String command = CommandName.USER_LIST.toString().toLowerCase();
+        String command = CommandName.USER_LIST.name();
         TagUtil.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
@@ -89,7 +89,7 @@ public class ViewAllUsersTag extends TagSupport {
                         writer.write("<td>" + user.getStatus() + "</td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
-                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td>");
+                        writer.write("<td></td><td></td><td></td><td></td><td></td>");
                     }
                     writer.write("</tr>");
                 }

@@ -30,30 +30,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<User> findNotActiveHRList(int start, int end) throws ServiceException {
-        List<User> notActiveHRList;
-        try {
-            notActiveHRList = new ArrayList<>(adminDao.findNotActiveHRs(start, end));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return notActiveHRList;
-    }
-
-    @Override
-    public int countNotActiveHRs() throws ServiceException {
-        int notActiveHRsCount;
-        try {
-            notActiveHRsCount = adminDao.countNotActiveHRs();
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return notActiveHRsCount;
-    }
-
-    @Override
     public boolean add(User entity) throws ServiceException {
         throw new UnsupportedOperationException();
     }
