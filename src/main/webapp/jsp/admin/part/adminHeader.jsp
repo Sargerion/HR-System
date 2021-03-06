@@ -28,11 +28,10 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><c:import url="/jsp/admin/part/hrListForm.jsp"/></li>
                     <li><c:import url="/jsp/admin/part/userListForm.jsp"/></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><c:import url="/jsp/modules/vacancyListForm.jsp"/></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/admin/addCompany.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="company_form_button_value"/></h5></a></li>
-                    <li><a href="${pageContext.request.contextPath}/jsp/admin/hrActivate.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="hr_activate_title"/></h5></a></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/admin/addSpecialty.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="specialty_form_title"/></h5></a></li>
                     <li>
                         <a href="#">More</a>

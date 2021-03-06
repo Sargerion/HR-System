@@ -51,14 +51,14 @@ public enum CommandName {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
     },
-    NOT_ACTIVE_HR_LIST(new FindNotActiveHRListCommand()) {
+    FIND_VACANCY_LIST(new FindVacancyListCommand()) {
         {
-            setAllowedUserTypes(UserType.ADMIN);
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
     },
-    FORWARD_TO_HR_LIST(new ForwardToHRListCommand()) {
+    FORWARD_TO_VACANCY_LIST(new ForwardToVacancyListCommand()) {
         {
-            setAllowedUserTypes(UserType.ADMIN);
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
     },
     ADD_COMPANY(new AddCompanyCommand()) {

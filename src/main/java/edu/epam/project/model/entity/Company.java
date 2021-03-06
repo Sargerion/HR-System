@@ -5,15 +5,13 @@ public class Company extends Entity {
     private String name;
     private String owner;
     private String address;
-    private Vacancy vacancy;
     private String hrLogin;
 
-    public Company(Integer companyId, String name, String owner, String address, Vacancy vacancy, String hrLogin) {
+    public Company(Integer companyId, String name, String owner, String address, String hrLogin) {
         super(companyId);
         this.name = name;
         this.owner = owner;
         this.address = address;
-        this.vacancy = vacancy;
         this.hrLogin = hrLogin;
     }
 
@@ -41,14 +39,6 @@ public class Company extends Entity {
         this.address = address;
     }
 
-    public Vacancy getVacancy() {
-        return vacancy;
-    }
-
-    public void setVacancy(Vacancy vacancy) {
-        this.vacancy = vacancy;
-    }
-
     public String getHrLogin() {
         return hrLogin;
     }
@@ -69,8 +59,7 @@ public class Company extends Entity {
             return false;
         }
         Company company = (Company) o;
-        return name.equals(company.name) && owner.equals(company.owner) && address.equals(company.address) &&
-                vacancy.equals(company.vacancy) && hrLogin.equals(company.hrLogin);
+        return name.equals(company.name) && owner.equals(company.owner) && address.equals(company.address) && hrLogin.equals(company.hrLogin);
     }
 
     @Override
@@ -80,7 +69,6 @@ public class Company extends Entity {
                 + (name != null ? name.hashCode() : 0)
                 + (owner != null ? owner.hashCode() : 0)
                 + (address != null ? address.hashCode() : 0)
-                + (vacancy != null ? vacancy.hashCode() : 0)
                 + (hrLogin != null ? hrLogin.hashCode() : 0);
         return result;
     }
@@ -92,7 +80,6 @@ public class Company extends Entity {
         sb.append("name='").append(name).append('\'');
         sb.append(", owner='").append(owner).append('\'');
         sb.append(", address='").append(address).append('\'');
-        sb.append(", vacancy=").append(vacancy);
         sb.append(", hrLogin='").append(hrLogin).append('\'');
         sb.append('}');
         return sb.toString();

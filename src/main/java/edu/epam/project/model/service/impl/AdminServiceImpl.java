@@ -8,7 +8,6 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.AdminService;
 
-import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.model.validator.UserInputValidator;
 
@@ -56,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public boolean add(User entity) throws ServiceException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -84,15 +83,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String vacancyId, String companyHrLogin) throws ServiceException {
-        UserService userService = UserServiceImpl.getInstance();
-        Vacancy vacancy;
+    public Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String companyHrLogin) throws ServiceException {
         Optional<Company> company = Optional.empty();
         List<String> errorMessages = new ArrayList<>();
         Map<String, String> correctFields = new HashMap<>();
         Map<Optional<Company>, Map<List<String>, Map<String, String>>> addResult = new HashMap<>();
-        if (!UserInputValidator.isValidCompanyName(companyName) || !UserInputValidator.isValidCompanyOwner(companyOwner) || !UserInputValidator.isValidCompanyTown(companyAddress) ||
-                !UserInputValidator.isValidId(vacancyId) || !UserInputValidator.isValidLogin(companyHrLogin)) {
+        if (!UserInputValidator.isValidCompanyName(companyName) || !UserInputValidator.isValidCompanyOwner(companyOwner)
+                || !UserInputValidator.isValidCompanyTown(companyAddress) || !UserInputValidator.isValidLogin(companyHrLogin)) {
             errorMessages.add(ErrorMessage.INCORRECT_ADD_COMPANY_PARAMETERS);
         } else {
             try {
@@ -108,11 +105,8 @@ public class AdminServiceImpl implements AdminService {
                 }
                 correctFields.put(SessionAttribute.CORRECT_COMPANY_OWNER, companyOwner);
                 correctFields.put(SessionAttribute.CORRECT_COMPANY_TOWN, companyAddress);
-                correctFields.put(SessionAttribute.CORRECT_VACANCY_ID, vacancyId);
-                vacancy = userService.findVacancyById(Integer.parseInt(vacancyId));
-                correctFields.put(SessionAttribute.CORRECT_VACANCY_NAME, vacancy.getName());
                 if (!adminDao.existsCompanyName(companyName) && !adminDao.existsCompanyHrLogin(companyHrLogin)) {
-                    company = Optional.of(new Company(0, companyName, companyOwner, companyAddress, vacancy, companyHrLogin));
+                    company = Optional.of(new Company(0, companyName, companyOwner, companyAddress, companyHrLogin));
                     adminDao.addCompany(company.get());
                 }
             } catch (DaoException e) {
@@ -162,21 +156,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Optional<User> findById(Integer entityId) throws ServiceException {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void update(User entity) throws ServiceException {
-
-    }
-
-    @Override
-    public boolean delete(User entity) throws ServiceException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(Integer entityId) throws ServiceException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 }

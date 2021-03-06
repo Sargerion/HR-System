@@ -17,6 +17,7 @@
         <ctag:show_avatar/>
         <h2 class="logo" style="font-size: 19px; "><fmt:message key="login_placeholder"/>:${sessionScope.user.getLogin()}</h2>
         <h2 class="logo" style="font-size: 19px;"><fmt:message key="user_role"/>:${sessionScope.user.getType()}</h2>
+        <h2 class="logo" style="font-size: 19px;"><fmt:message key="hr_work_place"/>:${sessionScope.hr_company}</h2>
         <ul>
             <li><a href="${pageContext.request.contextPath}/jsp/hr/welcomeHR.jsp"><fmt:message key="home"/></a></li>
             <li>
@@ -30,6 +31,7 @@
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/jsp/hr/createVacancy.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="vacancy_form_title"/></h5></a></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><c:import url="/jsp/modules/vacancyListForm.jsp"/></li>
                     <li>
                         <a href="#">More</a>
                         <ul>

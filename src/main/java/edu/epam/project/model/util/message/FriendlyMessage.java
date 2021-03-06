@@ -8,7 +8,7 @@ public class FriendlyMessage {
     public static final String LOCALE_CHANGED = "Locale has changed:)";
     public static final String LOG_OUT = "Exit from account";
     public static final String EMPTY_USER_LIST = "Unfortunately, there are no users";
-    public static final String EMPTY_HR_LIST = "Unfortunately, there are no not active HR users";
+    public static final String EMPTY_VACANCY_LIST = "Unfortunately, there are no vacancies";
     public static final String ADD_FINDER_INFO = "Finder info added correctly";
     public static final String UPDATE_FINDER_INFO = "Finder info updated correctly";
 

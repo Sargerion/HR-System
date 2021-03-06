@@ -118,7 +118,7 @@ public class ConnectionPool {
     void closeUnnecessaryConnections() {
         if (givenPerPeriodConnectionCount.get() < CONDITIONAL_VALUE_TO_DOWNSIZE_POOL) {
             int connectionsToCloseCount = HOW_MUCH_DOWNSIZE_POOL;
-            while (connectionsToCloseCount != 0 && !freeConnections.isEmpty()) {
+            while (!freeConnections.isEmpty() && connectionsToCloseCount != 0) {
                 try {
                     freeConnections.take().realClose();
                     connectionsToCloseCount--;
@@ -142,6 +142,7 @@ public class ConnectionPool {
                 freeConnections.offer(proxyConnection);
             } catch (ConnectionException e) {
                 logger.fatal(e);
+                //todo спросить про протаскивание пустых пропертей
             }
         }
         UnnecessaryConnectionsReturner connectionsReturner = new UnnecessaryConnectionsReturner();

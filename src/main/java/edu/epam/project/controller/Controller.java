@@ -37,10 +37,10 @@ public class Controller extends HttpServlet {
             commandResult = command.execute(requestContext);
         } catch (CommandException e) {
             logger.error(e);
-            commandResult = new CommandResult(PathJsp.ERROR_404_PAGE, TransitionType.FORWARD);
+            commandResult = new CommandResult(PathJsp.ERROR_500_PAGE, TransitionType.FORWARD);
         }
         requestContext.insertAttributes(request);
-        if (request.getParameter(RequestParameter.COMMAND).equals(RequestParameter.LOG_OUT)) {
+        if (commandName.name().equalsIgnoreCase(RequestParameter.LOG_OUT)) {
             request.getSession().invalidate();
         }
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {

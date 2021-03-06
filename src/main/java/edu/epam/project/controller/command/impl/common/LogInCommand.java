@@ -6,8 +6,9 @@ import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
-import edu.epam.project.model.entity.Vacancy;
+import edu.epam.project.model.service.HrService;
 import edu.epam.project.model.service.UserService;
+import edu.epam.project.model.service.impl.HrServiceImpl;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +24,7 @@ public class LogInCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         UserService userService = UserServiceImpl.getInstance();
+        HrService hrService = HrServiceImpl.getInstance();
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
         Optional<String> userAvatar;
@@ -56,15 +58,15 @@ public class LogInCommand implements Command {
                         userAvatar.ifPresent(user::setAvatarName);
                         requestContext.setSessionAttribute(SessionAttribute.USER, user);
                         List<Specialty> specialties = userService.findAllSpecialties();
-                        List<Vacancy> vacancies = userService.findAllVacancies();
                         requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
-                        requestContext.setSessionAttribute(SessionAttribute.VACANCY_LIST, vacancies);
                         switch (userType) {
                             case ADMIN -> {
                                 commandResult = new CommandResult(PathJsp.ADMIN_PAGE, TransitionType.REDIRECT);
                                 logger.info("Admin with login -> {} entered", user.getLogin());
                             }
                             case COMPANY_HR -> {
+                                String hrCompany = hrService.findCompanyNameByHrLogin(user.getLogin());
+                                requestContext.setSessionAttribute(SessionAttribute.HR_COMPANY, hrCompany);
                                 commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.REDIRECT);
                                 logger.info("Company HR with login -> {} entered", user.getLogin());
                             }

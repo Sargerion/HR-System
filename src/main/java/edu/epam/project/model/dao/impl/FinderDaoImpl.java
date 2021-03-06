@@ -6,7 +6,6 @@ import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.FinderBuilder;
 import edu.epam.project.model.entity.Finder;
-import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.pool.ConnectionPool;
 
 import org.apache.logging.log4j.LogManager;
@@ -77,7 +76,7 @@ public class FinderDaoImpl implements FinderDao {
 
     @Override
     public List<Finder> findAll(int start, int end) throws DaoException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -93,16 +92,6 @@ public class FinderDaoImpl implements FinderDao {
             logger.error(e);
             throw new DaoException(e);
         }
-    }
-
-    @Override
-    public boolean delete(Finder entity) throws DaoException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(Integer entityId) throws DaoException {
-        return false;
     }
 
     @Override

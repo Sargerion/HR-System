@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll(int start, int end) throws ServiceException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -72,16 +72,6 @@ public class UserServiceImpl implements UserService {
             logger.error(e);
             throw new ServiceException(e);
         }
-    }
-
-    @Override
-    public boolean delete(User entity) throws ServiceException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(Integer entityId) throws ServiceException {
-        return false;
     }
 
     @Override
@@ -231,5 +221,53 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return vacancies;
+    }
+
+    @Override
+    public List<Vacancy> findAllVacancies(int start, int end) throws ServiceException {
+        List<Vacancy> vacancies;
+        try {
+            vacancies = new ArrayList<>(userDao.findAllVacancies(start, end));
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return vacancies;
+    }
+
+    @Override
+    public int countVacancies() throws ServiceException {
+        int vacanciesCount;
+        try {
+            vacanciesCount = userDao.countVacancies();
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return vacanciesCount;
+    }
+
+    @Override
+    public Company findCompanyById(Integer companyId) throws ServiceException {
+        Company company;
+        try {
+            company = userDao.findCompanyById(companyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return company;
+    }
+
+    @Override
+    public Company findCompanyByHrLogin(String hrLogin) throws ServiceException {
+        Company company;
+        try {
+            company = userDao.findCompanyByHrLogin(hrLogin);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return company;
     }
 }

@@ -1,16 +1,12 @@
 package edu.epam.project.model.dao;
 
-import edu.epam.project.model.entity.Specialty;
-import edu.epam.project.model.entity.User;
-import edu.epam.project.model.entity.UserStatus;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
-import edu.epam.project.model.entity.Vacancy;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends BaseDao<Integer, User> {
-
     void addUser(User user, String encryptedPassword) throws DaoException;
 
     Optional<User> findUserByLogin(String login) throws DaoException;
@@ -36,4 +32,12 @@ public interface UserDao extends BaseDao<Integer, User> {
     Vacancy findVacancyById(Integer vacancyId) throws DaoException;
 
     List<Vacancy> findAllVacancies() throws DaoException;
+
+    List<Vacancy> findAllVacancies(int start, int end) throws DaoException;
+
+    int countVacancies() throws DaoException;
+
+    Company findCompanyById(Integer companyId) throws DaoException;
+
+    Company findCompanyByHrLogin(String hrLogin) throws DaoException;
 }

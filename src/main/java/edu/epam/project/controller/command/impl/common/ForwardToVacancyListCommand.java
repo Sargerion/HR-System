@@ -1,11 +1,11 @@
-package edu.epam.project.controller.command.impl.admin;
+package edu.epam.project.controller.command.impl.common;
 
 import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 
-public class ForwardToHRListCommand implements Command {
+public class ForwardToVacancyListCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        return new CommandResult(PathJsp.ADMIN_HR_VIEW_PAGE, TransitionType.FORWARD);
+        return new CommandResult(PathJsp.VACANCIES_VIEW_PAGE, TransitionType.FORWARD);
     }
 }

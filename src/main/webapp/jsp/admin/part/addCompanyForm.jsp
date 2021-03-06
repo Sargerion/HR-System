@@ -31,23 +31,6 @@
                value=<c:if test="${sessionScope.correct_company_town != null}">${sessionScope.correct_company_town}</c:if>>
     </div>
     <label style="color: red">*</label>
-    <h5><fmt:message key="company_form_list_needs"/></h5>
-    <div class="form-group">
-    <select name="vacancy" size="1" required>
-        <c:forEach items="${sessionScope.vacancies}" var="vacancy">
-            <option value=<c:choose>
-                            <c:when test="${sessionScope.correct_vacancy_id != null}">${sessionScope.correct_vacancy_id}</c:when>
-                            <c:otherwise>${vacancy.getEntityId()}</c:otherwise>
-                          </c:choose>>
-                <c:choose>
-                    <c:when test="${sessionScope.correct_vacancy_name != null}">${sessionScope.correct_vacancy_name}</c:when>
-                    <c:otherwise>${vacancy.name}</c:otherwise>
-                </c:choose>>
-            </option>
-        </c:forEach>
-    </select>
-    </div>
-    <label style="color: red">*</label>
     <h5><fmt:message key="login_needs"/></h5>
     <div class="form-group">
         <input type="text" name="company_hr_login" class="form-control" required pattern="^[a-zA-Zа-яА-Я0-9_-]{6,15}$" placeholder="<fmt:message key="company_form_hr_login_placeholder"/>"
@@ -80,7 +63,6 @@
     <c:remove var="correct_company_name" scope="session"/>
     <c:remove var="correct_company_owner" scope="session"/>
     <c:remove var="correct_company_town" scope="session"/>
-    <c:remove var="correct_vacancy_id" scope="session"/>
     <c:remove var="correct_company_hr_login" scope="session"/>
 </div>
 </body>

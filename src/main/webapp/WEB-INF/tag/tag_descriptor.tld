@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <taglib xmlns="http://java.sun.com/xml/ns/javaee"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
@@ -9,8 +8,8 @@
     <uri>custom_tag</uri>
 
     <tag>
-        <name>not_active_hr_list</name>
-        <tag-class>edu.epam.project.tag.ViewHrRequestsTag</tag-class>
+        <name>all_vacancies_list</name>
+        <tag-class>edu.epam.project.tag.ViewAllVacanciesTag</tag-class>
         <body-content>empty</body-content>
     </tag>
     <tag>
@@ -23,4 +22,5 @@
         <tag-class>edu.epam.project.tag.ViewImageTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+
 </taglib>

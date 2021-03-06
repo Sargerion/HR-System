@@ -1,8 +1,5 @@
 package edu.epam.project.tag.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
@@ -12,7 +9,6 @@ import java.util.ResourceBundle;
 
 public class TagUtil {
 
-    private static final Logger logger = LogManager.getLogger();
     private static final String PAGE_PROPERTIES_PATH = "property/pagecontent";
 
     private TagUtil() {

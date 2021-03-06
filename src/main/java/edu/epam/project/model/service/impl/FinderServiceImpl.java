@@ -35,12 +35,12 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public boolean add(Finder entity) throws ServiceException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Finder> findAll(int start, int end) throws ServiceException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -63,16 +63,6 @@ public class FinderServiceImpl implements FinderService {
             logger.error(e);
             throw new ServiceException(e);
         }
-    }
-
-    @Override
-    public boolean delete(Finder entity) throws ServiceException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(Integer entityId) throws ServiceException {
-        return false;
     }
 
     @Override

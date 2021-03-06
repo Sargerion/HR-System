@@ -8,7 +8,6 @@ import edu.epam.project.exception.DaoException;
 import java.util.List;
 
 public interface AdminDao extends BaseDao<Integer, User> {
-
     List<User> findNotActiveHRs(int start, int end) throws DaoException;
 
     int countUsers() throws DaoException;

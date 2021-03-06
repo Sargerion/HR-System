@@ -28,6 +28,12 @@ public class CommandAccessFilter implements Filter {
         String command = httpRequest.getParameter(RequestParameter.COMMAND);
         CommandName commandName;
         try {
+            if (command == null) {
+                httpRequest.setAttribute(RequestAttribute.ERROR_MESSAGE, ErrorMessage.ERROR_COMMAND);
+                RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(PathJsp.ERROR_404_PAGE);
+                dispatcher.forward(httpRequest, httpResponse);
+                return;
+            }
             commandName = CommandName.valueOf(command.toUpperCase());
         } catch (IllegalArgumentException e) {
             httpRequest.setAttribute(RequestAttribute.ERROR_MESSAGE, ErrorMessage.ERROR_COMMAND);

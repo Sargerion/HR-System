@@ -41,8 +41,8 @@ public class AdminDaoImpl implements AdminDao {
     private static final String COUNT_NOT_ACTIVE_HRS = "SELECT COUNT(*) FROM users WHERE user_status_id = ? AND user_type_id = ?;";
 
     @Language("SQL")
-    private static final String INSERT_COMPANY = "INSERT INTO companies (company_name, company_owner, company_addres, vacancy_id, company_hr_login) " +
-            "VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_COMPANY = "INSERT INTO companies (company_name, company_owner, company_addres, company_hr_login) " +
+            "VALUES (?, ?, ?, ?)";
 
     @Language("SQL")
     private static final String CONTAINS_COMPANY_NAME = "SELECT EXISTS(SELECT company_name FROM companies WHERE company_name = ?) AS company_name_existence;";
@@ -52,12 +52,6 @@ public class AdminDaoImpl implements AdminDao {
 
     @Language("SQL")
     private static final String CONTAINS_SPECIALTY_NAME = "SELECT EXISTS(SELECT specialty_name FROM specialties WHERE specialty_name = ?) AS specialty_name_existence;";
-
-    @Language("SQL")
-    private static final String SELECT_COMPANY = "SELECT company_id, company_name, company_owner, company_addres, " +
-            "vacancies.vacancy_id, vacancy_name, specialties.specialty_id, specialties.specialty_name, vacancies.vacancy_salary_usd, vacancies.vacancy_need_work_experience, company_hr_login FROM companies " +
-            "INNER JOIN vacancies ON companies.vacancy_id = vacancies.vacancy_id " +
-            "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id WHERE company_id = ?;";
 
     @Language("SQL")
     private static final String INSERT_SPECIALTY = "INSERT INTO specialties (specialty_name) VALUES (?)";
@@ -71,12 +65,12 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public void add(User entity) throws DaoException {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Optional<User> findById(Integer entityId) throws DaoException {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -115,17 +109,7 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public void update(User entity) throws DaoException {
-
-    }
-
-    @Override
-    public boolean delete(User entity) throws DaoException {
-        return false;
-    }
-
-    @Override
-    public boolean deleteById(Integer entityId) throws DaoException {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -173,8 +157,7 @@ public class AdminDaoImpl implements AdminDao {
             preparedStatement.setString(1, company.getName());
             preparedStatement.setString(2, company.getOwner());
             preparedStatement.setString(3, company.getAddress());
-            preparedStatement.setInt(4, company.getVacancy().getEntityId());
-            preparedStatement.setString(5, company.getHrLogin());
+            preparedStatement.setString(4, company.getHrLogin());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();

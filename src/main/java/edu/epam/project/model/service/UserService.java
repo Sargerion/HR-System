@@ -1,5 +1,6 @@
 package edu.epam.project.model.service;
 
+import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.ServiceException;
@@ -25,4 +26,12 @@ public interface UserService extends BaseService<Integer, User> {
     Vacancy findVacancyById(Integer vacancyId) throws ServiceException;
 
     List<Vacancy> findAllVacancies() throws ServiceException;
+
+    List<Vacancy> findAllVacancies(int start, int end) throws ServiceException;
+
+    int countVacancies() throws ServiceException;
+
+    Company findCompanyById(Integer companyId) throws ServiceException;
+
+    Company findCompanyByHrLogin(String hrLogin) throws ServiceException;
 }

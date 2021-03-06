@@ -25,7 +25,6 @@ public class RequestParameter {
     public static final String COMPANY_OWNER = "company_owner";
     public static final String COMPANY_TOWN = "company_town";
     public static final String COMPANY_HR_LOGIN = "company_hr_login";
-    public static final String VACANCY = "vacancy";
     public static final String SPECIALTY_NAME = "specialty_name";
 
     private RequestParameter() {

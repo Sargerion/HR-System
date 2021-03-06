@@ -17,7 +17,7 @@ class MailBuilder {
         try (InputStream input = MailBuilder.class.getResourceAsStream(PROPERTIES_PATH)) {
             properties.load(input);
         } catch (IOException e) {
-            logger.error(e);
+            logger.fatal(e);
         }
     }
 

@@ -17,7 +17,7 @@ public interface AdminService extends BaseService<Integer, User> {
 
     int countNotActiveHRs() throws ServiceException;
 
-    Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String vacancyId, String companyHrLogin) throws ServiceException;
+    Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String companyHrLogin) throws ServiceException;
 
     Map<Optional<Specialty>, Optional<String>> addSpecialty(String specialtyName) throws ServiceException;
 
