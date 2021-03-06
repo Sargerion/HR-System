@@ -95,7 +95,7 @@ public class Vacancy extends Entity {
                 + (specialty != null ? specialty.hashCode() : 0)
                 + (salary != null ? salary.hashCode() : 0)
                 + (needWorkExperience != null ? needWorkExperience.hashCode() : 0)
-                + (vacancyCompany != null ? vacancyCompany.hashCode() : 0) +
+                + (vacancyCompany != null ? vacancyCompany.hashCode() : 0)
                 + Boolean.hashCode(isVacancyActive);
         return result;
     }
