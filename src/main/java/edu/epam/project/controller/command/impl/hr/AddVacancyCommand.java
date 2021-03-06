@@ -2,7 +2,6 @@ package edu.epam.project.controller.command.impl.hr;
 
 import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
-
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.Vacancy;
