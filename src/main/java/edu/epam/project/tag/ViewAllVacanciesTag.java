@@ -143,24 +143,22 @@ public class ViewAllVacanciesTag extends TagSupport {
                 for (int i = 0; i < LIST_LINES_COUNT; i++) {
                     int lineNumber = LIST_LINES_COUNT * (currentPage - 1) + i + 1;
                     if (size > i) {
-                        if (vacancies.get(i).isVacancyActive()) {
-                            Vacancy vacancy = vacancies.get(i);
-                            writer.write("<tr><th>" + lineNumber + "</th>");
-                            writer.write("<td>" + vacancy.getEntityId() + "</td>");
-                            writer.write("<td>" + vacancy.getName() + "</td>");
-                            writer.write("<td>" + vacancy.getSpecialty().getSpecialtyName() + "</td>");
-                            writer.write("<td>" + vacancy.getSalary() + "</td>");
-                            writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
-                            writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
-                            writer.write("<td>");
-                            if (!finderService.isFinderApply(finderId)) {
-                                String command = CommandName.APPLY_VACANCY.name();
-                                TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
-                            } else {
-                                writer.write(resourceBundle.getString(APPLY_SENT));
-                            }
-                            writer.write("</td>");
+                        Vacancy vacancy = vacancies.get(i);
+                        writer.write("<tr><th>" + lineNumber + "</th>");
+                        writer.write("<td>" + vacancy.getEntityId() + "</td>");
+                        writer.write("<td>" + vacancy.getName() + "</td>");
+                        writer.write("<td>" + vacancy.getSpecialty().getSpecialtyName() + "</td>");
+                        writer.write("<td>" + vacancy.getSalary() + "</td>");
+                        writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
+                        writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
+                        writer.write("<td>");
+                        if (!finderService.isFinderApply(finderId)) {
+                            String command = CommandName.APPLY_VACANCY.name();
+                            TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
+                        } else {
+                            writer.write(resourceBundle.getString(APPLY_SENT));
                         }
+                        writer.write("</td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
                         writer.write("<td></td><td></td><td></td><td></td><td></td><td></td><td></td>");
