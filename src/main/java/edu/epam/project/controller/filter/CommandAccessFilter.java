@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/controller"})
+@WebFilter(filterName = "CommandAccessFilter")
 public class CommandAccessFilter implements Filter {
 
     @Override

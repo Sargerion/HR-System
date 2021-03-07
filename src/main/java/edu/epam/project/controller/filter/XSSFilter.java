@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@WebFilter(urlPatterns = {"/*"})
+@WebFilter(filterName = "XSSFilter")
 public class XSSFilter implements Filter {
 
     @Override

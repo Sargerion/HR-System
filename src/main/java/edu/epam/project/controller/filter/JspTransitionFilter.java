@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/jsp/*"})
+@WebFilter(urlPatterns = {"/jsp/*"}, filterName = "JspTransitionFilter")
 public class JspTransitionFilter implements Filter {
 
     @Override

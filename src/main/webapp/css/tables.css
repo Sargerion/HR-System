@@ -55,20 +55,20 @@ ul.navigate {
     padding: 0.7em 1em 0.7em 1em;
 }
 
-#apply_button {
+.apply_button {
     font-weight: 700;
     color: white;
     text-decoration: none;
-    padding: .8em 1em calc(.8em + 3px);
+    padding: .8em 4em calc(.8em + 3px);
     border-radius: 3px;
     background: rgb(64,199,129);
     box-shadow: 0 -3px rgb(53,167,110) inset;
     transition: 0.2s;
 }
-#apply_button:hover {
+.apply_button:hover {
     background: rgb(53, 167, 110);
 }
-#apply_button:active {
+.apply_button:active {
     background: rgb(33,147,90);
     box-shadow: 0 3px rgb(33,147,90) inset;
 }

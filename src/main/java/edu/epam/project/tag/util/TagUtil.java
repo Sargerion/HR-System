@@ -52,14 +52,13 @@ public class TagUtil {
         writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + imageName + "\">");
     }
 
-    public static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId) throws IOException {
+    public static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
-        writer.write("<button type=\"submit\" name=\"applyVacancyButton\" ");
-        writer.write("value=\"" + vacancyId + "\" ");
-        writer.write("</button></form>");
-        //todo add value send localize
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"applyVacancyButton\" ");
+        writer.write("value=\"" + vacancyId + "\">");
+        writer.write(buttonText + "</button></form>");
     }
 
     //todo finish it

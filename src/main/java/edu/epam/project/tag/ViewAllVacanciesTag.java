@@ -32,6 +32,7 @@ public class ViewAllVacanciesTag extends TagSupport {
     private static final String APPLY_SENT = "all_vacancies_table_apply_sent";
     private static final String VACANCY_ACTIVE_STATUS = "all_vacancies_table_status_value_active";
     private static final String VACANCY_BLOCKED_STATUS = "all_vacancies_table_status_value_block";
+    private static final String APPLY_BUTTON_TEXT = "all_vacancies_table_apply_text";
 
     @Override
     public int doStartTag() throws JspException {
@@ -154,7 +155,7 @@ public class ViewAllVacanciesTag extends TagSupport {
                             writer.write("<td>");
                             if (!finderService.isFinderApply(finderId)) {
                                 String command = CommandName.APPLY_VACANCY.name();
-                                TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId());
+                                TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
                             } else {
                                 writer.write(resourceBundle.getString(APPLY_SENT));
                             }
