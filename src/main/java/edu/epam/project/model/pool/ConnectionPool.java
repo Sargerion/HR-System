@@ -28,7 +28,6 @@ public class ConnectionPool {
     private static final int CONDITIONAL_VALUE_TO_DOWNSIZE_POOL = 50;
     private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
     private static final Lock lockInstance = new ReentrantLock(true);
-    private final Lock lockConnection = new ReentrantLock(true);
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
     private final ConnectionBuilder connectionBuilder = new ConnectionBuilder();
@@ -57,26 +56,18 @@ public class ConnectionPool {
         ProxyConnection proxyConnection = null;
         if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
             try {
-                lockConnection.lock();
                 proxyConnection = freeConnections.take();
                 givenAwayConnections.offer(proxyConnection);
                 logger.info("Getting connection from free connections");
             } catch (InterruptedException e) {
                 logger.error(e);
                 Thread.currentThread().interrupt();
-            } finally {
-                lockConnection.unlock();
             }
         } else {
-            try {
-                lockConnection.lock();
-                proxyConnection = new ProxyConnection(connectionBuilder.create());
-                givenAwayConnections.offer(proxyConnection);
-                logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
-                logger.info("New connection created and gone");
-            } finally {
-                lockConnection.unlock();
-            }
+            proxyConnection = new ProxyConnection(connectionBuilder.create());
+            givenAwayConnections.offer(proxyConnection);
+            logger.info("Pool size has increased, current size -> {}", detectPoolSize().get());
+            logger.info("New connection created and gone");
         }
         givenPerPeriodConnectionCount.incrementAndGet();
         logger.debug("Connection per period -> {}", givenPerPeriodConnectionCount);
@@ -84,19 +75,14 @@ public class ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) throws ConnectionException {
-        try {
-            lockConnection.lock();
-            if (!(connection instanceof ProxyConnection)) {
-                logger.error("Not proxy trying release");
-                throw new ConnectionException("It's not a proxy");
-            } else {
-                if (givenAwayConnections.contains(connection)) {
-                    freeConnections.offer((ProxyConnection) connection);
-                    givenAwayConnections.remove(connection);
-                }
+        if (!(connection instanceof ProxyConnection)) {
+            logger.error("Not proxy trying release");
+            throw new ConnectionException("It's not a proxy");
+        } else {
+            if (givenAwayConnections.contains(connection)) {
+                freeConnections.offer((ProxyConnection) connection);
+                givenAwayConnections.remove(connection);
             }
-        } finally {
-            lockConnection.unlock();
         }
     }
 
@@ -142,7 +128,7 @@ public class ConnectionPool {
                 freeConnections.offer(proxyConnection);
             } catch (ConnectionException e) {
                 logger.fatal(e);
-                //todo спросить про протаскивание пустых пропертей
+                throw new RuntimeException(e);
             }
         }
         UnnecessaryConnectionsReturner connectionsReturner = new UnnecessaryConnectionsReturner();
