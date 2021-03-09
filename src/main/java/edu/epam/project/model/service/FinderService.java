@@ -1,7 +1,6 @@
 package edu.epam.project.model.service;
 
 import edu.epam.project.exception.ServiceException;
-import edu.epam.project.model.entity.Application;
 import edu.epam.project.model.entity.Finder;
 
 import java.util.Map;
@@ -12,7 +11,7 @@ public interface FinderService extends BaseService<Integer, Finder> {
 
     boolean existsFinder(Integer finderId) throws ServiceException;
 
-    Map<Optional<Application>, Optional<String>> buildApplication(String vacancyId, Integer finderId, boolean isConfirmApplication) throws ServiceException;
+    Optional<String> findFinderLogin(Integer finderId) throws ServiceException;
 
-    boolean isFinderApply(Integer finderId) throws ServiceException;
+    void updateFinderWorkStatus(String companyName, Integer finderId) throws ServiceException;
 }

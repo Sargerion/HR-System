@@ -4,13 +4,11 @@ public class Application extends Entity {
 
     private Vacancy applicationVacancy;
     private Finder applicationFinder;
-    private boolean isConfirmApplication;
 
-    public Application(Integer entityId, Vacancy applicationVacancy, Finder applicationFinder, boolean isConfirmApplication) {
+    public Application(Integer entityId, Vacancy applicationVacancy, Finder applicationFinder) {
         super(entityId);
         this.applicationVacancy = applicationVacancy;
         this.applicationFinder = applicationFinder;
-        this.isConfirmApplication = isConfirmApplication;
     }
 
     public Vacancy getApplicationVacancy() {
@@ -29,14 +27,6 @@ public class Application extends Entity {
         this.applicationFinder = applicationFinder;
     }
 
-    public boolean isConfirmApplication() {
-        return isConfirmApplication;
-    }
-
-    public void setConfirmApplication(boolean confirmApplication) {
-        isConfirmApplication = confirmApplication;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -49,7 +39,7 @@ public class Application extends Entity {
             return false;
         }
         Application that = (Application) o;
-        return isConfirmApplication == that.isConfirmApplication && applicationVacancy.equals(that.applicationVacancy) && applicationFinder.equals(that.applicationFinder);
+        return applicationVacancy.equals(that.applicationVacancy) && applicationFinder.equals(that.applicationFinder);
     }
 
     @Override
@@ -57,8 +47,17 @@ public class Application extends Entity {
         int result = super.hashCode();
         result = result * 31
                 + (applicationVacancy != null ? applicationVacancy.hashCode() : 0)
-                + (applicationFinder != null ? applicationFinder.hashCode() : 0)
-                + (Boolean.hashCode(isConfirmApplication));
+                + (applicationFinder != null ? applicationFinder.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Application{");
+        sb.append(super.toString());
+        sb.append("applicationVacancy=").append(applicationVacancy);
+        sb.append(", applicationFinder=").append(applicationFinder);
+        sb.append('}');
+        return sb.toString();
     }
 }

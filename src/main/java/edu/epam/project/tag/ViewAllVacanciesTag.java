@@ -7,8 +7,8 @@ import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.entity.Vacancy;
-import edu.epam.project.model.service.FinderService;
-import edu.epam.project.model.service.impl.FinderServiceImpl;
+import edu.epam.project.model.service.ApplicationService;
+import edu.epam.project.model.service.impl.ApplicationServiceImpl;
 import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -133,7 +133,7 @@ public class ViewAllVacanciesTag extends TagSupport {
     }
 
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Vacancy> vacancies, Integer finderId) throws JspException {
-        FinderService finderService = FinderServiceImpl.getInstance();
+        ApplicationService applicationService = ApplicationServiceImpl.getInstance();
         String locale = sessionRequestContext.getLocale();
         ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
         try {
@@ -152,9 +152,11 @@ public class ViewAllVacanciesTag extends TagSupport {
                         writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
                         writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
                         writer.write("<td>");
-                        if (!finderService.isFinderApply(finderId)) {
+                        if (!applicationService.isFinderApply(vacancy.getEntityId(), finderId)) {
                             String command = CommandName.APPLY_VACANCY.name();
+                            writer.write("<ul class=\"navigate\"><li>");
                             TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
+                            writer.write("</li></ul>");
                         } else {
                             writer.write(resourceBundle.getString(APPLY_SENT));
                         }

@@ -27,6 +27,11 @@ public class ErrorMessage {
     public static final String NO_FINDER_OR_VACANCY = "No such finder or vacancy";
     public static final String NO_SUCH_SPECIALTY = "No such specialty";
     public static final String NO_SUCH_VACANCY_OR_COMPANY = "No such vacancy or company";
+    public static final String DIFFERENT_SPECIALTIES = "You can't apply because you have another specialization";
+    public static final String CONFIRM_APPLICATION_INCORRECT_PARAMETERS = "Incorrect confirm application parameters";
+    public static final String NO_APPLICATION = "Try to delete not existing application";
+    public static final String ALREADY_WORK = "You can't apply because you've already worked in ";
+    public static final String ALREADY_WORK_FINDER = "You can't apply this finder because he's already worked in ";
 
     private ErrorMessage() {
 

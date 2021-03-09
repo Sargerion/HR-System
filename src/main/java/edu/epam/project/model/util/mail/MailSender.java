@@ -17,8 +17,10 @@ public class MailSender {
 
     private static final MailSender instance = new MailSender();
     private static final Logger logger = LogManager.getLogger();
-    private static final String ACTIVATE_MESSAGE_FINDER = "You have registered on CringeLinkedIn, please confirm registration by link";
+    private static final String ACTIVATE_MESSAGE = "You have registered on CringeLinkedIn, please confirm registration by link";
     private static final String ACTIVATE_LINK = "http://localhost:8081/cringelinkedin/controller?command=activate&";
+    private static final String HIRE_MESSAGE = "Congrats, you've got work in ";
+    private static final String NO_HIRE_MESSAGE = "Unfortunately, you've not got work in ";
     private MimeMessage mimeMessage;
     private String sendToEmail;
     private String mailSubject;
@@ -33,10 +35,26 @@ public class MailSender {
 
     public void sendActivationUser(User user) throws MailSendException {
         setSendToEmail(user.getEmail());
-        setMailSubject(ACTIVATE_MESSAGE_FINDER);
+        setMailSubject(ACTIVATE_MESSAGE);
         setMailBody(ACTIVATE_LINK + "userId=" + user.getEntityId() + "&confirm_token=" + user.getConfirmationToken());
         send();
         logger.info("Activation sent to user with login -> {}", user.getLogin());
+    }
+
+    public void sendHireNotificationFinder(User user, String companyName) throws MailSendException {
+        setSendToEmail(user.getEmail());
+        setMailSubject(companyName);
+        setMailBody(HIRE_MESSAGE + companyName);
+        send();
+        logger.info("Hire message sent to finder with login -> {}", user.getLogin());
+    }
+
+    public void sendNoHireNotificationFinder(User user, String companyName) throws MailSendException {
+        setSendToEmail(user.getEmail());
+        setMailSubject(companyName);
+        setMailBody(NO_HIRE_MESSAGE + companyName);
+        send();
+        logger.info("No hire message sent to finder with login -> {}", user.getLogin());
     }
 
     private void initializeMessage() throws MessagingException {

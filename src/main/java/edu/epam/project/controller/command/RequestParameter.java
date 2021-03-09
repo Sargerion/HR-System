@@ -27,7 +27,8 @@ public class RequestParameter {
     public static final String COMPANY_HR_LOGIN = "company_hr_login";
     public static final String SPECIALTY_NAME = "specialty_name";
     public static final String APPLY_VACANCY_BUTTON = "applyVacancyButton";
-    public static final String ACTIVE_APPLICATION_BUTTON = "activeApplicationButton";
+    public static final String CONFIRM_APPLICATION_BUTTON = "confirmApplicationButton";
+    public static final String REJECT_APPLICATION_BUTTON = "rejectApplicationButton";
 
     private RequestParameter() {
 

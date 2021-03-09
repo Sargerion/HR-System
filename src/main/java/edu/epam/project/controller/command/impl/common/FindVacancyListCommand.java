@@ -4,8 +4,8 @@ import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.Vacancy;
-import edu.epam.project.model.service.UserService;
-import edu.epam.project.model.service.impl.UserServiceImpl;
+import edu.epam.project.model.service.VacancyService;
+import edu.epam.project.model.service.impl.VacancyServiceImpl;
 import edu.epam.project.model.util.message.FriendlyMessage;
 import edu.epam.project.tag.ViewAllVacanciesTag;
 
@@ -22,20 +22,20 @@ public class FindVacancyListCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         Integer currentTablePage = (Integer) requestContext.getSessionAttribute(SessionAttribute.VACANCY_LIST_CURRENT_PAGE);
-        Optional<String> currentPage = requestContext.getRequestParameter(RequestParameter.NEW_PAGE);
-        if (currentPage.isEmpty() && currentTablePage == null) {
+        Optional<String> nextPage = requestContext.getRequestParameter(RequestParameter.NEW_PAGE);
+        if (nextPage.isEmpty() && currentTablePage == null) {
             currentTablePage = 1;
-        } else if (currentPage.isPresent()) {
-            currentTablePage = Integer.parseInt(currentPage.get());
+        } else if (nextPage.isPresent()) {
+            currentTablePage = Integer.parseInt(nextPage.get());
         }
         requestContext.setSessionAttribute(SessionAttribute.VACANCY_LIST_CURRENT_PAGE, currentTablePage);
         int start = (currentTablePage - 1) * ViewAllVacanciesTag.LIST_LINES_COUNT;
         int end = ViewAllVacanciesTag.LIST_LINES_COUNT + start;
-        UserService userService = UserServiceImpl.getInstance();
+        VacancyService vacancyService = VacancyServiceImpl.getInstance();
         try {
-            List<Vacancy> vacancies = userService.findAllVacancies(start, end);
+            List<Vacancy> vacancies = vacancyService.findAll(start, end);
             requestContext.setSessionAttribute(SessionAttribute.VACANCY_PAGINATE_LIST, vacancies);
-            int vacanciesCount = userService.countVacancies();
+            int vacanciesCount = vacancyService.countVacancies();
             requestContext.setSessionAttribute(SessionAttribute.VACANCIES_COUNT, vacanciesCount);
             if (vacancies.size() == 0) {
                 requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.EMPTY_VACANCY_LIST);

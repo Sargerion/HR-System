@@ -6,7 +6,7 @@ import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.impl.UserDaoImpl;
 import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.DaoException;
-import edu.epam.project.model.service.AdminService;
+import edu.epam.project.model.service.CompanyService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.UserService;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private static final UserServiceImpl instance = new UserServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private final UserDao userDao = UserDaoImpl.getInstance();
+    private final UserDao userDao = new UserDaoImpl();
 
     private UserServiceImpl() {
     }
@@ -32,13 +32,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean add(User entity) throws ServiceException {
-        throw new UnsupportedOperationException("You can't add user by this UserService method");
+    public void add(User entity) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<User> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+        List<User> allUsers;
+        try {
+            allUsers = new ArrayList<>(userDao.findAll(start, end));
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return allUsers;
+    }
+
+    @Override
+    public int countUsers() throws ServiceException {
+        int usersCount;
+        try {
+            usersCount = userDao.countUsers();
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return usersCount;
     }
 
     @Override
@@ -62,6 +81,11 @@ public class UserServiceImpl implements UserService {
             logger.error(e);
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -113,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<Optional<User>, Map<List<String>, Map<String, String>>> registerUser(String login, String password, String repeatPassword, String email, boolean isHR) throws ServiceException {
-        AdminService adminService = AdminServiceImpl.getInstance();
+        CompanyService companyService = CompanyServiceImpl.getInstance();
         Optional<User> user = Optional.empty();
         List<String> errorMessages = new ArrayList<>();
         Map<String, String> correctFields = new HashMap<>();
@@ -134,9 +158,9 @@ public class UserServiceImpl implements UserService {
                     correctFields.put(SessionAttribute.CORRECT_REPEAT_PASSWORD, repeatPassword);
                 }
                 correctFields.put(SessionAttribute.CORRECT_EMAIL, email);
-                if (isHR && adminService.isCompanyHr(login)) {
+                if (isHR && companyService.isCompanyHr(login)) {
                     correctFields.put(SessionAttribute.HR_CHECK, RequestParameter.HR_CHECK_BOX);
-                } else if (isHR && !adminService.isCompanyHr(login)) {
+                } else if (isHR && !companyService.isCompanyHr(login)) {
                     correctFields.put(SessionAttribute.HR_CHECK, "");
                     errorMessages.add(ErrorMessage.NOT_REGISTER_LIKE_HR);
                 } else {
@@ -148,7 +172,7 @@ public class UserServiceImpl implements UserService {
                         user = Optional.of(new User(0, login, email, UserType.FINDER, UserStatus.NOT_ACTIVE));
                         user.get().setConfirmationToken(UUID.randomUUID().toString());
                         userDao.addUser(user.get(), encryptedPassword);
-                    } else if (adminService.isCompanyHr(login)) {
+                    } else if (companyService.isCompanyHr(login)) {
                         user = Optional.of(new User(0, login, email, UserType.COMPANY_HR, UserStatus.NOT_ACTIVE));
                         user.get().setConfirmationToken(UUID.randomUUID().toString());
                         userDao.addUser(user.get(), encryptedPassword);
@@ -173,89 +197,5 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return userAvatar;
-    }
-
-    @Override
-    public List<Specialty> findAllSpecialties() throws ServiceException {
-        List<Specialty> specialties;
-        try {
-            specialties = new ArrayList<>(userDao.findAllSpecialties());
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return specialties;
-    }
-
-    @Override
-    public Optional<Specialty> findSpecialtyById(Integer specialtyId) throws ServiceException {
-        Optional<Specialty> findSpecialty;
-        try {
-            findSpecialty = userDao.findSpecialtyById(specialtyId);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return findSpecialty;
-    }
-
-    @Override
-    public Optional<Vacancy> findVacancyById(Integer vacancyId) throws ServiceException {
-        Optional<Vacancy> vacancy;
-        try {
-            vacancy = userDao.findVacancyById(vacancyId);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return vacancy;
-    }
-
-    @Override
-    public List<Vacancy> findAllVacancies(int start, int end) throws ServiceException {
-        List<Vacancy> vacancies;
-        try {
-            vacancies = new ArrayList<>(userDao.findAllVacancies(start, end));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return vacancies;
-    }
-
-    @Override
-    public int countVacancies() throws ServiceException {
-        int vacanciesCount;
-        try {
-            vacanciesCount = userDao.countVacancies();
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return vacanciesCount;
-    }
-
-    @Override
-    public Optional<Company> findCompanyById(Integer companyId) throws ServiceException {
-        Optional<Company> company;
-        try {
-            company = userDao.findCompanyById(companyId);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return company;
-    }
-
-    @Override
-    public Optional<Company> findCompanyByHrLogin(String hrLogin) throws ServiceException {
-        Optional<Company> company;
-        try {
-            company = userDao.findCompanyByHrLogin(hrLogin);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return company;
     }
 }

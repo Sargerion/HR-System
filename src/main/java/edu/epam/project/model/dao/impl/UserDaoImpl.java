@@ -1,11 +1,8 @@
 package edu.epam.project.model.dao.impl;
 
 import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.CompanyBuilder;
-import edu.epam.project.model.dao.builder.impl.SpecialtyBuilder;
 import edu.epam.project.model.dao.builder.impl.UserBuilder;
 import edu.epam.project.model.dao.UserDao;
-import edu.epam.project.model.dao.builder.impl.VacancyBuilder;
 import edu.epam.project.model.dao.table.UserStatusesColumn;
 import edu.epam.project.model.dao.table.UserTypesColumn;
 import edu.epam.project.model.dao.table.UsersColumn;
@@ -25,12 +22,15 @@ import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
 
-    private static final UserDaoImpl instance = new UserDaoImpl();
     private static final Logger logger = LogManager.getLogger();
     private final EntityBuilder<User> userBuilder = new UserBuilder();
-    private final EntityBuilder<Specialty> specialtyBuilder = new SpecialtyBuilder();
-    private final EntityBuilder<Vacancy> vacancyBuilder = new VacancyBuilder();
-    private final EntityBuilder<Company> companyBuilder = new CompanyBuilder();
+
+    @Language("SQL")
+    private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
+            "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id LIMIT ?, ?;";
+
+    @Language("SQL")
+    private static final String COUNT_USERS = "SELECT COUNT(*) AS users_count FROM users";
 
     @Language("SQL")
     private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
@@ -42,12 +42,14 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_PASSWORD_BY_LOGIN = "SELECT user_password FROM users WHERE user_login = ?;";
 
     @Language("SQL")
-    private static final String SELECT_USER_BY_LOGIN = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
+    private static final String SELECT_USER_BY_LOGIN = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, US.user_status_name, " +
+            "U.confirmation_token FROM users U " +
             "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
             "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE U.user_login = ?;";
 
     @Language("SQL")
-    private static final String SELECT_USER_BY_ID = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
+    private static final String SELECT_USER_BY_ID = "SELECT U.user_id, U.user_login, U.user_password, U.user_email, UT.user_type_name, US.user_status_name, " +
+            "U.confirmation_token FROM users U " +
             "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id " +
             "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE U.user_id = ?;";
 
@@ -56,51 +58,21 @@ public class UserDaoImpl implements UserDao {
             "VALUES (?, ?, ?, ?, ?, ?);";
 
     @Language("SQL")
-    private static final String UPDATE_USER_BY_LOGIN = "UPDATE users SET user_login = ?, user_email = ?, user_type_id = ?, user_status_id = ?, confirmation_token = ? WHERE user_login = ?;";
+    private static final String UPDATE_USER_BY_LOGIN = "UPDATE users SET user_login = ?, user_email = ?, user_type_id = ?, user_status_id = ?, confirmation_token = ? " +
+            "WHERE user_login = ?;";
 
     @Language("SQL")
     private static final String UPDATE_STATUS_BY_LOGIN = "UPDATE users SET user_status_id = ? WHERE user_login = ?;";
 
     @Language("SQL")
-    private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses ON users.user_status_id = user_statuses.user_status_id WHERE user_login = ?;";
+    private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses ON users.user_status_id = user_statuses.user_status_id " +
+            "WHERE user_login = ?;";
 
     @Language("SQL")
     private static final String UPDATE_AVATAR_PATH_BY_ID = "UPDATE users SET user_avatar_path = ? WHERE user_id = ?;";
 
     @Language("SQL")
     private static final String SELECT_AVATAR_PATH_BY_USER_ID = "SELECT user_avatar_path FROM users WHERE user_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_ALL_SPECIALTIES = "SELECT specialty_id, specialty_name FROM specialties;";
-
-    @Language("SQL")
-    private static final String SELECT_SPECIALTY_BY_ID = "SELECT specialty_id, specialty_name FROM specialties WHERE specialty_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_VACANCY_BY_ID = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience, " +
-            "company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
-            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id WHERE vacancy_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_ALL_VACANCIES_WITH_LIMIT = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, vacancy_need_work_experience, " +
-            "company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active FROM vacancies INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
-            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id LIMIT ?, ?;";
-
-    @Language("SQL")
-    private static final String COUNT_VACANCIES = "SELECT COUNT(*) AS vacanciess_count FROM vacancies";
-
-    @Language("SQL")
-    private static final String SELECT_COMPANY_BY_ID = "SELECT company_id, company_name, company_owner, company_addres, company_hr_login FROM companies WHERE company_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_COMPANY_BY_HR_LOGIN = "SELECT company_id, company_name, company_owner, company_addres, company_hr_login FROM companies WHERE company_hr_login = ?;";
-
-    private UserDaoImpl() {
-    }
-
-    public static UserDaoImpl getInstance() {
-        return instance;
-    }
 
     @Override
     public void add(User entity) throws DaoException {
@@ -134,14 +106,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean existId(Integer userId) throws DaoException {
-        boolean isExists = isExistId(userId, CONTAINS_USER_ID);
+        boolean isExists = isExistsId(userId, CONTAINS_USER_ID);
         return isExists;
     }
 
     @Override
     public boolean existsLogin(String userLogin) throws DaoException {
-        boolean isExists = isExist(userLogin, CONTAINS_USER_LOGIN);
+        boolean isExists = isExistsStringValue(userLogin, CONTAINS_USER_LOGIN);
         return isExists;
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -210,7 +187,27 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
+        List<User> allUsers = new ArrayList<>();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_WITH_LIMIT)) {
+            preparedStatement.setInt(1, start);
+            preparedStatement.setInt(2, end);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = userBuilder.build(resultSet);
+                allUsers.add(user);
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return allUsers;
+    }
+
+    @Override
+    public int countUsers() throws DaoException {
+        int usersCount = countEntities(COUNT_USERS);
+        return usersCount;
     }
 
     @Override
@@ -297,135 +294,5 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         }
         return userAvatar;
-    }
-
-    @Override
-    public List<Specialty> findAllSpecialties() throws DaoException {
-        List<Specialty> specialties = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SPECIALTIES)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Specialty specialty = specialtyBuilder.build(resultSet);
-                specialties.add(specialty);
-            }
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return specialties;
-    }
-
-    @Override
-    public Optional<Specialty> findSpecialtyById(Integer specialtyId) throws DaoException {
-        Optional<Specialty> specialty;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SPECIALTY_BY_ID)) {
-            preparedStatement.setInt(1, specialtyId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            specialty = Optional.ofNullable(specialtyBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return specialty;
-    }
-
-    @Override
-    public Optional<Vacancy> findVacancyById(Integer vacancyId) throws DaoException {
-        Optional<Vacancy> vacancy;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_BY_ID)) {
-            preparedStatement.setInt(1, vacancyId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            vacancy = Optional.ofNullable(vacancyBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return vacancy;
-    }
-
-    @Override
-    public int countVacancies() throws DaoException {
-        int vacanciesCount;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(COUNT_VACANCIES)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            vacanciesCount = resultSet.getInt(1);
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return vacanciesCount;
-    }
-
-    @Override
-    public List<Vacancy> findAllVacancies(int start, int end) throws DaoException {
-        List<Vacancy> vacancies = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_VACANCIES_WITH_LIMIT)) {
-            preparedStatement.setInt(1, start);
-            preparedStatement.setInt(2, end);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Vacancy vacancy = vacancyBuilder.build(resultSet);
-                vacancies.add(vacancy);
-            }
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return vacancies;
-    }
-
-    @Override
-    public Optional<Company> findCompanyById(Integer companyId) throws DaoException {
-        Optional<Company> company;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)) {
-            preparedStatement.setInt(1, companyId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            company = Optional.ofNullable(companyBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return company;
-    }
-
-    @Override
-    public Optional<Company> findCompanyByHrLogin(String hrLogin) throws DaoException {
-        Optional<Company> company;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_HR_LOGIN)) {
-            preparedStatement.setString(1, hrLogin);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            company = Optional.ofNullable(companyBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return company;
-    }
-
-    private boolean isExist(String value, String sqlQuery) throws DaoException {
-        boolean result;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-            preparedStatement.setString(1, value);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            result = resultSet.getInt(1) != 0;
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return result;
     }
 }

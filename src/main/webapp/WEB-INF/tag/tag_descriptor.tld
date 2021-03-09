@@ -22,5 +22,10 @@
         <tag-class>edu.epam.project.tag.ViewImageTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>all_applications_list</name>
+        <tag-class>edu.epam.project.tag.ViewAllApplicationsTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 
 </taglib>

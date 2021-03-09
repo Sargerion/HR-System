@@ -4,12 +4,10 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.dao.impl.FinderDaoImpl;
-import edu.epam.project.model.entity.Application;
 import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.entity.Specialty;
-import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.FinderService;
-import edu.epam.project.model.service.UserService;
+import edu.epam.project.model.service.SpecialtyService;
 import edu.epam.project.model.util.message.ErrorMessage;
 import edu.epam.project.model.validator.UserInputValidator;
 
@@ -26,7 +24,7 @@ public class FinderServiceImpl implements FinderService {
 
     private static final FinderServiceImpl instance = new FinderServiceImpl();
     private static final Logger logger = LogManager.getLogger();
-    private final FinderDao finderDao = FinderDaoImpl.getInstance();
+    private final FinderDao finderDao = new FinderDaoImpl();
 
     private FinderServiceImpl() {
     }
@@ -36,7 +34,7 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public boolean add(Finder entity) throws ServiceException {
+    public void add(Finder entity) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
@@ -46,10 +44,10 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public Optional<Finder> findById(Integer entityId) throws ServiceException {
+    public Optional<Finder> findById(Integer finderId) throws ServiceException {
         Optional<Finder> foundFinder;
         try {
-            foundFinder = finderDao.findById(entityId);
+            foundFinder = finderDao.findById(finderId);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -58,9 +56,24 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public void update(Finder entity) throws ServiceException {
+    public void update(Finder finder) throws ServiceException {
         try {
-            finderDao.update(entity);
+            finderDao.update(finder);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void updateFinderWorkStatus(String companyName, Integer finderId) throws ServiceException {
+        try {
+            finderDao.updateFinderWorkStatus(companyName, finderId);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -69,7 +82,7 @@ public class FinderServiceImpl implements FinderService {
 
     @Override
     public Map<Optional<Finder>, Optional<String>> addFinder(Integer finderId, String requireSalary, String workExperience, String specialtyId) throws ServiceException {
-        UserService userService = UserServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         Optional<Finder> finder = Optional.empty();
         Optional<String> errorMessage = Optional.empty();
         Optional<Specialty> specialty;
@@ -78,7 +91,7 @@ public class FinderServiceImpl implements FinderService {
             errorMessage = Optional.of(ErrorMessage.ERROR_ADD_FINDER_INFO);
         } else {
             try {
-                specialty = userService.findSpecialtyById(Integer.parseInt(specialtyId));
+                specialty = specialtyService.findById(Integer.parseInt(specialtyId));
                 if (specialty.isPresent()) {
                     finder = Optional.of(new Finder(finderId, BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), specialty.get()));
                     finderDao.add(finder.get());
@@ -98,7 +111,7 @@ public class FinderServiceImpl implements FinderService {
     public boolean existsFinder(Integer finderId) throws ServiceException {
         boolean isExist;
         try {
-            isExist = finderDao.existsFinder(finderId);
+            isExist = finderDao.isExistsFinder(finderId);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -107,44 +120,14 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public Map<Optional<Application>, Optional<String>> buildApplication(String vacancyId, Integer finderId, boolean isConfirmApplication) throws ServiceException {
-        UserService userService = UserServiceImpl.getInstance();
-        FinderService finderService = FinderServiceImpl.getInstance();
-        Optional<Application> application = Optional.empty();
-        Optional<Vacancy> vacancy;
-        Optional<Finder> finder;
-        Optional<String> errorMessage = Optional.empty();
-        Map<Optional<Application>, Optional<String>> buildResult = new HashMap<>();
-        if (!UserInputValidator.isValidId(vacancyId)) {
-            errorMessage = Optional.of(ErrorMessage.APPLICATION_INCORRECT_PARAMETERS);
-        } else {
-            try {
-                vacancy = userService.findVacancyById(Integer.parseInt(vacancyId));
-                finder = finderService.findById(finderId);
-                if (vacancy.isPresent() && finder.isPresent()) {
-                    application = Optional.of(new Application(0, vacancy.get(), finder.get(), isConfirmApplication));
-                    finderDao.buildApplication(application.get());
-                } else {
-                    errorMessage = Optional.of(ErrorMessage.NO_FINDER_OR_VACANCY);
-                }
-            } catch (DaoException e) {
-                logger.error(e);
-                throw new ServiceException();
-            }
-        }
-        buildResult.put(application, errorMessage);
-        return buildResult;
-    }
-
-    @Override
-    public boolean isFinderApply(Integer finderId) throws ServiceException {
-        boolean isExist;
+    public Optional<String> findFinderLogin(Integer finderId) throws ServiceException {
+        Optional<String> finderLogin;
         try {
-            isExist = finderDao.isFinderApply(finderId);
+            finderLogin = finderDao.findFinderLogin(finderId);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);
         }
-        return isExist;
+        return finderLogin;
     }
 }

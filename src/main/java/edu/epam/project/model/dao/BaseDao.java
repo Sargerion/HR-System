@@ -21,7 +21,9 @@ public interface BaseDao<K, T extends Entity> {
 
     void update(T entity) throws DaoException;
 
-    default boolean isExistId(Integer value, String sqlQuery) throws DaoException {
+    void deleteById(K entityId) throws DaoException;
+
+    default boolean isExistsId(Integer value, String sqlQuery) throws DaoException {
         boolean result;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
@@ -33,5 +35,32 @@ public interface BaseDao<K, T extends Entity> {
             throw new DaoException(e);
         }
         return result;
+    }
+
+    default boolean isExistsStringValue(String value, String sqlQuery) throws DaoException {
+        boolean result;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            preparedStatement.setString(1, value);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            result = resultSet.getInt(1) != 0;
+        } catch (ConnectionException | SQLException e) {
+            throw new DaoException(e);
+        }
+        return result;
+    }
+
+    default int countEntities(String sqlQuery) throws DaoException {
+        int entitiesCount;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            entitiesCount = resultSet.getInt(1);
+        } catch (ConnectionException | SQLException e) {
+            throw new DaoException(e);
+        }
+        return entitiesCount;
     }
 }

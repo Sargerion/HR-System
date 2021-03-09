@@ -6,9 +6,11 @@ import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
-import edu.epam.project.model.service.HrService;
+import edu.epam.project.model.service.CompanyService;
+import edu.epam.project.model.service.SpecialtyService;
 import edu.epam.project.model.service.UserService;
-import edu.epam.project.model.service.impl.HrServiceImpl;
+import edu.epam.project.model.service.impl.CompanyServiceImpl;
+import edu.epam.project.model.service.impl.SpecialtyServiceImpl;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +26,8 @@ public class LogInCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         UserService userService = UserServiceImpl.getInstance();
-        HrService hrService = HrServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        CompanyService companyService = CompanyServiceImpl.getInstance();
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
         Optional<String> userAvatar;
@@ -58,13 +61,13 @@ public class LogInCommand implements Command {
                             userAvatar = userService.findUserAvatar(user);
                             userAvatar.ifPresent(user::setAvatarName);
                             requestContext.setSessionAttribute(SessionAttribute.USER, user);
-                            List<Specialty> specialties = userService.findAllSpecialties();
+                            List<Specialty> specialties = specialtyService.findAllSpecialties();
                             requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
-                            commandResult = defineIfAlreadyLoggedCommandResult(user, requestContext, hrService);
+                            commandResult = defineIfAlreadyLoggedCommandResult(user, requestContext, companyService);
                         }
                     }
                 } else {
-                    commandResult = defineIfAlreadyLoggedCommandResult(alreadyLoggedUser, requestContext, hrService);
+                    commandResult = defineIfAlreadyLoggedCommandResult(alreadyLoggedUser, requestContext, companyService);
                 }
             } catch (ServiceException e) {
                 logger.error(e);
@@ -74,7 +77,7 @@ public class LogInCommand implements Command {
         return commandResult;
     }
 
-    private CommandResult defineIfAlreadyLoggedCommandResult(User user, SessionRequestContext requestContext, HrService hrService) throws ServiceException {
+    private CommandResult defineIfAlreadyLoggedCommandResult(User user, SessionRequestContext requestContext, CompanyService companyService) throws ServiceException {
         CommandResult commandResult = null;
         UserType userType = user.getType();
         switch (userType) {
@@ -83,7 +86,7 @@ public class LogInCommand implements Command {
                 logger.info("Admin with login -> {} entered", user.getLogin());
             }
             case COMPANY_HR -> {
-                String hrCompany = hrService.findCompanyNameByHrLogin(user.getLogin());
+                String hrCompany = companyService.findCompanyNameByHrLogin(user.getLogin()).get();
                 requestContext.setSessionAttribute(SessionAttribute.HR_COMPANY, hrCompany);
                 commandResult = new CommandResult(PathJsp.HR_PAGE, TransitionType.REDIRECT);
                 logger.info("Company HR with login -> {} entered", user.getLogin());

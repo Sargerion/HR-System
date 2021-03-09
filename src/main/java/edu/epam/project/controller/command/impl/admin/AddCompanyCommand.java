@@ -4,8 +4,8 @@ import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.Company;
-import edu.epam.project.model.service.AdminService;
-import edu.epam.project.model.service.impl.AdminServiceImpl;
+import edu.epam.project.model.service.CompanyService;
+import edu.epam.project.model.service.impl.CompanyServiceImpl;
 import edu.epam.project.model.util.message.FriendlyMessage;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +20,7 @@ public class AddCompanyCommand implements Command {
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        AdminService adminService = AdminServiceImpl.getInstance();
+        CompanyService companyService = CompanyServiceImpl.getInstance();
         Optional<String> companyName = requestContext.getRequestParameter(RequestParameter.COMPANY_NAME);
         Optional<String> companyOwner = requestContext.getRequestParameter(RequestParameter.COMPANY_OWNER);
         Optional<String> companyAddress = requestContext.getRequestParameter(RequestParameter.COMPANY_TOWN);
@@ -34,7 +34,7 @@ public class AddCompanyCommand implements Command {
             Map<String, String> correctFields = new HashMap<>();
             Map<Optional<Company>, Map<List<String>, Map<String, String>>> addResult;
             try {
-                addResult = adminService.addCompany(companyName.get(), companyOwner.get(), companyAddress.get(), companyHrLogin.get());
+                addResult = companyService.addCompany(companyName.get(), companyOwner.get(), companyAddress.get(), companyHrLogin.get());
                 for (Map.Entry<Optional<Company>, Map<List<String>, Map<String, String>>> entry : addResult.entrySet()) {
                     company = entry.getKey();
                     for (Map.Entry<List<String>, Map<String, String>> listMapEntry : entry.getValue().entrySet()) {

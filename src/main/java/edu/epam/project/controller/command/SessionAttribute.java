@@ -25,6 +25,9 @@ public class SessionAttribute {
     public static final String CORRECT_EMAIL = "correct_email";
     public static final String HR_CHECK = "hr_check";
     public static final String HR_COMPANY = "hr_company";
+    public static final String APPLICATION_LIST_CURRENT_PAGE = "application_table_current_page";
+    public static final String APPLICATION_LIST = "application_list";
+    public static final String APPLICATIONS_COUNT = "applications_count";
 
     private SessionAttribute() {
 

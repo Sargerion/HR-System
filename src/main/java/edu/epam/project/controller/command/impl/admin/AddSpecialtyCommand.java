@@ -4,8 +4,8 @@ import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.Specialty;
-import edu.epam.project.model.service.AdminService;
-import edu.epam.project.model.service.impl.AdminServiceImpl;
+import edu.epam.project.model.service.SpecialtyService;
+import edu.epam.project.model.service.impl.SpecialtyServiceImpl;
 import edu.epam.project.model.util.message.FriendlyMessage;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +21,7 @@ public class AddSpecialtyCommand implements Command {
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        AdminService adminService = AdminServiceImpl.getInstance();
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         Optional<String> specialtyName = requestContext.getRequestParameter(RequestParameter.SPECIALTY_NAME);
         CommandResult commandResult = new CommandResult(PathJsp.ADD_SPECIALTY_PAGE, TransitionType.REDIRECT);
         if (specialtyName.isEmpty()) {
@@ -31,7 +31,7 @@ public class AddSpecialtyCommand implements Command {
             Optional<String> errorMessage = Optional.empty();
             Map<Optional<Specialty>, Optional<String>> addResult;
             try {
-                addResult = adminService.addSpecialty(specialtyName.get());
+                addResult = specialtyService.addSpecialty(specialtyName.get());
                 for (Map.Entry<Optional<Specialty>, Optional<String>> entry : addResult.entrySet()) {
                     specialty = entry.getKey();
                     errorMessage = entry.getValue();

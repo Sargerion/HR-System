@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends BaseDao<Integer, User> {
+    int countUsers() throws DaoException;
+
     void addUser(User user, String encryptedPassword) throws DaoException;
 
     Optional<User> findUserByLogin(String login) throws DaoException;
@@ -24,18 +26,4 @@ public interface UserDao extends BaseDao<Integer, User> {
     void updateAvatar(User user) throws DaoException;
 
     Optional<String> findUserAvatar(User user) throws DaoException;
-
-    List<Specialty> findAllSpecialties() throws DaoException;
-
-    Optional<Specialty> findSpecialtyById(Integer specialtyId) throws DaoException;
-
-    Optional<Vacancy> findVacancyById(Integer vacancyId) throws DaoException;
-
-    List<Vacancy> findAllVacancies(int start, int end) throws DaoException;
-
-    int countVacancies() throws DaoException;
-
-    Optional<Company> findCompanyById(Integer companyId) throws DaoException;
-
-    Optional<Company> findCompanyByHrLogin(String hrLogin) throws DaoException;
 }

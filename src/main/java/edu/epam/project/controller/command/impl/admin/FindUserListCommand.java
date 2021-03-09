@@ -4,8 +4,8 @@ import edu.epam.project.controller.command.*;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
-import edu.epam.project.model.service.AdminService;
-import edu.epam.project.model.service.impl.AdminServiceImpl;
+import edu.epam.project.model.service.UserService;
+import edu.epam.project.model.service.impl.UserServiceImpl;
 import edu.epam.project.tag.ViewAllUsersTag;
 import edu.epam.project.model.util.message.FriendlyMessage;
 
@@ -22,22 +22,22 @@ public class FindUserListCommand implements Command {
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         Integer currentTablePage = (Integer) requestContext.getSessionAttribute(SessionAttribute.ALL_USERS_CURRENT_PAGE);
-        Optional<String> currentPage = requestContext.getRequestParameter(RequestParameter.NEW_PAGE);
-        if (currentPage.isEmpty() && currentTablePage == null) {
+        Optional<String> nextPage = requestContext.getRequestParameter(RequestParameter.NEW_PAGE);
+        if (nextPage.isEmpty() && currentTablePage == null) {
             currentTablePage = 1;
-        } else if (currentPage.isPresent()) {
-            currentTablePage = Integer.parseInt(currentPage.get());
+        } else if (nextPage.isPresent()) {
+            currentTablePage = Integer.parseInt(nextPage.get());
         }
         requestContext.setSessionAttribute(SessionAttribute.ALL_USERS_CURRENT_PAGE, currentTablePage);
         int start = (currentTablePage - 1) * ViewAllUsersTag.LIST_LINES_COUNT;
         int end = ViewAllUsersTag.LIST_LINES_COUNT + start;
-        AdminService adminService = AdminServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
         try {
-            List<User> allUsers = adminService.findAll(start, end);
+            List<User> allUsers = userService.findAll(start, end);
             requestContext.setSessionAttribute(SessionAttribute.ALL_USERS_LIST, allUsers);
-            int usersCount = adminService.countUsers();
+            int usersCount = userService.countUsers();
             requestContext.setSessionAttribute(SessionAttribute.USERS_COUNT, usersCount);
-            if(allUsers.size() == 0) {
+            if (allUsers.size() == 0) {
                 requestContext.setRequestAttribute(RequestAttribute.CONFIRM_MESSAGE, FriendlyMessage.EMPTY_USER_LIST);
             }
         } catch (ServiceException e) {

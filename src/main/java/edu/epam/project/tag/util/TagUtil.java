@@ -61,15 +61,22 @@ public class TagUtil {
         writer.write(buttonText + "</button></form>");
     }
 
-    //todo finish it
-    public static void createConfirmAndRejectApplicationButton(JspWriter writer, PageContext pageContext, String command, String buttonValue, String buttonName) throws IOException {
+    public static void createConfirmApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
-        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<li><form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
-        writer.write("<button id=\"apply_button\" type=\"submit\" name=\"activeApplicationButton\" ");
-        writer.write("value=\"" + buttonValue + "\" ");
-        writer.write(buttonName + "</button>");
-        writer.write("</form>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"confirmApplicationButton\" ");
+        writer.write("value=\"" + applicationId + "\">");
+        writer.write(buttonText + "</button></form></li>");
+    }
+
+    public static void createRejectApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<li><form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"rejectApplicationButton\" ");
+        writer.write("value=\"" + applicationId + "\">");
+        writer.write(buttonText + "</button></form></li>");
     }
 
     private static void createButton(JspWriter writer, int pageNumber) throws IOException {

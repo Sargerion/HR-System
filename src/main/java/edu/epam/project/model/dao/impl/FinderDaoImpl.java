@@ -5,7 +5,8 @@ import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.FinderDao;
 import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.FinderBuilder;
-import edu.epam.project.model.entity.Application;
+import edu.epam.project.model.dao.table.FindersColumn;
+import edu.epam.project.model.dao.table.UsersColumn;
 import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.pool.ConnectionPool;
 
@@ -19,7 +20,6 @@ import java.util.Optional;
 
 public class FinderDaoImpl implements FinderDao {
 
-    private static final FinderDaoImpl instance = new FinderDaoImpl();
     private static final Logger logger = LogManager.getLogger();
     private final EntityBuilder<Finder> finderBuilder = new FinderBuilder();
 
@@ -34,21 +34,14 @@ public class FinderDaoImpl implements FinderDao {
     private static final String CONTAINS_FINDER_ID = "SELECT EXISTS(SELECT finder_id FROM finders WHERE finder_id = ?) AS finder_existence;";
 
     @Language("SQL")
-    private static final String SELECT_FINDER_BY_ID = "SELECT finder_id, finder_require_salary, finder_work_experience, specialty_id, specialty_name FROM finders " +
-            "INNER JOIN specialties ON finders.finder_specialty_id = specialties.specialty_id WHERE finder_id = ?;";
+    private static final String SELECT_FINDER_BY_ID = "SELECT finder_id, finder_require_salary, finder_work_experience, specialty_id, specialty_name, finder_work_status " +
+            "FROM finders INNER JOIN specialties ON finders.finder_specialty_id = specialties.specialty_id WHERE finder_id = ?;";
 
     @Language("SQL")
-    private static final String CONTAINS_FINDER_ID_APPLICATION = "SELECT EXISTS(SELECT application_finder_id FROM applications WHERE application_finder_id = ?) AS application_finder_id_existence;";
+    private static final String SELECT_FINDER_LOGIN_BY_USER_ID = "SELECT user_login FROM users WHERE user_id = ?;";
 
     @Language("SQL")
-    private static final String INSERT_APPLICATION = "INSERT INTO applications(application_vacancy_id, application_finder_id, application_is_confirm) VALUES (?, ?, ?)";
-
-    private FinderDaoImpl() {
-    }
-
-    public static FinderDaoImpl getInstance() {
-        return instance;
-    }
+    private static final String UPDATE_FINDER_WORK_STATUS = "UPDATE finders SET finder_work_status = ? WHERE finder_id = ?;";
 
     @Override
     public void add(Finder finder) throws DaoException {
@@ -74,6 +67,9 @@ public class FinderDaoImpl implements FinderDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             foundFinder = Optional.ofNullable(finderBuilder.build(resultSet));
+            if (foundFinder.isPresent()) {
+                foundFinder.get().setFinderWorkStatus(resultSet.getString(FindersColumn.WORK_STATUS));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -102,23 +98,12 @@ public class FinderDaoImpl implements FinderDao {
     }
 
     @Override
-    public boolean existsFinder(Integer finderId) throws DaoException {
-        boolean isExists = isExistId(finderId, CONTAINS_FINDER_ID);
-        return isExists;
-    }
-
-    @Override
-    public void buildApplication(Application application) throws DaoException {
+    public void updateFinderWorkStatus(String companyName, Integer finderId) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_APPLICATION, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, application.getApplicationVacancy().getEntityId());
-            preparedStatement.setInt(2, application.getApplicationFinder().getEntityId());
-            preparedStatement.setBoolean(3, application.isConfirmApplication());
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_FINDER_WORK_STATUS)) {
+            preparedStatement.setString(1, companyName);
+            preparedStatement.setInt(2, finderId);
             preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            resultSet.next();
-            int applicationId = resultSet.getInt(1);
-            application.setEntityId(applicationId);
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -126,8 +111,29 @@ public class FinderDaoImpl implements FinderDao {
     }
 
     @Override
-    public boolean isFinderApply(Integer finderId) throws DaoException {
-        boolean isExists = isExistId(finderId, CONTAINS_FINDER_ID_APPLICATION);
+    public boolean isExistsFinder(Integer finderId) throws DaoException {
+        boolean isExists = isExistsId(finderId, CONTAINS_FINDER_ID);
         return isExists;
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<String> findFinderLogin(Integer finderId) throws DaoException {
+        Optional<String> finderLogin;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_FINDER_LOGIN_BY_USER_ID)) {
+            preparedStatement.setInt(1, finderId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            finderLogin = Optional.ofNullable(resultSet.getString(UsersColumn.LOGIN));
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return finderLogin;
     }
 }

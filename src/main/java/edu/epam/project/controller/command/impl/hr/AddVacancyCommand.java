@@ -5,9 +5,10 @@ import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.Vacancy;
-import edu.epam.project.model.service.HrService;
-import edu.epam.project.model.service.impl.HrServiceImpl;
+import edu.epam.project.model.service.VacancyService;
+import edu.epam.project.model.service.impl.VacancyServiceImpl;
 import edu.epam.project.model.util.message.FriendlyMessage;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,7 @@ public class AddVacancyCommand implements Command {
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        HrService hrService = HrServiceImpl.getInstance();
+        VacancyService vacancyService = VacancyServiceImpl.getInstance();
         Optional<String> vacancyName = requestContext.getRequestParameter(RequestParameter.VACANCY_NAME);
         Optional<String> vacancySpecialtyId = requestContext.getRequestParameter(RequestParameter.SPECIALTY);
         Optional<String> vacancySalary = requestContext.getRequestParameter(RequestParameter.VACANCY_MONEY);
@@ -36,7 +37,7 @@ public class AddVacancyCommand implements Command {
             Optional<String> errorMessage = Optional.empty();
             Map<Optional<Vacancy>, Optional<String>> addResult;
             try {
-                addResult = hrService.addVacancy(user.getLogin(), vacancyName.get(), vacancySpecialtyId.get(), vacancySalary.get(), vacancyWorkExperience.get(), ACTIVE_VACANCY);
+                addResult = vacancyService.addVacancy(user.getLogin(), vacancyName.get(), vacancySpecialtyId.get(), vacancySalary.get(), vacancyWorkExperience.get(), ACTIVE_VACANCY);
                 for (Map.Entry<Optional<Vacancy>, Optional<String>> entry : addResult.entrySet()) {
                     vacancy = entry.getKey();
                     errorMessage = entry.getValue();

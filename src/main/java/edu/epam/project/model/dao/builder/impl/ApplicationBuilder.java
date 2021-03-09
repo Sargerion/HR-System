@@ -31,7 +31,6 @@ public class ApplicationBuilder implements EntityBuilder<Application> {
         BigDecimal requireSalary = resultSet.getBigDecimal(FindersColumn.REQUIRE_SALARY);
         Integer workExperience = resultSet.getInt(FindersColumn.WORK_EXPERIENCE);
         Finder finder = new Finder(finderId, requireSalary, workExperience, specialty);
-        boolean isApplicationConfirm = resultSet.getBoolean(ApplicationsColumn.IS_CONFIRM);
-        return new Application(applicationId, vacancy, finder, isApplicationConfirm);
+        return new Application(applicationId, vacancy, finder);
     }
 }

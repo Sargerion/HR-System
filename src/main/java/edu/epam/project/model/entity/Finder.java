@@ -3,11 +3,12 @@ package edu.epam.project.model.entity;
 
 import java.math.BigDecimal;
 
-public class Finder extends Entity{
+public class Finder extends Entity {
 
     private BigDecimal requireSalary;
     private Integer workExperience;
     private Specialty specialty;
+    private String finderWorkStatus;
 
     public Finder() {
     }
@@ -43,6 +44,14 @@ public class Finder extends Entity{
         this.specialty = specialty;
     }
 
+    public String getFinderWorkStatus() {
+        return finderWorkStatus;
+    }
+
+    public void setFinderWorkStatus(String finderWorkStatus) {
+        this.finderWorkStatus = finderWorkStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -55,8 +64,8 @@ public class Finder extends Entity{
             return false;
         }
         Finder finder = (Finder) o;
-        return workExperience.equals(finder.workExperience) &&
-                requireSalary.equals(finder.requireSalary) && specialty.equals(finder.specialty);
+        return workExperience.equals(finder.workExperience) && requireSalary.equals(finder.requireSalary) &&
+                specialty.equals(finder.specialty) && finderWorkStatus.equals(finder.finderWorkStatus);
     }
 
     @Override
@@ -64,7 +73,8 @@ public class Finder extends Entity{
         int result = super.hashCode();
         result = result * 31 + (requireSalary != null ? requireSalary.hashCode() : 0)
                 + (workExperience != null ? workExperience.hashCode() : 0)
-                + (specialty != null ? specialty.hashCode() : 0);
+                + (specialty != null ? specialty.hashCode() : 0)
+                + (finderWorkStatus != null ? finderWorkStatus.hashCode() : 0);
         return result;
     }
 
@@ -75,6 +85,7 @@ public class Finder extends Entity{
         sb.append("requireSalary=").append(requireSalary);
         sb.append(", workExperience=").append(workExperience);
         sb.append(", specialty='").append(specialty).append('\'');
+        sb.append(", finderWorkStatus='").append(finderWorkStatus).append('\'');
         sb.append('}');
         return sb.toString();
     }
