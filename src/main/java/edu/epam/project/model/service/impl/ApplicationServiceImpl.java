@@ -117,7 +117,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Map<Integer, Optional<String>> confirmApplication(String applicationId) throws ServiceException {
+    public Map<Integer, Optional<String>> confirmApplication(String applicationId, String noHireString) throws ServiceException {
         FinderService finderService = FinderServiceImpl.getInstance();
         VacancyService vacancyService = VacancyServiceImpl.getInstance();
         Optional<String> errorMessage = Optional.empty();
@@ -135,7 +135,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         finderId = entry.getValue();
                     }
                     Finder finder = finderService.findById(finderId).get();
-                    if (finder.getFinderWorkStatus().equals("Not Hire")) {
+                    if (finder.getFinderWorkStatus().equals(noHireString)) {
                         applicationDao.deleteById(Integer.parseInt(applicationId));
                         vacancyService.deleteById(vacancyId);
                     } else {
@@ -155,7 +155,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Map<Integer, Optional<String>> rejectApplication(String applicationId) throws ServiceException {
+    public Map<Integer, Optional<String>> rejectApplication(String applicationId, String noHireString) throws ServiceException {
         FinderService finderService = FinderServiceImpl.getInstance();
         VacancyService vacancyService = VacancyServiceImpl.getInstance();
         Optional<String> errorMessage = Optional.empty();
@@ -173,7 +173,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         finderId = entry.getValue();
                     }
                     Finder finder = finderService.findById(finderId).get();
-                    if (finder.getFinderWorkStatus().equals("Not Hire")) {
+                    if (finder.getFinderWorkStatus().equals(noHireString)) {
                         applicationDao.deleteById(Integer.parseInt(applicationId));
                         vacancyService.updateVacancyStatus(true, vacancyId);
                     } else {

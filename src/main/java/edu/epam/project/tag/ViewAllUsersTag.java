@@ -4,6 +4,9 @@ import edu.epam.project.controller.command.CommandName;
 import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
 import edu.epam.project.model.entity.User;
+import edu.epam.project.model.entity.UserStatus;
+import edu.epam.project.model.service.UserService;
+import edu.epam.project.model.service.impl.UserServiceImpl;
 import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +26,9 @@ public class ViewAllUsersTag extends TagSupport {
     private static final String USER_EMAIL_BUNDLE = "all_users_table_email";
     private static final String USER_TYPE_BUNDLE = "all_users_table_type";
     private static final String USER_STATUS_BUNDLE = "all_users_table_status";
+    private static final String OPERATION = "all_users_table_operation";
+    private static final String USER_BLOCK_BUTTON_BUNDLE = "all_users_table_block_button_value";
+    private static final String USER_UNBLOCK_BUTTON_BUNDLE = "all_users_table_unblock_button_value";
 
     @Override
     public int doStartTag() throws JspException {
@@ -59,6 +65,7 @@ public class ViewAllUsersTag extends TagSupport {
             String userEmail = resourceBundle.getString(USER_EMAIL_BUNDLE);
             String userType = resourceBundle.getString(USER_TYPE_BUNDLE);
             String userStatus = resourceBundle.getString(USER_STATUS_BUNDLE);
+            String operation = resourceBundle.getString(OPERATION);
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
             TagUtil.createTableHeadItem(writer, userID);
@@ -66,6 +73,7 @@ public class ViewAllUsersTag extends TagSupport {
             TagUtil.createTableHeadItem(writer, userEmail);
             TagUtil.createTableHeadItem(writer, userType);
             TagUtil.createTableHeadItem(writer, userStatus);
+            TagUtil.createTableHeadItem(writer, operation);
             writer.write("</tr></thead>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -73,6 +81,9 @@ public class ViewAllUsersTag extends TagSupport {
     }
 
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<User> allUsers) throws JspException {
+        String locale = sessionRequestContext.getLocale();
+        UserService userService = UserServiceImpl.getInstance();
+        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
         try {
             if (allUsers != null) {
                 int size = allUsers.size();
@@ -87,9 +98,16 @@ public class ViewAllUsersTag extends TagSupport {
                         writer.write("<td>" + user.getEmail() + "</td>");
                         writer.write("<td>" + user.getType() + "</td>");
                         writer.write("<td>" + user.getStatus() + "</td>");
+                        writer.write("<td>");
+                        if (user.getStatus() == UserStatus.ACTIVE) {
+                            TagUtil.createBlockButton(writer, CommandName.BLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_BLOCK_BUTTON_BUNDLE));
+                        } else if (user.getStatus() == UserStatus.BLOCKED) {
+                            TagUtil.createUnblockButton(writer, CommandName.UNBLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_UNBLOCK_BUTTON_BUNDLE));
+                        }
+                        writer.write("</td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
-                        writer.write("<td></td><td></td><td></td><td></td><td></td>");
+                        writer.write("<td></td><td></td><td></td><td></td><td></td><td></td>");
                     }
                     writer.write("</tr>");
                 }

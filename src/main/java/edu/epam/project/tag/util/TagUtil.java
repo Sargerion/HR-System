@@ -79,6 +79,24 @@ public class TagUtil {
         writer.write(buttonText + "</button></form></li>");
     }
 
+    public static void createBlockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"blockUserButton\" ");
+        writer.write("value=\"" + userId + "\">");
+        writer.write(buttonText + "</button></form>");
+    }
+
+    public static void createUnblockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"unblockUserButton\" ");
+        writer.write("value=\"" + userId + "\">");
+        writer.write(buttonText + "</button></form>");
+    }
+
     private static void createButton(JspWriter writer, int pageNumber) throws IOException {
         writer.write("<li><button type=\"submit\" name=\"newPage\" ");
         writer.write("value=\"" + pageNumber + "\" ");

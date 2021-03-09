@@ -18,6 +18,8 @@ public class FriendlyMessage {
     public static final String EMPTY_APPLICATION_LIST = "Unfortunately, there are no applications";
     public static final String CONFIRM_FINDER_APPLICATION = "Finder was successfully hired, a notification was sent to the mail";
     public static final String REJECT_FINDER_APPLICATION = "Finder wasn't hired successfully, a notification was sent to the mail";
+    public static final String BLOCK_USER_CORRECT = "User blocked correctly";
+    public static final String UNBLOCK_USER_CORRECT = "User unblocked correctly";
 
     private FriendlyMessage() {
 

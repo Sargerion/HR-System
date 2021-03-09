@@ -13,7 +13,7 @@ public interface ApplicationService extends BaseService<Integer, Application> {
 
     int countApplications() throws ServiceException;
 
-    Map<Integer, Optional<String>> confirmApplication(String applicationId) throws ServiceException;
+    Map<Integer, Optional<String>> confirmApplication(String applicationId, String noHireString) throws ServiceException;
 
-    Map<Integer, Optional<String>> rejectApplication(String applicationId) throws ServiceException;
+    Map<Integer, Optional<String>> rejectApplication(String applicationId, String noHireString) throws ServiceException;
 }

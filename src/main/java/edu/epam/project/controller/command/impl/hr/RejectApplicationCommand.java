@@ -24,6 +24,7 @@ public class RejectApplicationCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String EMPTY_REJECT_APPLICATION_PARAMETERS = "Empty reject application parameters";
+    private static final String FINDER_NOT_HIRE_STATUS = "Not Hire";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
@@ -40,7 +41,7 @@ public class RejectApplicationCommand implements Command {
             Optional<String> errorMessage = Optional.empty();
             Map<Integer, Optional<String>> rejectResult;
             try {
-                rejectResult = applicationService.rejectApplication(applicationId.get());
+                rejectResult = applicationService.rejectApplication(applicationId.get(), FINDER_NOT_HIRE_STATUS);
                 for (Map.Entry<Integer, Optional<String>> entry : rejectResult.entrySet()) {
                     finderId = entry.getKey();
                     errorMessage = entry.getValue();

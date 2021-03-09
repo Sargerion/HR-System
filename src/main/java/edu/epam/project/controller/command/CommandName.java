@@ -106,6 +106,16 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.FINDER);
         }
+    },
+    BLOCK_USER(new BlockUserCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    UNBLOCK_USER(new UnblockUserCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
     };
 
     private Command command;

@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao {
             "WHERE user_login = ?;";
 
     @Language("SQL")
-    private static final String UPDATE_STATUS_BY_LOGIN = "UPDATE users SET user_status_id = ? WHERE user_login = ?;";
+    private static final String UPDATE_STATUS_BY_ID = "UPDATE users SET user_status_id = ? WHERE user_id = ?;";
 
     @Language("SQL")
     private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses ON users.user_status_id = user_statuses.user_status_id " +
@@ -245,10 +245,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateStatus(User user) throws DaoException {
+    public void updateStatus(UserStatus userStatus, Integer userId) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BY_LOGIN)) {
-            switch (user.getStatus()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BY_ID)) {
+            switch (userStatus) {
                 case ACTIVE -> {
                     preparedStatement.setInt(1, UserStatusesColumn.ACTIVE);
                 }
@@ -259,7 +259,7 @@ public class UserDaoImpl implements UserDao {
                     preparedStatement.setInt(1, UserStatusesColumn.BLOCKED);
                 }
             }
-            preparedStatement.setString(2, user.getLogin());
+            preparedStatement.setInt(2, userId);
             preparedStatement.executeUpdate();
         } catch (ConnectionException | SQLException e) {
             logger.error(e);

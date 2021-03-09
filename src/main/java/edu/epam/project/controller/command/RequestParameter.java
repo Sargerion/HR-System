@@ -29,6 +29,8 @@ public class RequestParameter {
     public static final String APPLY_VACANCY_BUTTON = "applyVacancyButton";
     public static final String CONFIRM_APPLICATION_BUTTON = "confirmApplicationButton";
     public static final String REJECT_APPLICATION_BUTTON = "rejectApplicationButton";
+    public static final String BLOCK_USER_BUTTON = "blockUserButton";
+    public static final String UNBLOCK_USER_BUTTON = "unblockUserButton";
 
     private RequestParameter() {
 

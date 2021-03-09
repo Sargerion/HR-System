@@ -26,6 +26,7 @@ public class ConfirmApplicationCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String EMPTY_CONFIRM_APPLICATION_PARAMETERS = "Empty confirm application parameters";
+    private static final String FINDER_NOT_HIRE_STATUS = "Not Hire";
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
@@ -43,7 +44,7 @@ public class ConfirmApplicationCommand implements Command {
                 Integer finderId = 0;
                 Optional<String> errorMessage = Optional.empty();
                 Map<Integer, Optional<String>> confirmResult;
-                confirmResult = applicationService.confirmApplication(applicationId.get());
+                confirmResult = applicationService.confirmApplication(applicationId.get(), FINDER_NOT_HIRE_STATUS);
                 for (Map.Entry<Integer, Optional<String>> entry : confirmResult.entrySet()) {
                     finderId = entry.getKey();
                     errorMessage = entry.getValue();

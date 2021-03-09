@@ -17,4 +17,8 @@ public interface UserService extends BaseService<Integer, User> {
     void updateAvatar(User user) throws ServiceException;
 
     Optional<String> findUserAvatar(User user) throws ServiceException;
+
+    Optional<String> blockUser(String userId) throws ServiceException;
+
+    Optional<String> unblockUser(String userId) throws ServiceException;
 }

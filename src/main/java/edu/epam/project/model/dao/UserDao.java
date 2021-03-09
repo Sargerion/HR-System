@@ -15,7 +15,7 @@ public interface UserDao extends BaseDao<Integer, User> {
 
     UserStatus detectUserStatusByLogin(String login) throws DaoException;
 
-    void updateStatus(User user) throws DaoException;
+    void updateStatus(UserStatus userStatus, Integer userId) throws DaoException;
 
     boolean existId(Integer userId) throws DaoException;
 

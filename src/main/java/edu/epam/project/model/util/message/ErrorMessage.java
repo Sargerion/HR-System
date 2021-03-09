@@ -32,6 +32,10 @@ public class ErrorMessage {
     public static final String NO_APPLICATION = "Try to delete not existing application";
     public static final String ALREADY_WORK = "You can't apply because you've already worked in ";
     public static final String ALREADY_WORK_FINDER = "You can't apply this finder because he's already worked in ";
+    public static final String INCORRECT_BLOCK_USER_PARAMETERS = "Incorrect block user parameters";
+    public static final String TRY_BLOCK_NOT_EXISTING_USER = "Trying to block not existing user";
+    public static final String INCORRECT_UNBLOCK_USER_PARAMETERS = "Incorrect unblock user parameters";
+    public static final String TRY_UNBLOCK_NOT_EXISTING_USER = "Trying to unblock not existing user";
 
     private ErrorMessage() {
 

@@ -198,4 +198,44 @@ public class UserServiceImpl implements UserService {
         }
         return userAvatar;
     }
+
+    @Override
+    public Optional<String> blockUser(String userId) throws ServiceException {
+        Optional<String> errorMessage = Optional.empty();
+        if (!UserInputValidator.isValidId(userId)) {
+            errorMessage = Optional.of(ErrorMessage.INCORRECT_BLOCK_USER_PARAMETERS);
+        } else {
+            try {
+                if (userDao.existId(Integer.parseInt(userId))) {
+                    userDao.updateStatus(UserStatus.BLOCKED, Integer.parseInt(userId));
+                } else {
+                    errorMessage = Optional.of(ErrorMessage.TRY_BLOCK_NOT_EXISTING_USER);
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        return errorMessage;
+    }
+
+    @Override
+    public Optional<String> unblockUser(String userId) throws ServiceException {
+        Optional<String> errorMessage = Optional.empty();
+        if (!UserInputValidator.isValidId(userId)) {
+            errorMessage = Optional.of(ErrorMessage.INCORRECT_UNBLOCK_USER_PARAMETERS);
+        } else {
+            try {
+                if (userDao.existId(Integer.parseInt(userId))) {
+                    userDao.updateStatus(UserStatus.ACTIVE, Integer.parseInt(userId));
+                } else {
+                    errorMessage = Optional.of(ErrorMessage.TRY_UNBLOCK_NOT_EXISTING_USER);
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        return errorMessage;
+    }
 }
