@@ -29,7 +29,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     private static final String SELECT_SPECIALTY_BY_ID = "SELECT specialty_id, specialty_name FROM specialties WHERE specialty_id = ?;";
 
     @Language("SQL")
-    private static final String SELECT_ALL_SPECIALTIES = "SELECT specialty_id, specialty_name FROM specialties;";
+    private static final String SELECT_ALL_SPECIALTIES = "SELECT specialty_id, specialty_name FROM specialties ORDER BY specialty_id;";
 
     @Language("SQL")
     private static final String CONTAINS_SPECIALTY_NAME = "SELECT EXISTS(SELECT specialty_name FROM specialties WHERE specialty_name = ?) AS specialty_name_existence;";
@@ -67,8 +67,8 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
-    public List<Specialty> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
+    public void update(Specialty entity) throws DaoException {
+
     }
 
     @Override
@@ -89,18 +89,17 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
-    public void update(Specialty entity) throws DaoException {
+    public boolean isExistsSpecialtyName(String specialtyName) throws DaoException {
+        return isExistsStringValue(specialtyName, CONTAINS_SPECIALTY_NAME);
+    }
 
+    @Override
+    public List<Specialty> findAll(int start, int end) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void deleteById(Integer entityId) throws DaoException {
-
-    }
-
-    @Override
-    public boolean isExistsSpecialtyName(String specialtyName) throws DaoException {
-        boolean isExists = isExistsStringValue(specialtyName, CONTAINS_SPECIALTY_NAME);
-        return isExists;
+        throw new UnsupportedOperationException();
     }
 }

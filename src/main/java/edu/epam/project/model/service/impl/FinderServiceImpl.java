@@ -34,8 +34,30 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public void add(Finder entity) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public Map<Optional<Finder>, Optional<String>> addFinder(Integer finderId, String requireSalary, String workExperience, String specialtyId) throws ServiceException {
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        Optional<Finder> finder = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Optional<Specialty> specialty;
+        Map<Optional<Finder>, Optional<String>> addResult = new HashMap<>();
+        if (!UserInputValidator.isValidSalary(requireSalary) || !UserInputValidator.isValidWorkExperience(workExperience) || !UserInputValidator.isValidId(specialtyId)) {
+            errorMessage = Optional.of(ErrorMessage.ERROR_ADD_FINDER_INFO);
+        } else {
+            try {
+                specialty = specialtyService.findById(Integer.parseInt(specialtyId));
+                if (specialty.isPresent()) {
+                    finder = Optional.of(new Finder(finderId, BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), specialty.get()));
+                    finderDao.add(finder.get());
+                } else {
+                    errorMessage = Optional.of(ErrorMessage.NO_SUCH_SPECIALTY);
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        addResult.put(finder, errorMessage);
+        return addResult;
     }
 
     @Override
@@ -66,11 +88,6 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public void deleteById(Integer entityId) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void updateFinderWorkStatus(String companyName, Integer finderId) throws ServiceException {
         try {
             finderDao.updateFinderWorkStatus(companyName, finderId);
@@ -78,33 +95,6 @@ public class FinderServiceImpl implements FinderService {
             logger.error(e);
             throw new ServiceException(e);
         }
-    }
-
-    @Override
-    public Map<Optional<Finder>, Optional<String>> addFinder(Integer finderId, String requireSalary, String workExperience, String specialtyId) throws ServiceException {
-        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
-        Optional<Finder> finder = Optional.empty();
-        Optional<String> errorMessage = Optional.empty();
-        Optional<Specialty> specialty;
-        Map<Optional<Finder>, Optional<String>> addResult = new HashMap<>();
-        if (!UserInputValidator.isValidSalary(requireSalary) || !UserInputValidator.isValidWorkExperience(workExperience) || !UserInputValidator.isValidId(specialtyId)) {
-            errorMessage = Optional.of(ErrorMessage.ERROR_ADD_FINDER_INFO);
-        } else {
-            try {
-                specialty = specialtyService.findById(Integer.parseInt(specialtyId));
-                if (specialty.isPresent()) {
-                    finder = Optional.of(new Finder(finderId, BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), specialty.get()));
-                    finderDao.add(finder.get());
-                } else {
-                    errorMessage = Optional.of(ErrorMessage.NO_SUCH_SPECIALTY);
-                }
-            } catch (DaoException e) {
-                logger.error(e);
-                throw new ServiceException(e);
-            }
-        }
-        addResult.put(finder, errorMessage);
-        return addResult;
     }
 
     @Override
@@ -129,5 +119,10 @@ public class FinderServiceImpl implements FinderService {
             throw new ServiceException(e);
         }
         return finderLogin;
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 }

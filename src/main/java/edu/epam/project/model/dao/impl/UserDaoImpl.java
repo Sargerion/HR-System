@@ -27,16 +27,7 @@ public class UserDaoImpl implements UserDao {
 
     @Language("SQL")
     private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
-            "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id LIMIT ?, ?;";
-
-    @Language("SQL")
-    private static final String COUNT_USERS = "SELECT COUNT(*) AS users_count FROM users";
-
-    @Language("SQL")
-    private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
-
-    @Language("SQL")
-    private static final String CONTAINS_USER_LOGIN = "SELECT EXISTS(SELECT user_login FROM users WHERE user_login = ?) AS user_existence;";
+            "INNER JOIN user_types UT ON U.user_type_id = UT.user_type_id INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id ORDER BY U.user_id LIMIT ?, ?;";
 
     @Language("SQL")
     private static final String SELECT_PASSWORD_BY_LOGIN = "SELECT user_password FROM users WHERE user_login = ?;";
@@ -54,6 +45,22 @@ public class UserDaoImpl implements UserDao {
             "INNER JOIN user_statuses US ON U.user_status_id = US.user_status_id WHERE U.user_id = ?;";
 
     @Language("SQL")
+    private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses ON users.user_status_id = user_statuses.user_status_id " +
+            "WHERE user_login = ?;";
+
+    @Language("SQL")
+    private static final String SELECT_AVATAR_PATH_BY_USER_ID = "SELECT user_avatar_path FROM users WHERE user_id = ?;";
+
+    @Language("SQL")
+    private static final String COUNT_USERS = "SELECT COUNT(*) AS users_count FROM users";
+
+    @Language("SQL")
+    private static final String CONTAINS_USER_ID = "SELECT EXISTS(SELECT user_id FROM users WHERE user_id = ?) AS user_existence;";
+
+    @Language("SQL")
+    private static final String CONTAINS_USER_LOGIN = "SELECT EXISTS(SELECT user_login FROM users WHERE user_login = ?) AS user_existence;";
+
+    @Language("SQL")
     private static final String INSERT_USER = "INSERT INTO users (user_login, user_password, user_email, user_type_id, user_status_id, confirmation_token) " +
             "VALUES (?, ?, ?, ?, ?, ?);";
 
@@ -65,19 +72,7 @@ public class UserDaoImpl implements UserDao {
     private static final String UPDATE_STATUS_BY_ID = "UPDATE users SET user_status_id = ? WHERE user_id = ?;";
 
     @Language("SQL")
-    private static final String SELECT_USER_STATUS_BY_LOGIN = "SELECT user_status_name FROM users INNER JOIN user_statuses ON users.user_status_id = user_statuses.user_status_id " +
-            "WHERE user_login = ?;";
-
-    @Language("SQL")
     private static final String UPDATE_AVATAR_PATH_BY_ID = "UPDATE users SET user_avatar_path = ? WHERE user_id = ?;";
-
-    @Language("SQL")
-    private static final String SELECT_AVATAR_PATH_BY_USER_ID = "SELECT user_avatar_path FROM users WHERE user_id = ?;";
-
-    @Override
-    public void add(User entity) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public void addUser(User user, String encryptedPassword) throws DaoException {
@@ -102,112 +97,6 @@ public class UserDaoImpl implements UserDao {
             logger.error(e);
             throw new DaoException(e);
         }
-    }
-
-    @Override
-    public boolean existId(Integer userId) throws DaoException {
-        boolean isExists = isExistsId(userId, CONTAINS_USER_ID);
-        return isExists;
-    }
-
-    @Override
-    public boolean existsLogin(String userLogin) throws DaoException {
-        boolean isExists = isExistsStringValue(userLogin, CONTAINS_USER_LOGIN);
-        return isExists;
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Optional<String> findUserPasswordByLogin(String login) throws DaoException {
-        Optional<String> foundPassword;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PASSWORD_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            foundPassword = Optional.ofNullable(resultSet.getString(UsersColumn.PASSWORD));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return foundPassword;
-    }
-
-    @Override
-    public Optional<User> findUserByLogin(String login) throws DaoException {
-        Optional<User> checkingUser;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            checkingUser = Optional.ofNullable(userBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return checkingUser;
-    }
-
-    @Override
-    public UserStatus detectUserStatusByLogin(String login) throws DaoException {
-        UserStatus userStatus;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_STATUS_BY_LOGIN)) {
-            preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return userStatus;
-    }
-
-    @Override
-    public Optional<User> findById(Integer entityId) throws DaoException {
-        Optional<User> foundUser;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-            preparedStatement.setInt(1, entityId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            foundUser = Optional.ofNullable(userBuilder.build(resultSet));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return foundUser;
-    }
-
-    @Override
-    public List<User> findAll(int start, int end) throws DaoException {
-        List<User> allUsers = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_WITH_LIMIT)) {
-            preparedStatement.setInt(1, start);
-            preparedStatement.setInt(2, end);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                User user = userBuilder.build(resultSet);
-                allUsers.add(user);
-            }
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return allUsers;
-    }
-
-    @Override
-    public int countUsers() throws DaoException {
-        int usersCount = countEntities(COUNT_USERS);
-        return usersCount;
     }
 
     @Override
@@ -245,6 +134,92 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<String> findUserPasswordByLogin(String login) throws DaoException {
+        Optional<String> foundPassword = Optional.empty();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_PASSWORD_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                foundPassword = Optional.of(resultSet.getString(UsersColumn.PASSWORD));
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return foundPassword;
+    }
+
+    @Override
+    public Optional<User> findUserByLogin(String login) throws DaoException {
+        Optional<User> checkingUser = Optional.empty();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                checkingUser = Optional.of(userBuilder.build(resultSet));
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return checkingUser;
+    }
+
+    @Override
+    public UserStatus detectUserStatusByLogin(String login) throws DaoException {
+        UserStatus userStatus;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_STATUS_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return userStatus;
+    }
+
+    @Override
+    public Optional<User> findById(Integer entityId) throws DaoException {
+        Optional<User> foundUser = Optional.empty();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
+            preparedStatement.setInt(1, entityId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                foundUser = Optional.of(userBuilder.build(resultSet));
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return foundUser;
+    }
+
+    @Override
+    public List<User> findAll(int start, int end) throws DaoException {
+        List<User> allUsers = new ArrayList<>();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_WITH_LIMIT)) {
+            preparedStatement.setInt(1, start);
+            preparedStatement.setInt(2, end);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User user = userBuilder.build(resultSet);
+                allUsers.add(user);
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return allUsers;
+    }
+
+    @Override
     public void updateStatus(UserStatus userStatus, Integer userId) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STATUS_BY_ID)) {
@@ -268,6 +243,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<String> findUserAvatar(User user) throws DaoException {
+        Optional<String> userAvatar = Optional.empty();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_AVATAR_PATH_BY_USER_ID)) {
+            preparedStatement.setInt(1, user.getEntityId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                userAvatar = Optional.of(resultSet.getString(UsersColumn.AVATAR));
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return userAvatar;
+    }
+
+    @Override
     public void updateAvatar(User user) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_AVATAR_PATH_BY_ID)) {
@@ -281,18 +273,27 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<String> findUserAvatar(User user) throws DaoException {
-        Optional<String> userAvatar;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_AVATAR_PATH_BY_USER_ID)) {
-            preparedStatement.setInt(1, user.getEntityId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            userAvatar = Optional.ofNullable(resultSet.getString(UsersColumn.AVATAR));
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return userAvatar;
+    public int countUsers() throws DaoException {
+        return countEntities(COUNT_USERS);
+    }
+
+    @Override
+    public boolean existId(Integer userId) throws DaoException {
+        return isExistsId(userId, CONTAINS_USER_ID);
+    }
+
+    @Override
+    public boolean existsLogin(String userLogin) throws DaoException {
+        return isExistsStringValue(userLogin, CONTAINS_USER_LOGIN);
+    }
+
+    @Override
+    public void add(User entity) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

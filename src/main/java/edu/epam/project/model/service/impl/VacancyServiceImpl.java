@@ -33,11 +33,6 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void add(Vacancy entity) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Map<Optional<Vacancy>, Optional<String>> addVacancy(String hrLogin, String vacancyName, String specialtyId, String requireSalary, String workExperience, boolean isVacancyActive) throws ServiceException {
         SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         CompanyService companyService = CompanyServiceImpl.getInstance();
@@ -66,6 +61,11 @@ public class VacancyServiceImpl implements VacancyService {
         }
         addResult.put(vacancy, errorMessage);
         return addResult;
+    }
+
+    @Override
+    public void update(Vacancy entity) throws ServiceException {
+
     }
 
     @Override
@@ -102,11 +102,6 @@ public class VacancyServiceImpl implements VacancyService {
             throw new ServiceException(e);
         }
         return vacancy;
-    }
-
-    @Override
-    public void update(Vacancy entity) throws ServiceException {
-
     }
 
     @Override

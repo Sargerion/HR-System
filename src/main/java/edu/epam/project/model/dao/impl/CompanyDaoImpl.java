@@ -7,8 +7,8 @@ import edu.epam.project.model.dao.builder.EntityBuilder;
 import edu.epam.project.model.dao.builder.impl.CompanyBuilder;
 import edu.epam.project.model.dao.table.CompaniesColumn;
 import edu.epam.project.model.entity.Company;
-
 import edu.epam.project.model.pool.ConnectionPool;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
@@ -62,13 +62,14 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Override
     public Optional<Company> findById(Integer companyId) throws DaoException {
-        Optional<Company> company;
+        Optional<Company> company = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_ID)) {
             preparedStatement.setInt(1, companyId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            company = Optional.ofNullable(companyBuilder.build(resultSet));
+            if (resultSet.next()) {
+                company = Optional.of(companyBuilder.build(resultSet));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -87,31 +88,15 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public void deleteById(Integer entityId) throws DaoException {
-
-    }
-
-    @Override
-    public boolean isExistsCompanyName(String companyName) throws DaoException {
-        boolean isExists = isExistsStringValue(companyName, CONTAINS_COMPANY_NAME);
-        return isExists;
-    }
-
-    @Override
-    public boolean isExistsCompanyHrLogin(String hrLogin) throws DaoException {
-        boolean isExists = isExistsStringValue(hrLogin, CONTAINS_COMPANY_HR_LOGIN);
-        return isExists;
-    }
-
-    @Override
     public Optional<String> findCompanyNameByHrLogin(String hrLogin) throws DaoException {
-        Optional<String> companyName;
+        Optional<String> companyName = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_NAME_BY_HR_LOGIN)) {
             preparedStatement.setString(1, hrLogin);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            companyName = Optional.ofNullable(resultSet.getString(CompaniesColumn.NAME));
+            if (resultSet.next()) {
+                companyName = Optional.of(resultSet.getString(CompaniesColumn.NAME));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -121,17 +106,33 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Override
     public Optional<Company> findCompanyByHrLogin(String hrLogin) throws DaoException {
-        Optional<Company> company;
+        Optional<Company> company = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COMPANY_BY_HR_LOGIN)) {
             preparedStatement.setString(1, hrLogin);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            company = Optional.ofNullable(companyBuilder.build(resultSet));
+            if (resultSet.next()) {
+                company = Optional.of(companyBuilder.build(resultSet));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
         return company;
+    }
+
+    @Override
+    public boolean isExistsCompanyName(String companyName) throws DaoException {
+        return isExistsStringValue(companyName, CONTAINS_COMPANY_NAME);
+    }
+
+    @Override
+    public boolean isExistsCompanyHrLogin(String hrLogin) throws DaoException {
+        return isExistsStringValue(hrLogin, CONTAINS_COMPANY_HR_LOGIN);
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

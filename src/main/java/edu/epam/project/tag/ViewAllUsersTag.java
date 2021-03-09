@@ -3,8 +3,10 @@ package edu.epam.project.tag;
 import edu.epam.project.controller.command.CommandName;
 import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
+import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserStatus;
+import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 import edu.epam.project.tag.util.TagUtil;
@@ -92,16 +94,17 @@ public class ViewAllUsersTag extends TagSupport {
                     int lineNumber = LIST_LINES_COUNT * (currentPage - 1) + i + 1;
                     if (size > i) {
                         User user = allUsers.get(i);
+                        UserStatus userStatus = userService.detectUserStatusByLogin(user.getLogin());
                         writer.write("<tr><th>" + lineNumber + "</th>");
                         writer.write("<td>" + user.getEntityId() + "</td>");
                         writer.write("<td>" + user.getLogin() + "</td>");
                         writer.write("<td>" + user.getEmail() + "</td>");
                         writer.write("<td>" + user.getType() + "</td>");
-                        writer.write("<td>" + user.getStatus() + "</td>");
+                        writer.write("<td>" + userStatus + "</td>");
                         writer.write("<td>");
-                        if (user.getStatus() == UserStatus.ACTIVE) {
+                        if ((userStatus == UserStatus.ACTIVE) && (user.getType() != UserType.ADMIN)) {
                             TagUtil.createBlockButton(writer, CommandName.BLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_BLOCK_BUTTON_BUNDLE));
-                        } else if (user.getStatus() == UserStatus.BLOCKED) {
+                        } else if (userStatus == UserStatus.BLOCKED) {
                             TagUtil.createUnblockButton(writer, CommandName.UNBLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_UNBLOCK_BUTTON_BUNDLE));
                         }
                         writer.write("</td>");
@@ -112,7 +115,7 @@ public class ViewAllUsersTag extends TagSupport {
                     writer.write("</tr>");
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ServiceException e) {
             throw new JspException(e);
         }
     }

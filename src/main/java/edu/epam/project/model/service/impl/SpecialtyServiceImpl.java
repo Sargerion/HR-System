@@ -28,11 +28,6 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public void add(Specialty entity) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Map<Optional<Specialty>, Optional<String>> addSpecialty(String specialtyName) throws ServiceException {
         Optional<Specialty> specialty = Optional.empty();
         Optional<String> errorMessage = Optional.empty();
@@ -57,11 +52,6 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public List<Specialty> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<Specialty> findAllSpecialties() throws ServiceException {
         List<Specialty> specialties;
         try {
@@ -71,11 +61,6 @@ public class SpecialtyServiceImpl implements SpecialtyService {
             throw new ServiceException(e);
         }
         return specialties;
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws ServiceException {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -91,7 +76,17 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public void update(Specialty entity) throws ServiceException {
+    public List<Specialty> findAll(int start, int end) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public void update(Specialty entity) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 }

@@ -29,11 +29,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void add(Company company) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Map<Optional<Company>, Map<List<String>, Map<String, String>>> addCompany(String companyName, String companyOwner, String companyAddress, String companyHrLogin) throws ServiceException {
         Optional<Company> company = Optional.empty();
         List<String> errorMessages = new ArrayList<>();
@@ -70,8 +65,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public void update(Company entity) throws ServiceException {
+
     }
 
     @Override
@@ -111,16 +106,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void update(Company entity) throws ServiceException {
-
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean isCompanyHr(String hrLogin) throws ServiceException {
         boolean isCompanyHr;
         try {
@@ -130,5 +115,15 @@ public class CompanyServiceImpl implements CompanyService {
             throw new ServiceException(e);
         }
         return isCompanyHr;
+    }
+
+    @Override
+    public List<Company> findAll(int start, int end) throws ServiceException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 }

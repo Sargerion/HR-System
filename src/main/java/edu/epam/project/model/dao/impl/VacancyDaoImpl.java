@@ -36,7 +36,7 @@ public class VacancyDaoImpl implements VacancyDao {
     private static final String SELECT_ALL_VACANCIES_WITH_LIMIT = "SELECT vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, " +
             "vacancy_need_work_experience, company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active FROM vacancies " +
             "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
-            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id LIMIT ?, ?;";
+            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id ORDER BY vacancy_id LIMIT ?, ?;";
 
     @Language("SQL")
     private static final String COUNT_VACANCIES = "SELECT COUNT(*) AS vacancies_count FROM vacancies";
@@ -70,18 +70,24 @@ public class VacancyDaoImpl implements VacancyDao {
 
     @Override
     public Optional<Vacancy> findById(Integer vacancyId) throws DaoException {
-        Optional<Vacancy> vacancy;
+        Optional<Vacancy> vacancy = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_BY_ID)) {
             preparedStatement.setInt(1, vacancyId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            vacancy = Optional.ofNullable(vacancyBuilder.build(resultSet));
+            if (resultSet.next()) {
+                vacancy = Optional.of(vacancyBuilder.build(resultSet));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
         return vacancy;
+    }
+
+    @Override
+    public void update(Vacancy entity) throws DaoException {
+
     }
 
     @Override
@@ -101,17 +107,6 @@ public class VacancyDaoImpl implements VacancyDao {
             throw new DaoException(e);
         }
         return vacancies;
-    }
-
-    @Override
-    public int countVacancies() throws DaoException {
-        int vacanciesCount = countEntities(COUNT_VACANCIES);
-        return vacanciesCount;
-    }
-
-    @Override
-    public void update(Vacancy entity) throws DaoException {
-
     }
 
     @Override
@@ -137,5 +132,10 @@ public class VacancyDaoImpl implements VacancyDao {
             logger.error(e);
             throw new DaoException(e);
         }
+    }
+
+    @Override
+    public int countVacancies() throws DaoException {
+        return countEntities(COUNT_VACANCIES);
     }
 }

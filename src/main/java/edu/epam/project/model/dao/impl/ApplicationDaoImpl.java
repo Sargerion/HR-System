@@ -35,7 +35,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
             "INNER JOIN vacancies ON applications.application_vacancy_id = vacancies.vacancy_id " +
             "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
             "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id " +
-            "INNER JOIN finders ON applications.application_finder_id = finders.finder_id LIMIT ?, ?;";
+            "INNER JOIN finders ON applications.application_finder_id = finders.finder_id ORDER BY application_id LIMIT ?, ?;";
 
     @Language("SQL")
     private static final String COUNT_APPLICATIONS = "SELECT COUNT(*) AS applications_count FROM applications;";
@@ -48,6 +48,15 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Language("SQL")
     private static final String SELECT_VACANCY_AND_FINDER_ID = "SELECT application_vacancy_id, application_finder_id FROM applications WHERE application_id = ?;";
+
+    @Language("SQL")
+    private static final String SELECT_APPLICATION_BY_ID = "SELECT application_id, vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, " +
+            "vacancy_need_work_experience, company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active, finder_id, finder_require_salary, " +
+            "finder_work_experience FROM applications " +
+            "INNER JOIN vacancies ON applications.application_vacancy_id = vacancies.vacancy_id " +
+            "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
+            "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id " +
+            "INNER JOIN finders ON applications.application_finder_id = finders.finder_id WHERE application_id = ?;";
 
     @Override
     public void add(Application application) throws DaoException {
@@ -67,8 +76,40 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public Optional<Application> findById(Integer entityId) throws DaoException {
-        return Optional.empty();
+    public Optional<Application> findById(Integer applicationId) throws DaoException {
+        Optional<Application> application = Optional.empty();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_APPLICATION_BY_ID)) {
+            preparedStatement.setInt(1, applicationId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                application = Optional.of(applicationBuilder.build(resultSet));
+            }
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return application;
+    }
+
+    @Override
+    public Map<Integer, Integer> findPairVacancyAndFinderId(Integer applicationId) throws DaoException {
+        int vacancyId;
+        int finderId;
+        Map<Integer, Integer> result = new HashMap<>();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_AND_FINDER_ID)) {
+            preparedStatement.setInt(1, applicationId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            vacancyId = resultSet.getInt(ApplicationsColumn.VACANCY_ID);
+            finderId = resultSet.getInt(ApplicationsColumn.FINDER_ID);
+            result.put(vacancyId, finderId);
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     @Override
@@ -91,9 +132,20 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public int countApplications() throws DaoException {
-        int applicationsCount = countEntities(COUNT_APPLICATIONS);
-        return applicationsCount;
+    public boolean isFinderApply(Integer vacancyId, Integer finderId) throws DaoException {
+        boolean isExists;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(CONTAINS_FINDER_VACANCY_CONNECT)) {
+            preparedStatement.setInt(1, vacancyId);
+            preparedStatement.setInt(2, finderId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            isExists = resultSet.getInt(1) != 0;
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+        return isExists;
     }
 
     @Override
@@ -114,45 +166,12 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public boolean isFinderApply(Integer vacancyId, Integer finderId) throws DaoException {
-        boolean isExists;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(CONTAINS_FINDER_VACANCY_CONNECT)) {
-            preparedStatement.setInt(1, vacancyId);
-            preparedStatement.setInt(2, finderId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            isExists = resultSet.getInt(1) != 0;
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return isExists;
-    }
-
-    @Override
     public boolean isExistsApplicationId(Integer applicationId) throws DaoException {
-        boolean isExists = isExistsId(applicationId, CONTAINS_APPLICATION_ID);
-        return isExists;
+        return isExistsId(applicationId, CONTAINS_APPLICATION_ID);
     }
 
     @Override
-    public Map<Integer, Integer> findPairVacancyAndFinderId(Integer applicationId) throws DaoException {
-        int vacancyId;
-        int finderId;
-        Map<Integer, Integer> result = new HashMap<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_VACANCY_AND_FINDER_ID)) {
-            preparedStatement.setInt(1, applicationId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            vacancyId = resultSet.getInt(ApplicationsColumn.VACANCY_ID);
-            finderId = resultSet.getInt(ApplicationsColumn.FINDER_ID);
-            result.put(vacancyId, finderId);
-        } catch (ConnectionException | SQLException e) {
-            logger.error(e);
-            throw new DaoException(e);
-        }
-        return result;
+    public int countApplications() throws DaoException {
+        return countEntities(COUNT_APPLICATIONS);
     }
 }

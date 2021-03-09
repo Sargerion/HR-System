@@ -32,73 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(User entity) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<User> findAll(int start, int end) throws ServiceException {
-        List<User> allUsers;
-        try {
-            allUsers = new ArrayList<>(userDao.findAll(start, end));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return allUsers;
-    }
-
-    @Override
-    public int countUsers() throws ServiceException {
-        int usersCount;
-        try {
-            usersCount = userDao.countUsers();
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return usersCount;
-    }
-
-    @Override
-    public Optional<User> findById(Integer entityId) throws ServiceException {
-        Optional<User> foundUser;
-        try {
-            foundUser = userDao.findById(entityId);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return foundUser;
-    }
-
-
-    @Override
-    public void update(User entity) throws ServiceException {
-        try {
-            userDao.update(entity);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void updateAvatar(User user) throws ServiceException {
-        try {
-            userDao.updateAvatar(user);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
     public Map<Optional<User>, Map<Optional<String>, Optional<String>>> loginUser(String login, String password) throws ServiceException {
         Optional<User> foundUser = Optional.empty();
         Optional<String> errorMessage = Optional.empty();
@@ -188,18 +121,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<String> findUserAvatar(User user) throws ServiceException {
-        Optional<String> userAvatar;
-        try {
-            userAvatar = userDao.findUserAvatar(user);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return userAvatar;
-    }
-
-    @Override
     public Optional<String> blockUser(String userId) throws ServiceException {
         Optional<String> errorMessage = Optional.empty();
         if (!UserInputValidator.isValidId(userId)) {
@@ -237,5 +158,91 @@ public class UserServiceImpl implements UserService {
             }
         }
         return errorMessage;
+    }
+
+    @Override
+    public List<User> findAll(int start, int end) throws ServiceException {
+        List<User> allUsers;
+        try {
+            allUsers = new ArrayList<>(userDao.findAll(start, end));
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return allUsers;
+    }
+
+    @Override
+    public int countUsers() throws ServiceException {
+        int usersCount;
+        try {
+            usersCount = userDao.countUsers();
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return usersCount;
+    }
+
+    @Override
+    public Optional<User> findById(Integer entityId) throws ServiceException {
+        Optional<User> foundUser;
+        try {
+            foundUser = userDao.findById(entityId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return foundUser;
+    }
+
+
+    @Override
+    public void update(User entity) throws ServiceException {
+        try {
+            userDao.update(entity);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void updateAvatar(User user) throws ServiceException {
+        try {
+            userDao.updateAvatar(user);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Optional<String> findUserAvatar(User user) throws ServiceException {
+        Optional<String> userAvatar;
+        try {
+            userAvatar = userDao.findUserAvatar(user);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return userAvatar;
+    }
+
+    @Override
+    public UserStatus detectUserStatusByLogin(String login) throws ServiceException {
+        UserStatus userStatus;
+        try {
+            userStatus = userDao.detectUserStatusByLogin(login);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return userStatus;
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 }

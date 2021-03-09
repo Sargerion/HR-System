@@ -32,11 +32,6 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void add(Application entity) throws ServiceException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Map<Optional<Application>, Optional<String>> buildApplication(String vacancyId, Integer finderId) throws ServiceException {
         VacancyService vacancyService = VacancyServiceImpl.getInstance();
         FinderService finderService = FinderServiceImpl.getInstance();
@@ -68,52 +63,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         buildResult.put(application, errorMessage);
         return buildResult;
-    }
-
-    @Override
-    public List<Application> findAll(int start, int end) throws ServiceException {
-        List<Application> applications;
-        try {
-            applications = new ArrayList<>(applicationDao.findAll(start, end));
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return applications;
-    }
-
-    @Override
-    public int countApplications() throws ServiceException {
-        int applicationsCount;
-        try {
-            applicationsCount = applicationDao.countApplications();
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return applicationsCount;
-    }
-
-    @Override
-    public Optional<Application> findById(Integer entityId) throws ServiceException {
-        return Optional.empty();
-    }
-
-    @Override
-    public void update(Application entity) throws ServiceException {
-
-    }
-
-    @Override
-    public boolean isFinderApply(Integer vacancyId, Integer finderId) throws ServiceException {
-        boolean isExists;
-        try {
-            isExists = applicationDao.isFinderApply(vacancyId, finderId);
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-        return isExists;
     }
 
     @Override
@@ -190,6 +139,59 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         result.put(finderId, errorMessage);
         return result;
+    }
+
+    @Override
+    public void update(Application entity) throws ServiceException {
+
+    }
+
+    @Override
+    public List<Application> findAll(int start, int end) throws ServiceException {
+        List<Application> applications;
+        try {
+            applications = new ArrayList<>(applicationDao.findAll(start, end));
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return applications;
+    }
+
+    @Override
+    public int countApplications() throws ServiceException {
+        int applicationsCount;
+        try {
+            applicationsCount = applicationDao.countApplications();
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return applicationsCount;
+    }
+
+    @Override
+    public Optional<Application> findById(Integer applicationId) throws ServiceException {
+        Optional<Application> application;
+        try {
+            application = applicationDao.findById(applicationId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return application;
+    }
+
+    @Override
+    public boolean isFinderApply(Integer vacancyId, Integer finderId) throws ServiceException {
+        boolean isExists;
+        try {
+            isExists = applicationDao.isFinderApply(vacancyId, finderId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+        return isExists;
     }
 
     @Override

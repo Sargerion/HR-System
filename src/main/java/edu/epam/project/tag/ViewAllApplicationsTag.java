@@ -5,7 +5,9 @@ import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.Application;
+import edu.epam.project.model.service.ApplicationService;
 import edu.epam.project.model.service.FinderService;
+import edu.epam.project.model.service.impl.ApplicationServiceImpl;
 import edu.epam.project.model.service.impl.FinderServiceImpl;
 import edu.epam.project.tag.util.TagUtil;
 
@@ -78,6 +80,7 @@ public class ViewAllApplicationsTag extends TagSupport {
         String locale = sessionRequestContext.getLocale();
         ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
         FinderService finderService = FinderServiceImpl.getInstance();
+        ApplicationService applicationService = ApplicationServiceImpl.getInstance();
         try {
             if (applications != null) {
                 int size = applications.size();
@@ -87,19 +90,23 @@ public class ViewAllApplicationsTag extends TagSupport {
                     int lineNumber = LIST_LINES_COUNT * (currentPage - 1) + i + 1;
                     if (size > i) {
                         Application application = applications.get(i);
-                        writer.write("<tr><th>" + lineNumber + "</th>");
-                        writer.write("<td>" + application.getEntityId() + "</td>");
-                        writer.write("<td>" + application.getApplicationVacancy().getName() + "</td>");
-                        finderLogin = finderService.findFinderLogin(application.getApplicationFinder().getEntityId());
-                        writer.write("<td>");
-                        if (finderLogin.isPresent()) {
-                            writer.write(finderLogin.get());
+                        Optional<Application> applicationAfterOperation;
+                        applicationAfterOperation = applicationService.findById(application.getEntityId());
+                        if (applicationAfterOperation.isPresent()) {
+                            writer.write("<tr><th>" + lineNumber + "</th>");
+                            writer.write("<td>" + application.getEntityId() + "</td>");
+                            writer.write("<td>" + application.getApplicationVacancy().getName() + "</td>");
+                            finderLogin = finderService.findFinderLogin(application.getApplicationFinder().getEntityId());
+                            writer.write("<td>");
+                            if (finderLogin.isPresent()) {
+                                writer.write(finderLogin.get());
+                            }
+                            writer.write("</td>");
+                            writer.write("<td><ul class=\"navigate\">");
+                            TagUtil.createConfirmApplicationButton(writer, CommandName.CONFIRM_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_CONFIRM));
+                            TagUtil.createRejectApplicationButton(writer, CommandName.REJECT_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_REJECT));
+                            writer.write("</ul></td>");
                         }
-                        writer.write("</td>");
-                        writer.write("<td><ul class=\"navigate\">");
-                        TagUtil.createConfirmApplicationButton(writer, CommandName.CONFIRM_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_CONFIRM));
-                        TagUtil.createRejectApplicationButton(writer, CommandName.REJECT_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_REJECT));
-                        writer.write("</ul></td>");
                     } else {
                         writer.write("<tr><th>" + lineNumber + "</th>");
                         writer.write("<td></td><td></td><td></td><td></td>");

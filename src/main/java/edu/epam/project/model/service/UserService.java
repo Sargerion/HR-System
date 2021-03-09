@@ -2,6 +2,7 @@ package edu.epam.project.model.service;
 
 import edu.epam.project.model.entity.User;
 import edu.epam.project.exception.ServiceException;
+import edu.epam.project.model.entity.UserStatus;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface UserService extends BaseService<Integer, User> {
     Optional<String> blockUser(String userId) throws ServiceException;
 
     Optional<String> unblockUser(String userId) throws ServiceException;
+
+    UserStatus detectUserStatusByLogin(String login) throws ServiceException;
 }

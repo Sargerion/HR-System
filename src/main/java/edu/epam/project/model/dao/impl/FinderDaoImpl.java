@@ -60,13 +60,14 @@ public class FinderDaoImpl implements FinderDao {
 
     @Override
     public Optional<Finder> findById(Integer entityId) throws DaoException {
-        Optional<Finder> foundFinder;
+        Optional<Finder> foundFinder = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_FINDER_BY_ID)) {
             preparedStatement.setInt(1, entityId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            foundFinder = Optional.ofNullable(finderBuilder.build(resultSet));
+            if (resultSet.next()) {
+                foundFinder = Optional.of(finderBuilder.build(resultSet));
+            }
             if (foundFinder.isPresent()) {
                 foundFinder.get().setFinderWorkStatus(resultSet.getString(FindersColumn.WORK_STATUS));
             }
@@ -75,11 +76,6 @@ public class FinderDaoImpl implements FinderDao {
             throw new DaoException(e);
         }
         return foundFinder;
-    }
-
-    @Override
-    public List<Finder> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -111,29 +107,34 @@ public class FinderDaoImpl implements FinderDao {
     }
 
     @Override
-    public boolean isExistsFinder(Integer finderId) throws DaoException {
-        boolean isExists = isExistsId(finderId, CONTAINS_FINDER_ID);
-        return isExists;
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Optional<String> findFinderLogin(Integer finderId) throws DaoException {
-        Optional<String> finderLogin;
+        Optional<String> finderLogin = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_FINDER_LOGIN_BY_USER_ID)) {
             preparedStatement.setInt(1, finderId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            finderLogin = Optional.ofNullable(resultSet.getString(UsersColumn.LOGIN));
+            if (resultSet.next()) {
+                finderLogin = Optional.of(resultSet.getString(UsersColumn.LOGIN));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
         }
         return finderLogin;
+    }
+
+    @Override
+    public boolean isExistsFinder(Integer finderId) throws DaoException {
+        return isExistsId(finderId, CONTAINS_FINDER_ID);
+    }
+
+    @Override
+    public List<Finder> findAll(int start, int end) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }
