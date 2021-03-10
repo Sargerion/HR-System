@@ -7,8 +7,8 @@
 
 <html>
 <body>
-<div class="container" style="max-height: 50%">
-    <form style="height: 38%" name="addSpecialtyForm"  method="post" action="<c:url value="/controller"/>">
+<div class="container" style="max-height: 40%">
+    <form style="height: 28%" name="addSpecialtyForm"  method="post" action="<c:url value="/controller"/>">
         <input type="hidden" name="command" value="add_specialty">
         <h1><fmt:message key="specialty_form_title"/></h1>
         <label style="color: red">*</label>

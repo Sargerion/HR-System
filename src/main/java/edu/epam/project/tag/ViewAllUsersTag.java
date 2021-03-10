@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class ViewAllUsersTag extends TagSupport {
 
-    public static final int LIST_LINES_COUNT = 2;
+    public static final int LIST_LINES_COUNT = 10;
     private static final String USER_ID_BUNDLE = "all_users_table_id";
     private static final String USER_LOGIN_BUNDLE = "all_users_table_login";
     private static final String USER_EMAIL_BUNDLE = "all_users_table_email";

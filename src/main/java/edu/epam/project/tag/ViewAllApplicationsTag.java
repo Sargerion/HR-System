@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class ViewAllApplicationsTag extends TagSupport {
 
-    public static final int LIST_LINES_COUNT = 2;
+    public static final int LIST_LINES_COUNT = 10;
     private static final String APPLICATION_ID_BUNDLE = "all_applications_table_id";
     private static final String APPLICATION_VACANCY_NAME_BUNDLE = "all_applications_table_vacancy_name";
     private static final String APPLICATION_FINDER_LOGIN = "all_applications_table_finder_login";

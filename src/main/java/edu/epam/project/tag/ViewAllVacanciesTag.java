@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class ViewAllVacanciesTag extends TagSupport {
 
-    public static final int LIST_LINES_COUNT = 2;
+    public static final int LIST_LINES_COUNT = 10;
     private static final String VACANCY_ID_BUNDLE = "all_vacancies_table_id";
     private static final String VACANCY_NAME_BUNDLE = "all_vacancies_table_name";
     private static final String VACANCY_SPECIALTY_NAME_BUNDLE = "all_vacancies_table_specialty_name";
