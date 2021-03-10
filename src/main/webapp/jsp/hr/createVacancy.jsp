@@ -14,6 +14,7 @@
 <body>
 <c:import url="part/hrHeader.jsp"/>
 <c:import url="part/vacancyForm.jsp"/>
+<c:import url="/jsp/hr/part/findSpecialtiesForm.jsp"/>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>
