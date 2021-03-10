@@ -20,6 +20,8 @@ public class FriendlyMessage {
     public static final String REJECT_FINDER_APPLICATION = "Finder wasn't hired successfully, a notification was sent to the mail";
     public static final String BLOCK_USER_CORRECT = "User blocked correctly";
     public static final String UNBLOCK_USER_CORRECT = "User unblocked correctly";
+    public static final String NO_NEW_SPECIALTIES = "Unfortunately there are no new specialties";
+    public static final String EXISTS_NEW_SPECIALTIES = "New specialties upload";
 
     private FriendlyMessage() {
 

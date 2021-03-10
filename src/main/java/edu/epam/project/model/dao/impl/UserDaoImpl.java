@@ -250,7 +250,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, user.getEntityId());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                userAvatar = Optional.of(resultSet.getString(UsersColumn.AVATAR));
+                userAvatar = Optional.ofNullable(resultSet.getString(UsersColumn.AVATAR));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);

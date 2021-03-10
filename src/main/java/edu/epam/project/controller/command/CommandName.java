@@ -116,6 +116,11 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.ADMIN);
         }
+    },
+    FIND_SPECIALTIES(new FindSpecialtiesCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
     };
 
     private Command command;
