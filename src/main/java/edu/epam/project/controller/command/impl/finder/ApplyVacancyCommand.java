@@ -39,7 +39,7 @@ public class ApplyVacancyCommand implements Command {
             try {
                 if (finderService.existsFinder(finderId)) {
                     Finder finder = finderService.findById(finderId).get();
-                    if (finder.getFinderWorkStatus().equals(FINDER_NOT_HIRE_STATUS)) {
+                    if (finder.getWorkStatus().equals(FINDER_NOT_HIRE_STATUS)) {
                         Optional<Application> application = Optional.empty();
                         Optional<String> errorMessage = Optional.empty();
                         Map<Optional<Application>, Optional<String>> applyResult;
@@ -56,7 +56,7 @@ public class ApplyVacancyCommand implements Command {
                             }
                         }
                     } else {
-                        requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, ErrorMessage.ALREADY_WORK + finder.getFinderWorkStatus());
+                        requestContext.setSessionAttribute(SessionAttribute.ERROR_MESSAGE, ErrorMessage.ALREADY_WORK + finder.getWorkStatus());
                     }
                 } else {
                     commandResult = new CommandResult(PathJsp.ADD_FINDER_INFO_PAGE, TransitionType.REDIRECT);

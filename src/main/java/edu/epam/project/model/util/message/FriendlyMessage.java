@@ -22,6 +22,7 @@ public class FriendlyMessage {
     public static final String UNBLOCK_USER_CORRECT = "User unblocked correctly";
     public static final String NO_NEW_SPECIALTIES = "Unfortunately there are no new specialties";
     public static final String EXISTS_NEW_SPECIALTIES = "New specialties upload";
+    public static final String EDIT_FINDER_INFO = "The edit was made successfully";
 
     private FriendlyMessage() {
 

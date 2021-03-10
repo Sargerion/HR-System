@@ -7,8 +7,8 @@
 
 <html>
 <body>
-<div class="container">
-    <form style="position:relative;" name="logInForm" method="post" action="<c:url value="/controller"/>">
+<div class="container" style="max-height: 40%">
+    <form style="position:relative; height: 37%" name="logInForm" method="post" action="<c:url value="/controller"/>">
         <input type="hidden" name="command" value="log_in">
         <h1><fmt:message key="login_page"/></h1>
         <h5><fmt:message key="login_needs"/></h5>
@@ -41,9 +41,10 @@
                onmouseover="this.style.borderColor='rgba(25, 181, 254, 1)';"
                onmouseout="this.style.borderColor='#4ef18f';"
                value="<fmt:message key="login"/>">
-        <c:import url="/jsp/modules/part/message_part.jsp"/>
-        <c:import url="/jsp/error/error_parts/error_part.jsp"/>
     </form>
+    <br/>
+    <c:import url="/jsp/modules/part/message_part.jsp"/>
+    <c:import url="/jsp/error/error_parts/error_part.jsp"/>
     <c:remove var="correct_login" scope="session"/>
 </div>
 </body>

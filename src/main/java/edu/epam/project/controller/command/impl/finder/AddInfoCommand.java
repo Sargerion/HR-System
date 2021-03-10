@@ -47,6 +47,7 @@ public class AddInfoCommand implements Command {
                     } else {
                         if (optionalFinder.isPresent()) {
                             requestContext.setSessionAttribute(SessionAttribute.CONFIRM_MESSAGE, FriendlyMessage.ADD_FINDER_INFO);
+                            requestContext.setSessionAttribute(SessionAttribute.FINDER, optionalFinder.get());
                         }
                     }
                 } else {

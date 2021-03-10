@@ -46,7 +46,8 @@ public class FinderServiceImpl implements FinderService {
             try {
                 specialty = specialtyService.findById(Integer.parseInt(specialtyId));
                 if (specialty.isPresent()) {
-                    finder = Optional.of(new Finder(finderId, BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), specialty.get()));
+                    finder = Optional.of(new Finder(finderId, new BigDecimal(requireSalary),
+                            Integer.valueOf(workExperience), specialty.get(), Finder.getNotHireStatus()));
                     finderDao.add(finder.get());
                 } else {
                     errorMessage = Optional.of(ErrorMessage.NO_SUCH_SPECIALTY);
@@ -61,8 +62,35 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
-    public List<Finder> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public Map<Optional<Finder>, Optional<String>> editInfo(Finder currentFinder, String requireSalary, String workExperience, String specialtyId) throws ServiceException {
+        SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
+        Optional<Finder> finder = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Optional<Specialty> newSpecialty;
+        Map<Optional<Finder>, Optional<String>> editResult = new HashMap<>();
+        if (!UserInputValidator.isValidSalary(requireSalary) || !UserInputValidator.isValidWorkExperience(workExperience) || !UserInputValidator.isValidId(specialtyId)) {
+            errorMessage = Optional.of(ErrorMessage.ERROR_EDIT_FINDER_INFO);
+        } else {
+            try {
+                newSpecialty = specialtyService.findById(Integer.parseInt(specialtyId));
+                if (newSpecialty.isPresent()) {
+                    finder = Optional.of(new Finder(currentFinder.getEntityId(), new BigDecimal(requireSalary),
+                            Integer.valueOf(workExperience), newSpecialty.get(), currentFinder.getWorkStatus()));
+                    if (!finder.get().equals(currentFinder)) {
+                        finderDao.update(finder.get());
+                    } else {
+                        errorMessage = Optional.of(ErrorMessage.IDENTICAL_EDIT_FINDER_INFO);
+                    }
+                } else {
+                    errorMessage = Optional.of(ErrorMessage.NO_SUCH_SPECIALTY);
+                }
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        editResult.put(finder, errorMessage);
+        return editResult;
     }
 
     @Override
@@ -119,6 +147,11 @@ public class FinderServiceImpl implements FinderService {
             throw new ServiceException(e);
         }
         return finderLogin;
+    }
+
+    @Override
+    public List<Finder> findAll(int start, int end) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

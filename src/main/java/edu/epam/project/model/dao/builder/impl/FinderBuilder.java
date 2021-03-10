@@ -19,6 +19,7 @@ public class FinderBuilder implements EntityBuilder<Finder> {
         Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
         String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
         Specialty specialty = new Specialty(specialtyId, specialtyName);
-        return new Finder(finderId, requireSalary, workExperience, specialty);
+        String finderWorkStatus = resultSet.getString(FindersColumn.WORK_STATUS);
+        return new Finder(finderId, requireSalary, workExperience, specialty, finderWorkStatus);
     }
 }

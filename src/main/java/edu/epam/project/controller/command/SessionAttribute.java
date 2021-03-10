@@ -28,6 +28,7 @@ public class SessionAttribute {
     public static final String APPLICATION_LIST_CURRENT_PAGE = "application_table_current_page";
     public static final String APPLICATION_LIST = "application_list";
     public static final String APPLICATIONS_COUNT = "applications_count";
+    public static final String FINDER = "finder";
 
     private SessionAttribute() {
 

@@ -14,4 +14,6 @@ public interface FinderService extends BaseService<Integer, Finder> {
     Optional<String> findFinderLogin(Integer finderId) throws ServiceException;
 
     void updateFinderWorkStatus(String companyName, Integer finderId) throws ServiceException;
+
+    Map<Optional<Finder>, Optional<String>> editInfo(Finder currentFinder, String requireSalary, String workExperience, String specialtyId) throws ServiceException;
 }

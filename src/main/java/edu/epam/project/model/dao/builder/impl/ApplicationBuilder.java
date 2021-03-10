@@ -30,7 +30,8 @@ public class ApplicationBuilder implements EntityBuilder<Application> {
         Integer finderId = resultSet.getInt(FindersColumn.ID);
         BigDecimal requireSalary = resultSet.getBigDecimal(FindersColumn.REQUIRE_SALARY);
         Integer workExperience = resultSet.getInt(FindersColumn.WORK_EXPERIENCE);
-        Finder finder = new Finder(finderId, requireSalary, workExperience, specialty);
+        String finderWorkStatus = resultSet.getString(FindersColumn.WORK_STATUS);
+        Finder finder = new Finder(finderId, requireSalary, workExperience, specialty, finderWorkStatus);
         return new Application(applicationId, vacancy, finder);
     }
 }

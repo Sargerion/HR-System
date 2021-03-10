@@ -36,6 +36,8 @@ public class ErrorMessage {
     public static final String TRY_BLOCK_NOT_EXISTING_USER = "Trying to block not existing user";
     public static final String INCORRECT_UNBLOCK_USER_PARAMETERS = "Incorrect unblock user parameters";
     public static final String TRY_UNBLOCK_NOT_EXISTING_USER = "Trying to unblock not existing user";
+    public static final String ERROR_EDIT_FINDER_INFO = "Incorrect edit finder info parameters";
+    public static final String IDENTICAL_EDIT_FINDER_INFO = "The information is identical, no editing has been performed";
 
     private ErrorMessage() {
 

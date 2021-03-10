@@ -31,7 +31,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Language("SQL")
     private static final String SELECT_ALL_APPLICATIONS_WITH_LIMIT = "SELECT application_id, vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, " +
             "vacancy_need_work_experience, company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active, finder_id, finder_require_salary, " +
-            "finder_work_experience FROM applications " +
+            "finder_work_experience, finder_work_status FROM applications " +
             "INNER JOIN vacancies ON applications.application_vacancy_id = vacancies.vacancy_id " +
             "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
             "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id " +
@@ -52,7 +52,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Language("SQL")
     private static final String SELECT_APPLICATION_BY_ID = "SELECT application_id, vacancy_id, vacancy_name, specialty_id, specialty_name, vacancy_salary_usd, " +
             "vacancy_need_work_experience, company_id, company_name, company_owner, company_addres, company_hr_login, vacancy_is_active, finder_id, finder_require_salary, " +
-            "finder_work_experience FROM applications " +
+            "finder_work_experience, finder_work_status FROM applications " +
             "INNER JOIN vacancies ON applications.application_vacancy_id = vacancies.vacancy_id " +
             "INNER JOIN specialties ON vacancies.vacancy_specialty_id = specialties.specialty_id " +
             "INNER JOIN companies ON vacancies.vacancy_company_id = companies.company_id " +

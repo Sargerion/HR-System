@@ -30,6 +30,7 @@
         <h5><fmt:message key="vacancy_money_needs"/></h5>
         <div class="form-group">
             <input type="number" size="5" name="vacancy_money" class="form-control" required min="500" max="100000" value="500"
+            pattern="^\\d+(?:[\\.,]\\d+)?$"
             placeholder="<fmt:message key="vacancy_money"/>">
         </div>
         <label style="color: red">*</label>
@@ -63,6 +64,7 @@
                value="<fmt:message key="form_create_vacancy"/>">
         <br/>
     </form>
+    <c:import url="/jsp/hr/part/findSpecialtiesForm.jsp"/>
     <br/>
     <c:import url="/jsp/modules/part/message_part.jsp"/>
     <c:import url="/jsp/error/error_parts/error_part.jsp"/>

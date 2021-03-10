@@ -1,23 +1,24 @@
 package edu.epam.project.model.entity;
 
-
 import java.math.BigDecimal;
 
 public class Finder extends Entity {
 
+    private static final String NOT_HIRE_STATUS = "Not Hire";
     private BigDecimal requireSalary;
     private Integer workExperience;
     private Specialty specialty;
-    private String finderWorkStatus;
+    private String workStatus;
 
     public Finder() {
     }
 
-    public Finder(Integer finderId, BigDecimal requireSalary, Integer workExperience, Specialty specialty) {
+    public Finder(Integer finderId, BigDecimal requireSalary, Integer workExperience, Specialty specialty, String workStatus) {
         super(finderId);
         this.requireSalary = requireSalary;
         this.workExperience = workExperience;
         this.specialty = specialty;
+        this.workStatus = workStatus;
     }
 
     public BigDecimal getRequireSalary() {
@@ -44,12 +45,16 @@ public class Finder extends Entity {
         this.specialty = specialty;
     }
 
-    public String getFinderWorkStatus() {
-        return finderWorkStatus;
+    public String getWorkStatus() {
+        return workStatus;
     }
 
-    public void setFinderWorkStatus(String finderWorkStatus) {
-        this.finderWorkStatus = finderWorkStatus;
+    public void setWorkStatus(String workStatus) {
+        this.workStatus = workStatus;
+    }
+
+    public static String getNotHireStatus() {
+        return NOT_HIRE_STATUS;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class Finder extends Entity {
         }
         Finder finder = (Finder) o;
         return workExperience.equals(finder.workExperience) && requireSalary.equals(finder.requireSalary) &&
-                specialty.equals(finder.specialty) && finderWorkStatus.equals(finder.finderWorkStatus);
+                specialty.equals(finder.specialty) && workStatus.equals(finder.workStatus);
     }
 
     @Override
@@ -74,7 +79,7 @@ public class Finder extends Entity {
         result = result * 31 + (requireSalary != null ? requireSalary.hashCode() : 0)
                 + (workExperience != null ? workExperience.hashCode() : 0)
                 + (specialty != null ? specialty.hashCode() : 0)
-                + (finderWorkStatus != null ? finderWorkStatus.hashCode() : 0);
+                + (workStatus != null ? workStatus.hashCode() : 0);
         return result;
     }
 
@@ -85,7 +90,7 @@ public class Finder extends Entity {
         sb.append("requireSalary=").append(requireSalary);
         sb.append(", workExperience=").append(workExperience);
         sb.append(", specialty='").append(specialty).append('\'');
-        sb.append(", finderWorkStatus='").append(finderWorkStatus).append('\'');
+        sb.append(", finderWorkStatus='").append(workStatus).append('\'');
         sb.append('}');
         return sb.toString();
     }

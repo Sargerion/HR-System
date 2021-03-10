@@ -84,11 +84,11 @@ public class ApplicationServiceImpl implements ApplicationService {
                         finderId = entry.getValue();
                     }
                     Finder finder = finderService.findById(finderId).get();
-                    if (finder.getFinderWorkStatus().equals(noHireString)) {
+                    if (finder.getWorkStatus().equals(noHireString)) {
                         applicationDao.deleteById(Integer.parseInt(applicationId));
                         vacancyService.deleteById(vacancyId);
                     } else {
-                        errorMessage = Optional.of(ErrorMessage.ALREADY_WORK_FINDER + finder.getFinderWorkStatus());
+                        errorMessage = Optional.of(ErrorMessage.ALREADY_WORK_FINDER + finder.getWorkStatus());
                         applicationDao.deleteById(Integer.parseInt(applicationId));
                     }
                 } else {
@@ -122,12 +122,12 @@ public class ApplicationServiceImpl implements ApplicationService {
                         finderId = entry.getValue();
                     }
                     Finder finder = finderService.findById(finderId).get();
-                    if (finder.getFinderWorkStatus().equals(noHireString)) {
+                    if (finder.getWorkStatus().equals(noHireString)) {
                         applicationDao.deleteById(Integer.parseInt(applicationId));
                         vacancyService.updateVacancyStatus(true, vacancyId);
                     } else {
                         applicationDao.deleteById(Integer.parseInt(applicationId));
-                        errorMessage = Optional.of(ErrorMessage.ALREADY_WORK_FINDER + finder.getFinderWorkStatus());
+                        errorMessage = Optional.of(ErrorMessage.ALREADY_WORK_FINDER + finder.getWorkStatus());
                     }
                 } else {
                     errorMessage = Optional.of(ErrorMessage.NO_APPLICATION);

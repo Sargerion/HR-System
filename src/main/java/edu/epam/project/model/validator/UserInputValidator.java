@@ -1,5 +1,7 @@
 package edu.epam.project.model.validator;
 
+import java.math.BigDecimal;
+
 public class UserInputValidator {
 
     private static final String LOGIN_REGEX = "^[a-zA-Zа-яА-Я0-9_-]{6,15}$";
@@ -9,8 +11,9 @@ public class UserInputValidator {
     private static final String OWNER_REGEX = "^[a-zA-Zа-яА-Я_-]{1,25}$";
     private static final String TOWN_REGEX = "^[a-zA-Zа-яА-Я]{1,20}$";
     private static final String DIGIT_REGEX = "\\d+";
-    private static final int SALARY_LOWER_BOUND = 500;
-    private static final int SALARY_UPPER_BOUND = 100000;
+    private static final String SALARY_REGEX = "^\\d+(?:[\\.,]\\d+)?$";
+    private static final BigDecimal SALARY_LOWER_BOUND = BigDecimal.valueOf(500);
+    private static final BigDecimal SALARY_UPPER_BOUND = BigDecimal.valueOf(100000);
     private static final int WORK_EXPERIENCE_LOWER_BOUND = 1;
     private static final int WORK_EXPERIENCE_UPPER_BOUND = 60;
     private static final String VACANCY_NAME_REGEX = "^[a-zA-Zа-яА-Я_-]{1,40}$";
@@ -30,9 +33,9 @@ public class UserInputValidator {
 
     public static boolean isValidSalary(String salary) {
         boolean result = false;
-        if (salary.matches(DIGIT_REGEX)) {
-            int checkSalary = Integer.parseInt(salary);
-            if (checkSalary >= SALARY_LOWER_BOUND && checkSalary <= SALARY_UPPER_BOUND) {
+        if (salary.matches(SALARY_REGEX)) {
+            BigDecimal checkSalary = new BigDecimal(salary);
+            if (checkSalary.compareTo(SALARY_LOWER_BOUND) >= 0 && checkSalary.compareTo(SALARY_UPPER_BOUND) <= 0) {
                 result = true;
             }
         }

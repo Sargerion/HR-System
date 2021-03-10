@@ -24,11 +24,11 @@ public class FinderDaoImpl implements FinderDao {
     private final EntityBuilder<Finder> finderBuilder = new FinderBuilder();
 
     @Language("SQL")
-    private static final String INSERT_FINDER = "INSERT INTO finders (finder_id, finder_require_salary, finder_work_experience, finder_specialty_id) " +
-            "VALUES (?, ?, ?, ?);";
+    private static final String INSERT_FINDER = "INSERT INTO finders (finder_id, finder_require_salary, finder_work_experience, finder_specialty_id, finder_work_status) " +
+            "VALUES (?, ?, ?, ?, ?);";
 
     @Language("SQL")
-    private static final String UPDATE_FINDER = "UPDATE finders SET finder_require_salary = ?, finder_work_experience = ?, finder_specialty_id = ? WHERE finder_id = ?";
+    private static final String UPDATE_FINDER = "UPDATE finders SET finder_require_salary = ?, finder_work_experience = ?, finder_specialty_id = ? WHERE finder_id = ?;";
 
     @Language("SQL")
     private static final String CONTAINS_FINDER_ID = "SELECT EXISTS(SELECT finder_id FROM finders WHERE finder_id = ?) AS finder_existence;";
@@ -51,6 +51,7 @@ public class FinderDaoImpl implements FinderDao {
             preparedStatement.setBigDecimal(2, finder.getRequireSalary());
             preparedStatement.setInt(3, finder.getWorkExperience());
             preparedStatement.setInt(4, finder.getSpecialty().getEntityId());
+            preparedStatement.setString(5, finder.getWorkStatus());
             preparedStatement.executeUpdate();
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -67,9 +68,6 @@ public class FinderDaoImpl implements FinderDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 foundFinder = Optional.of(finderBuilder.build(resultSet));
-            }
-            if (foundFinder.isPresent()) {
-                foundFinder.get().setFinderWorkStatus(resultSet.getString(FindersColumn.WORK_STATUS));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);

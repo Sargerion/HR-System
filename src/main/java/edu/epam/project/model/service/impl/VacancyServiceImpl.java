@@ -49,7 +49,7 @@ public class VacancyServiceImpl implements VacancyService {
                 vacancySpecialty = specialtyService.findById(Integer.parseInt(specialtyId));
                 vacancyCompany = companyService.findByHrLogin(hrLogin);
                 if (vacancySpecialty.isPresent() && vacancyCompany.isPresent()) {
-                    vacancy = Optional.of(new Vacancy(0, vacancyName, vacancySpecialty.get(), BigDecimal.valueOf(Long.parseLong(requireSalary)), Integer.valueOf(workExperience), vacancyCompany.get(), isVacancyActive));
+                    vacancy = Optional.of(new Vacancy(0, vacancyName, vacancySpecialty.get(), new BigDecimal(requireSalary), Integer.valueOf(workExperience), vacancyCompany.get(), isVacancyActive));
                     vacancyDao.add(vacancy.get());
                 } else {
                     errorMessage = Optional.of(ErrorMessage.NO_SUCH_VACANCY_OR_COMPANY);

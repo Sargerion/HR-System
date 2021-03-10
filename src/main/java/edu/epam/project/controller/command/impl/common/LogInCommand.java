@@ -1,15 +1,18 @@
 package edu.epam.project.controller.command.impl.common;
 
 import edu.epam.project.controller.command.*;
+import edu.epam.project.model.entity.Finder;
 import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.service.CompanyService;
+import edu.epam.project.model.service.FinderService;
 import edu.epam.project.model.service.SpecialtyService;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.service.impl.CompanyServiceImpl;
+import edu.epam.project.model.service.impl.FinderServiceImpl;
 import edu.epam.project.model.service.impl.SpecialtyServiceImpl;
 import edu.epam.project.model.service.impl.UserServiceImpl;
 
@@ -28,6 +31,7 @@ public class LogInCommand implements Command {
         UserService userService = UserServiceImpl.getInstance();
         SpecialtyService specialtyService = SpecialtyServiceImpl.getInstance();
         CompanyService companyService = CompanyServiceImpl.getInstance();
+        FinderService finderService = FinderServiceImpl.getInstance();
         Optional<String> login = requestContext.getRequestParameter(RequestParameter.LOGIN);
         Optional<String> password = requestContext.getRequestParameter(RequestParameter.PASSWORD);
         Optional<String> userAvatar;
@@ -63,11 +67,11 @@ public class LogInCommand implements Command {
                             requestContext.setSessionAttribute(SessionAttribute.USER, user);
                             List<Specialty> specialties = specialtyService.findAllSpecialties();
                             requestContext.setSessionAttribute(SessionAttribute.SPECIALTY_LIST, specialties);
-                            commandResult = defineIfAlreadyLoggedCommandResult(user, requestContext, companyService);
+                            commandResult = defineIfAlreadyLoggedCommandResult(user, requestContext, companyService, finderService);
                         }
                     }
                 } else {
-                    commandResult = defineIfAlreadyLoggedCommandResult(alreadyLoggedUser, requestContext, companyService);
+                    commandResult = defineIfAlreadyLoggedCommandResult(alreadyLoggedUser, requestContext, companyService, finderService);
                 }
             } catch (ServiceException e) {
                 logger.error(e);
@@ -77,7 +81,8 @@ public class LogInCommand implements Command {
         return commandResult;
     }
 
-    private CommandResult defineIfAlreadyLoggedCommandResult(User user, SessionRequestContext requestContext, CompanyService companyService) throws ServiceException {
+    private CommandResult defineIfAlreadyLoggedCommandResult(User user, SessionRequestContext requestContext,
+                                                             CompanyService companyService, FinderService finderService) throws ServiceException {
         CommandResult commandResult = null;
         UserType userType = user.getType();
         switch (userType) {
@@ -92,6 +97,8 @@ public class LogInCommand implements Command {
                 logger.info("Company HR with login -> {} entered", user.getLogin());
             }
             case FINDER -> {
+                Optional<Finder> finder = finderService.findById(user.getEntityId());
+                finder.ifPresent(value -> requestContext.setSessionAttribute(SessionAttribute.FINDER, value));
                 commandResult = new CommandResult(PathJsp.FINDER_PAGE, TransitionType.REDIRECT);
                 logger.info("Finder with login -> {} entered", user.getLogin());
             }

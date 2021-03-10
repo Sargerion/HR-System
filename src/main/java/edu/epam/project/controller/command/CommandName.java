@@ -4,6 +4,7 @@ import edu.epam.project.controller.command.impl.admin.*;
 import edu.epam.project.controller.command.impl.common.*;
 import edu.epam.project.controller.command.impl.finder.AddInfoCommand;
 import edu.epam.project.controller.command.impl.finder.ApplyVacancyCommand;
+import edu.epam.project.controller.command.impl.finder.EditFinderInfoCommand;
 import edu.epam.project.controller.command.impl.hr.*;
 import edu.epam.project.model.entity.UserType;
 
@@ -120,6 +121,11 @@ public enum CommandName {
     FIND_SPECIALTIES(new FindSpecialtiesCommand()) {
         {
             setAllowedUserTypes(UserType.COMPANY_HR);
+        }
+    },
+    EDIT_FINDER_INFO(new EditFinderInfoCommand()) {
+        {
+            setAllowedUserTypes(UserType.FINDER);
         }
     };
 
