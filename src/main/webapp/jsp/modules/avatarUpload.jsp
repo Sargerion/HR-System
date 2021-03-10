@@ -34,7 +34,7 @@
     <br/>
     <br/>
     <h1 style="text-align: center;"><fmt:message key="current_avatar"/></h1>
-    <img style="display: block;margin: 0 auto;" src="${pageContext.request.contextPath}/user_avatars/${requestScope.view_image}" width="400" height="400">
+    <img style="display: block;margin: 0 auto;" src="${pageContext.request.contextPath}/user_avatars/" width="400" height="400">
 </form>
 </body>
 </html>

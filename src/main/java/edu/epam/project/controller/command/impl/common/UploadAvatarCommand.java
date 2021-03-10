@@ -20,7 +20,7 @@ public class UploadAvatarCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String UPLOAD_AVATAR_DIRECTORY = "D:/project_directory/user_avatars";
-    private static final String UPLOAD_AVATAR_DIRECTORY_FOR_VIEW = "user_avatars";
+    private static final char FILE_FORMAT_SEPARATOR = '.';
     private static final String EMPTY_UPLOAD_FILE_PARAMETERS = "Empty upload parameters";
 
     @Override
@@ -38,7 +38,8 @@ public class UploadAvatarCommand implements Command {
             for (Part part : fileParts) {
                 fileName = part.getSubmittedFileName();
                 if (fileName != null) {
-                    part.write(UPLOAD_AVATAR_DIRECTORY + File.separator + fileName);
+                    fileName = buildNewFileName(fileName);
+                    part.write(fileName);
                 }
             }
 
@@ -51,9 +52,7 @@ public class UploadAvatarCommand implements Command {
         } else {
             try {
                 if (!fileName.isEmpty()) {
-                    requestContext.setRequestAttribute(RequestAttribute.VIEW_IMAGE, UPLOAD_AVATAR_DIRECTORY.
-                            substring(UPLOAD_AVATAR_DIRECTORY.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW)));
-                    user.setAvatarName(UPLOAD_AVATAR_DIRECTORY + "/" + fileName);
+                    user.setAvatarName(fileName);
                     userService.updateAvatar(user);
                     commandResult = new CommandResult(PathJsp.CHANGE_AVATAR_PAGE, TransitionType.FORWARD);
                     logger.info("User -> {}, change avatar", user);
@@ -84,5 +83,10 @@ public class UploadAvatarCommand implements Command {
             }
         }
         return commandResult;
+    }
+
+    private String buildNewFileName(String oldFileName) {
+        String fileFormat = oldFileName.substring(oldFileName.indexOf(FILE_FORMAT_SEPARATOR));
+        return UPLOAD_AVATAR_DIRECTORY + "/" + UUID.randomUUID().toString() + fileFormat;
     }
 }
