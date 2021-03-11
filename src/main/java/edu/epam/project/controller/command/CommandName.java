@@ -5,6 +5,7 @@ import edu.epam.project.controller.command.impl.common.*;
 import edu.epam.project.controller.command.impl.finder.AddInfoCommand;
 import edu.epam.project.controller.command.impl.finder.ApplyVacancyCommand;
 import edu.epam.project.controller.command.impl.finder.EditFinderInfoCommand;
+import edu.epam.project.controller.command.impl.finder.ForwardToEditInfoCommand;
 import edu.epam.project.controller.command.impl.hr.*;
 import edu.epam.project.model.entity.UserType;
 
@@ -124,6 +125,11 @@ public enum CommandName {
         }
     },
     EDIT_FINDER_INFO(new EditFinderInfoCommand()) {
+        {
+            setAllowedUserTypes(UserType.FINDER);
+        }
+    },
+    FORWARD_TO_EDIT_INFO(new ForwardToEditInfoCommand()) {
         {
             setAllowedUserTypes(UserType.FINDER);
         }

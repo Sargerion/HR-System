@@ -8,10 +8,39 @@
 
 <html>
 <head>
+    <link href="${pageContext.request.contextPath}/css/profile.css" rel="stylesheet">
     <title><fmt:message key="home"/></title>
 </head>
 <body>
 <c:import url="part/adminHeader.jsp"/>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="wrapper" style="height: 40%; width: 54%;">
+    <div class="left">
+        <img src="${pageContext.request.contextPath}/user_avatars/" width="200">
+        <p>${sessionScope.user.getLogin()}</p>
+    </div>
+    <div class="right">
+        <div class="info">
+            <h3><fmt:message key="admin_profile_information_title"/></h3>
+            <div class="info_data">
+                <div class="data">
+                    <h4><fmt:message key="email_placeholder"/></h4>
+                    <p>${sessionScope.user.getEmail()}</p>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="info_data">
+                <div class="data">
+                    <h4><fmt:message key="admin_profile_explain"/></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>
 </html>
