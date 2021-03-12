@@ -21,12 +21,6 @@
                     <li><c:import url="/jsp/modules/locale.jsp"/></li>
                 </ul>
             </li>
-            <li>
-                <a href="#" ><fmt:message key="service"/></a>
-                <ul>
-                    <li><a href="#" ><fmt:message key="all_companies_title"/></a></li>
-                </ul>
-            </li>
             <li><a href="${pageContext.request.contextPath}/jsp/guest/login.jsp" class="delim"><fmt:message key="login"/></a></li>
             <li><a href="${pageContext.request.contextPath}/jsp/guest/register.jsp"><fmt:message key="register"/></a></li>
         </ul>
