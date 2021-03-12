@@ -138,6 +138,11 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
+    },
+    VIEW_FINDER_PROFILE(new ViewFinderProfile()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
+        }
     };
 
     private Command command;

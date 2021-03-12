@@ -32,6 +32,7 @@ public class RequestParameter {
     public static final String BLOCK_USER_BUTTON = "blockUserButton";
     public static final String UNBLOCK_USER_BUTTON = "unblockUserButton";
     public static final String COMPANY_BUTTON = "companyButton";
+    public static final String FINDER_BUTTON = "finderButton";
 
     private RequestParameter() {
 

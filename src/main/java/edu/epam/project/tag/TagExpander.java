@@ -105,6 +105,15 @@ class TagExpander {
         writer.write(buttonText + "</button></form>");
     }
 
+    static void createFinderProfileViewButton(JspWriter writer, String command, PageContext pageContext, int finderId, String buttonText) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"finderButton\" ");
+        writer.write("value=\"" + finderId + "\">");
+        writer.write(buttonText + "</button></form>");
+    }
+
     private static void createButton(JspWriter writer, int pageNumber) throws IOException {
         writer.write("<li><button type=\"submit\" name=\"newPage\" ");
         writer.write("value=\"" + pageNumber + "\" ");

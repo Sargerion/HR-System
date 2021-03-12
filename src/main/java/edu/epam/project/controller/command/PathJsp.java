@@ -27,6 +27,7 @@ public class PathJsp {
     public static final String APPLICATIONS_VIEW_PAGE = "/jsp/hr/applicationsView.jsp";
     public static final String EDIT_FINDER_INFO_PAGE = "/jsp/finder/editFinderInfo.jsp";
     public static final String VIEW_COMPANY_PAGE = "/jsp/common/viewCompany.jsp";
+    public static final String VIEW_FINDER_PROFILE = "/jsp/hr/viewFinderProfile.jsp";
 
     private PathJsp() {
 

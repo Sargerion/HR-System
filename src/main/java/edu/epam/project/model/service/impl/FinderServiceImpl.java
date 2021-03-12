@@ -94,6 +94,25 @@ public class FinderServiceImpl implements FinderService {
     }
 
     @Override
+    public Map<Optional<Finder>, Optional<String>> findFinderById(String finderId) throws ServiceException {
+        Optional<Finder> foundFinder = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Map<Optional<Finder>, Optional<String>> findResult = new HashMap<>();
+        if (!UserInputValidator.isValidId(finderId)) {
+            errorMessage = Optional.of(ErrorMessage.INCORRECT_FIND_FINDER_PARAMETERS);
+        } else {
+            try {
+                foundFinder = finderDao.findById(Integer.parseInt(finderId));
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        findResult.put(foundFinder, errorMessage);
+        return findResult;
+    }
+
+    @Override
     public Optional<Finder> findById(Integer finderId) throws ServiceException {
         Optional<Finder> foundFinder;
         try {

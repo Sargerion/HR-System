@@ -39,6 +39,7 @@ public class ErrorMessage {
     public static final String ERROR_EDIT_FINDER_INFO = "Incorrect edit finder info parameters";
     public static final String IDENTICAL_EDIT_FINDER_INFO = "The information is identical, no editing has been performed";
     public static final String INCORRECT_FIND_COMPANY_PARAMETERS = "Incorrect find company parameters";
+    public static final String INCORRECT_FIND_FINDER_PARAMETERS = "Incorrect find finder parameters";
 
     private ErrorMessage() {
 

@@ -95,12 +95,13 @@ public class ViewAllApplicationsTag extends TagSupport {
                             writer.write("<tr><th>" + lineNumber + "</th>");
                             writer.write("<td>" + application.getEntityId() + "</td>");
                             writer.write("<td>" + application.getApplicationVacancy().getName() + "</td>");
-                            finderLogin = finderService.findFinderLogin(application.getApplicationFinder().getEntityId());
-                            writer.write("<td>");
+                            Integer finderId = application.getApplicationFinder().getEntityId();
+                            finderLogin = finderService.findFinderLogin(finderId);
+                            writer.write("<td><ul class=\"navigate\"><li>");
                             if (finderLogin.isPresent()) {
-                                writer.write(finderLogin.get());
+                                TagExpander.createFinderProfileViewButton(writer, CommandName.VIEW_FINDER_PROFILE.name(), pageContext, finderId, finderLogin.get());
                             }
-                            writer.write("</td>");
+                            writer.write("</li></ul></td>");
                             writer.write("<td><ul class=\"navigate\">");
                             TagExpander.createConfirmApplicationButton(writer, CommandName.CONFIRM_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_CONFIRM));
                             TagExpander.createRejectApplicationButton(writer, CommandName.REJECT_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_REJECT));
