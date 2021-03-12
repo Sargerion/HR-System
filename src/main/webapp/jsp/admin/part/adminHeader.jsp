@@ -33,14 +33,6 @@
                     <li><c:import url="/jsp/modules/vacancyListForm.jsp"/></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/admin/addCompany.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="company_form_button_value"/></h5></a></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/admin/addSpecialty.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="specialty_form_title"/></h5></a></li>
-                    <li>
-                        <a href="#">More</a>
-                        <ul>
-                            <li><a href="#">Sub1</a></li>
-                            <li><a href="#">Sub2</a></li>
-                            <li><a href="#">Sub3</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </li>
             <li><c:import url="/jsp/modules/logoutForm.jsp"/></li>

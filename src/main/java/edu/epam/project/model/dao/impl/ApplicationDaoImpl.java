@@ -3,23 +3,21 @@ package edu.epam.project.model.dao.impl;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.ApplicationDao;
-import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.ApplicationBuilder;
-import edu.epam.project.model.dao.table.ApplicationsColumn;
-import edu.epam.project.model.entity.Application;
+import edu.epam.project.model.dao.table.*;
+import edu.epam.project.model.entity.*;
 import edu.epam.project.model.pool.ConnectionPool;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 
 public class ApplicationDaoImpl implements ApplicationDao {
 
     private static final Logger logger = LogManager.getLogger();
-    private final EntityBuilder<Application> applicationBuilder = new ApplicationBuilder();
 
     @Language("SQL")
     private static final String INSERT_APPLICATION = "INSERT INTO applications(application_vacancy_id, application_finder_id) VALUES (?, ?);";
@@ -83,7 +81,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.setInt(1, applicationId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                application = Optional.of(applicationBuilder.build(resultSet));
+                application = Optional.of(buildApplication(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -121,7 +119,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
             preparedStatement.setInt(2, end);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Application application = applicationBuilder.build(resultSet);
+                Application application = buildApplication(resultSet);
                 applications.add(application);
             }
         } catch (ConnectionException | SQLException e) {
@@ -173,5 +171,30 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Override
     public int countApplications() throws DaoException {
         return countEntities(COUNT_APPLICATIONS);
+    }
+
+    private Application buildApplication(ResultSet resultSet) throws SQLException {
+        Integer applicationId = resultSet.getInt(ApplicationsColumn.ID);
+        Integer vacancyId = resultSet.getInt(VacanciesColumn.ID);
+        String vacancyName = resultSet.getString(VacanciesColumn.NAME);
+        Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
+        String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
+        Specialty specialty = new Specialty(specialtyId, specialtyName);
+        BigDecimal vacancySalary = resultSet.getBigDecimal(VacanciesColumn.SALARY);
+        Integer vacancyNeedWorkExperience = resultSet.getInt(VacanciesColumn.NEED_WORK_EXPERIENCE);
+        Integer companyId = resultSet.getInt(CompaniesColumn.ID);
+        String companyName = resultSet.getString(CompaniesColumn.NAME);
+        String companyOwner = resultSet.getString(CompaniesColumn.OWNER);
+        String companyAddress = resultSet.getString(CompaniesColumn.ADDRESS);
+        String companyHrLogin = resultSet.getString(CompaniesColumn.HR_UNIQUE_LOGIN);
+        Company company = new Company(companyId, companyName, companyOwner, companyAddress, companyHrLogin);
+        boolean isVacancyActive = resultSet.getBoolean(VacanciesColumn.VACANCY_IS_ACTIVE);
+        Vacancy vacancy = new Vacancy(vacancyId, vacancyName, specialty, vacancySalary, vacancyNeedWorkExperience, company, isVacancyActive);
+        Integer finderId = resultSet.getInt(FindersColumn.ID);
+        BigDecimal requireSalary = resultSet.getBigDecimal(FindersColumn.REQUIRE_SALARY);
+        Integer workExperience = resultSet.getInt(FindersColumn.WORK_EXPERIENCE);
+        String finderWorkStatus = resultSet.getString(FindersColumn.WORK_STATUS);
+        Finder finder = new Finder(finderId, requireSalary, workExperience, specialty, finderWorkStatus);
+        return new Application(applicationId, vacancy, finder);
     }
 }

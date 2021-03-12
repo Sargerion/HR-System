@@ -3,8 +3,11 @@ package edu.epam.project.model.dao.impl;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.VacancyDao;
-import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.VacancyBuilder;
+import edu.epam.project.model.dao.table.CompaniesColumn;
+import edu.epam.project.model.dao.table.SpecialtiesColumn;
+import edu.epam.project.model.dao.table.VacanciesColumn;
+import edu.epam.project.model.entity.Company;
+import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.pool.ConnectionPool;
 
@@ -12,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Language;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,6 @@ import java.util.Optional;
 public class VacancyDaoImpl implements VacancyDao {
 
     private static final Logger logger = LogManager.getLogger();
-    private final EntityBuilder<Vacancy> vacancyBuilder = new VacancyBuilder();
 
     @Language("SQL")
     private static final String INSERT_VACANCY = "INSERT INTO vacancies(vacancy_name, vacancy_specialty_id, vacancy_salary_usd, vacancy_need_work_experience, vacancy_company_id, vacancy_is_active) " +
@@ -76,7 +79,7 @@ public class VacancyDaoImpl implements VacancyDao {
             preparedStatement.setInt(1, vacancyId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                vacancy = Optional.of(vacancyBuilder.build(resultSet));
+                vacancy = Optional.of(buildVacancy(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -99,7 +102,7 @@ public class VacancyDaoImpl implements VacancyDao {
             preparedStatement.setInt(2, end);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Vacancy vacancy = vacancyBuilder.build(resultSet);
+                Vacancy vacancy = buildVacancy(resultSet);
                 vacancies.add(vacancy);
             }
         } catch (ConnectionException | SQLException e) {
@@ -137,5 +140,23 @@ public class VacancyDaoImpl implements VacancyDao {
     @Override
     public int countVacancies() throws DaoException {
         return countEntities(COUNT_VACANCIES);
+    }
+
+    private Vacancy buildVacancy(ResultSet resultSet) throws SQLException {
+        Integer vacancyId = resultSet.getInt(VacanciesColumn.ID);
+        String vacancyName = resultSet.getString(VacanciesColumn.NAME);
+        Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
+        String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
+        Specialty specialty = new Specialty(specialtyId, specialtyName);
+        BigDecimal vacancySalary = resultSet.getBigDecimal(VacanciesColumn.SALARY);
+        Integer vacancyNeedWorkExperience = resultSet.getInt(VacanciesColumn.NEED_WORK_EXPERIENCE);
+        Integer companyId = resultSet.getInt(CompaniesColumn.ID);
+        String companyName = resultSet.getString(CompaniesColumn.NAME);
+        String companyOwner = resultSet.getString(CompaniesColumn.OWNER);
+        String companyAddress = resultSet.getString(CompaniesColumn.ADDRESS);
+        String companyHrLogin = resultSet.getString(CompaniesColumn.HR_UNIQUE_LOGIN);
+        Company company = new Company(companyId, companyName, companyOwner, companyAddress, companyHrLogin);
+        boolean isVacancyActive = resultSet.getBoolean(VacanciesColumn.VACANCY_IS_ACTIVE);
+        return new Vacancy(vacancyId, vacancyName, specialty, vacancySalary, vacancyNeedWorkExperience, company, isVacancyActive);
     }
 }

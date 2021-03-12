@@ -1,7 +1,5 @@
 package edu.epam.project.model.dao.impl;
 
-import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.UserBuilder;
 import edu.epam.project.model.dao.UserDao;
 import edu.epam.project.model.dao.table.UserStatusesColumn;
 import edu.epam.project.model.dao.table.UserTypesColumn;
@@ -23,7 +21,6 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
     private static final Logger logger = LogManager.getLogger();
-    private final EntityBuilder<User> userBuilder = new UserBuilder();
 
     @Language("SQL")
     private static final String SELECT_ALL_USERS_WITH_LIMIT = "SELECT U.user_id, U.user_login, U.user_email, UT.user_type_name, US.user_status_name, U.confirmation_token FROM users U " +
@@ -158,7 +155,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                checkingUser = Optional.of(userBuilder.build(resultSet));
+                checkingUser = Optional.of(buildUser(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -191,7 +188,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(1, entityId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                foundUser = Optional.of(userBuilder.build(resultSet));
+                foundUser = Optional.of(buildUser(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -209,7 +206,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(2, end);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                User user = userBuilder.build(resultSet);
+                User user = buildUser(resultSet);
                 allUsers.add(user);
             }
         } catch (ConnectionException | SQLException e) {
@@ -295,5 +292,15 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
+    }
+
+    private User buildUser(ResultSet resultSet) throws SQLException {
+        Integer userId = resultSet.getInt(UsersColumn.ID);
+        String userLogin = resultSet.getString(UsersColumn.LOGIN);
+        String userEmail = resultSet.getString(UsersColumn.EMAIL);
+        UserType userType = UserType.valueOf(resultSet.getString(UserTypesColumn.NAME));
+        UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
+        String confirmationToken = resultSet.getString(UsersColumn.CONFIRMATION_TOKEN);
+        return new User(userId, userLogin, userEmail, userType, userStatus, confirmationToken);
     }
 }

@@ -9,7 +9,6 @@ import edu.epam.project.model.entity.UserStatus;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.service.UserService;
 import edu.epam.project.model.service.impl.UserServiceImpl;
-import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -41,7 +40,7 @@ public class ViewAllUsersTag extends TagSupport {
         int usersCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.USERS_COUNT);
         int pagesCount = usersCount % LIST_LINES_COUNT == 0 ? usersCount / LIST_LINES_COUNT : usersCount / LIST_LINES_COUNT + 1;
         String command = CommandName.USER_LIST.name();
-        TagUtil.paginate(pageContext, pagesCount, command);
+        TagExpander.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
 
@@ -61,7 +60,7 @@ public class ViewAllUsersTag extends TagSupport {
     private void createTableHeader(JspWriter writer, SessionRequestContext sessionRequestContext) throws JspException {
         try {
             String locale = sessionRequestContext.getLocale();
-            ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+            ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
             String userID = resourceBundle.getString(USER_ID_BUNDLE);
             String userLogin = resourceBundle.getString(USER_LOGIN_BUNDLE);
             String userEmail = resourceBundle.getString(USER_EMAIL_BUNDLE);
@@ -70,12 +69,12 @@ public class ViewAllUsersTag extends TagSupport {
             String operation = resourceBundle.getString(OPERATION);
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
-            TagUtil.createTableHeadItem(writer, userID);
-            TagUtil.createTableHeadItem(writer, userLogin);
-            TagUtil.createTableHeadItem(writer, userEmail);
-            TagUtil.createTableHeadItem(writer, userType);
-            TagUtil.createTableHeadItem(writer, userStatus);
-            TagUtil.createTableHeadItem(writer, operation);
+            TagExpander.createTableHeadItem(writer, userID);
+            TagExpander.createTableHeadItem(writer, userLogin);
+            TagExpander.createTableHeadItem(writer, userEmail);
+            TagExpander.createTableHeadItem(writer, userType);
+            TagExpander.createTableHeadItem(writer, userStatus);
+            TagExpander.createTableHeadItem(writer, operation);
             writer.write("</tr></thead>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -85,7 +84,7 @@ public class ViewAllUsersTag extends TagSupport {
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<User> allUsers) throws JspException {
         String locale = sessionRequestContext.getLocale();
         UserService userService = UserServiceImpl.getInstance();
-        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+        ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
         try {
             if (allUsers != null) {
                 int size = allUsers.size();
@@ -103,9 +102,9 @@ public class ViewAllUsersTag extends TagSupport {
                         writer.write("<td>" + userStatus + "</td>");
                         writer.write("<td>");
                         if ((userStatus == UserStatus.ACTIVE) && (user.getType() != UserType.ADMIN)) {
-                            TagUtil.createBlockButton(writer, CommandName.BLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_BLOCK_BUTTON_BUNDLE));
+                            TagExpander.createBlockButton(writer, CommandName.BLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_BLOCK_BUTTON_BUNDLE));
                         } else if (userStatus == UserStatus.BLOCKED) {
-                            TagUtil.createUnblockButton(writer, CommandName.UNBLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_UNBLOCK_BUTTON_BUNDLE));
+                            TagExpander.createUnblockButton(writer, CommandName.UNBLOCK_USER.name(), pageContext, user.getEntityId(), resourceBundle.getString(USER_UNBLOCK_BUTTON_BUNDLE));
                         }
                         writer.write("</td>");
                     } else {

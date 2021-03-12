@@ -133,6 +133,11 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.FINDER);
         }
+    },
+    FIND_COMPANY_INFO(new FindCompanyInfo()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
+        }
     };
 
     private Command command;

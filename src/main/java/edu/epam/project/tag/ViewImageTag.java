@@ -3,7 +3,6 @@ package edu.epam.project.tag;
 import edu.epam.project.controller.command.SessionAttribute;
 import edu.epam.project.controller.command.SessionRequestContext;
 import edu.epam.project.model.entity.User;
-import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -23,10 +22,10 @@ public class ViewImageTag extends TagSupport {
         String imageName = user.getAvatarName();
         try {
             if (imageName == null || imageName.isEmpty()) {
-                TagUtil.showImage(pageContext, UPLOAD_AVATAR_DIRECTORY_FOR_VIEW + "/" + DEFAULT_AVATAR);
+                TagExpander.showImage(pageContext, UPLOAD_AVATAR_DIRECTORY_FOR_VIEW + "/" + DEFAULT_AVATAR);
             } else {
                 imageName = imageName.substring(imageName.lastIndexOf(UPLOAD_AVATAR_DIRECTORY_FOR_VIEW));
-                TagUtil.showImage(pageContext, imageName);
+                TagExpander.showImage(pageContext, imageName);
             }
         } catch (IOException e) {
             throw new JspException(e);

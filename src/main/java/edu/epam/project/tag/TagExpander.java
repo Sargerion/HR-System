@@ -1,4 +1,4 @@
-package edu.epam.project.tag.util;
+package edu.epam.project.tag;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -7,21 +7,20 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TagUtil {
+class TagExpander {
 
     private static final String PAGE_PROPERTIES_PATH = "property/pagecontent";
 
-    private TagUtil() {
+    private TagExpander() {
     }
 
-    public static ResourceBundle getLocalizeText(String locale) {
+    static ResourceBundle getLocalizeText(String locale) {
         String language = locale.substring(0, locale.indexOf("_"));
         String country = locale.substring(locale.indexOf("_") + 1);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(PAGE_PROPERTIES_PATH, new Locale(language, country));
-        return resourceBundle;
+        return ResourceBundle.getBundle(PAGE_PROPERTIES_PATH, new Locale(language, country));
     }
 
-    public static void paginate(PageContext pageContext, int pagesCount, String command) throws JspException {
+    static void paginate(PageContext pageContext, int pagesCount, String command) throws JspException {
         try {
             JspWriter writer = pageContext.getOut();
             String contextPath = pageContext.getServletContext().getContextPath();
@@ -38,7 +37,7 @@ public class TagUtil {
         }
     }
 
-    public static void createTableHeadItem(JspWriter writer, String content) throws JspException {
+    static void createTableHeadItem(JspWriter writer, String content) throws JspException {
         try {
             writer.write("<th>" + content + "</th>");
         } catch (IOException e) {
@@ -46,13 +45,13 @@ public class TagUtil {
         }
     }
 
-    public static void showImage(PageContext pageContext, String imageName) throws IOException {
+    static void showImage(PageContext pageContext, String imageName) throws IOException {
         JspWriter writer = pageContext.getOut();
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + imageName + "\">");
     }
 
-    public static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId, String buttonText) throws IOException {
+    static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
@@ -61,7 +60,7 @@ public class TagUtil {
         writer.write(buttonText + "</button></form>");
     }
 
-    public static void createConfirmApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
+    static void createConfirmApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<li><form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
@@ -70,7 +69,7 @@ public class TagUtil {
         writer.write(buttonText + "</button></form></li>");
     }
 
-    public static void createRejectApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
+    static void createRejectApplicationButton(JspWriter writer, String command, PageContext pageContext, int applicationId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<li><form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
@@ -79,7 +78,7 @@ public class TagUtil {
         writer.write(buttonText + "</button></form></li>");
     }
 
-    public static void createBlockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
+    static void createBlockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
@@ -88,12 +87,21 @@ public class TagUtil {
         writer.write(buttonText + "</button></form>");
     }
 
-    public static void createUnblockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
+    static void createUnblockButton(JspWriter writer, String command, PageContext pageContext, int userId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
         writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
         writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
         writer.write("<button class=\"apply_button\" type=\"submit\" name=\"unblockUserButton\" ");
         writer.write("value=\"" + userId + "\">");
+        writer.write(buttonText + "</button></form>");
+    }
+
+    static void createCompanyViewButton(JspWriter writer, String command, PageContext pageContext, int companyId, String buttonText) throws IOException {
+        String contextPath = pageContext.getServletContext().getContextPath();
+        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<button class=\"apply_button\" type=\"submit\" name=\"companyButton\" ");
+        writer.write("value=\"" + companyId + "\">");
         writer.write(buttonText + "</button></form>");
     }
 

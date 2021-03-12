@@ -29,12 +29,8 @@
                 <div class="data">
                     <h4><fmt:message key="email_placeholder"/></h4>
                     <p>${sessionScope.user.getEmail()}</p>
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <div class="info_data">
-                <div class="data">
+                    <br/>
+                    <br/>
                     <h4><fmt:message key="admin_profile_explain"/></h4>
                 </div>
             </div>

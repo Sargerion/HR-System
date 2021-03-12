@@ -38,6 +38,7 @@ public class ErrorMessage {
     public static final String TRY_UNBLOCK_NOT_EXISTING_USER = "Trying to unblock not existing user";
     public static final String ERROR_EDIT_FINDER_INFO = "Incorrect edit finder info parameters";
     public static final String IDENTICAL_EDIT_FINDER_INFO = "The information is identical, no editing has been performed";
+    public static final String INCORRECT_FIND_COMPANY_PARAMETERS = "Incorrect find company parameters";
 
     private ErrorMessage() {
 

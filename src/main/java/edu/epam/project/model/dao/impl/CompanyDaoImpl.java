@@ -3,8 +3,6 @@ package edu.epam.project.model.dao.impl;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.CompanyDao;
-import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.CompanyBuilder;
 import edu.epam.project.model.dao.table.CompaniesColumn;
 import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.pool.ConnectionPool;
@@ -20,7 +18,6 @@ import java.util.Optional;
 public class CompanyDaoImpl implements CompanyDao {
 
     private static final Logger logger = LogManager.getLogger();
-    private final EntityBuilder<Company> companyBuilder = new CompanyBuilder();
 
     @Language("SQL")
     private static final String INSERT_COMPANY = "INSERT INTO companies (company_name, company_owner, company_addres, company_hr_login) " +
@@ -68,7 +65,7 @@ public class CompanyDaoImpl implements CompanyDao {
             preparedStatement.setInt(1, companyId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                company = Optional.of(companyBuilder.build(resultSet));
+                company = Optional.of(buildCompany(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -112,7 +109,7 @@ public class CompanyDaoImpl implements CompanyDao {
             preparedStatement.setString(1, hrLogin);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                company = Optional.of(companyBuilder.build(resultSet));
+                company = Optional.of(buildCompany(resultSet));
             }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
@@ -134,5 +131,14 @@ public class CompanyDaoImpl implements CompanyDao {
     @Override
     public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
+    }
+
+    private Company buildCompany(ResultSet resultSet) throws SQLException {
+        Integer companyId = resultSet.getInt(CompaniesColumn.ID);
+        String companyName = resultSet.getString(CompaniesColumn.NAME);
+        String companyOwner = resultSet.getString(CompaniesColumn.OWNER);
+        String companyAddress = resultSet.getString(CompaniesColumn.ADDRESS);
+        String companyHrLogin = resultSet.getString(CompaniesColumn.HR_UNIQUE_LOGIN);
+        return new Company(companyId, companyName, companyOwner, companyAddress, companyHrLogin);
     }
 }

@@ -29,6 +29,7 @@ public class SessionAttribute {
     public static final String APPLICATION_LIST = "application_list";
     public static final String APPLICATIONS_COUNT = "applications_count";
     public static final String FINDER = "finder";
+    public static final String COMPANY = "company";
 
     private SessionAttribute() {
 

@@ -1,15 +1,12 @@
 package edu.epam.project.tag;
 
-import edu.epam.project.controller.command.CommandName;
-import edu.epam.project.controller.command.SessionAttribute;
-import edu.epam.project.controller.command.SessionRequestContext;
+import edu.epam.project.controller.command.*;
 import edu.epam.project.exception.ServiceException;
 import edu.epam.project.model.entity.User;
 import edu.epam.project.model.entity.UserType;
 import edu.epam.project.model.entity.Vacancy;
 import edu.epam.project.model.service.ApplicationService;
 import edu.epam.project.model.service.impl.ApplicationServiceImpl;
-import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -43,7 +40,7 @@ public class ViewAllVacanciesTag extends TagSupport {
         int vacanciesCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.VACANCIES_COUNT);
         int pagesCount = vacanciesCount % LIST_LINES_COUNT == 0 ? vacanciesCount / LIST_LINES_COUNT : vacanciesCount / LIST_LINES_COUNT + 1;
         String command = CommandName.FIND_VACANCY_LIST.name();
-        TagUtil.paginate(pageContext, pagesCount, command);
+        TagExpander.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
 
@@ -72,7 +69,7 @@ public class ViewAllVacanciesTag extends TagSupport {
     private void createTableHeader(JspWriter writer, SessionRequestContext sessionRequestContext) throws JspException {
         try {
             String locale = sessionRequestContext.getLocale();
-            ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+            ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
             String vacancyID = resourceBundle.getString(VACANCY_ID_BUNDLE);
             String vacancyName = resourceBundle.getString(VACANCY_NAME_BUNDLE);
             String vacancySpecialtyName = resourceBundle.getString(VACANCY_SPECIALTY_NAME_BUNDLE);
@@ -82,13 +79,13 @@ public class ViewAllVacanciesTag extends TagSupport {
             String vacancyAvailability = resourceBundle.getString(VACANCY_AVAILABILITY);
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
-            TagUtil.createTableHeadItem(writer, vacancyID);
-            TagUtil.createTableHeadItem(writer, vacancyName);
-            TagUtil.createTableHeadItem(writer, vacancySpecialtyName);
-            TagUtil.createTableHeadItem(writer, vacancySalary);
-            TagUtil.createTableHeadItem(writer, vacancyNeedWorkExperience);
-            TagUtil.createTableHeadItem(writer, vacancyCompanyName);
-            TagUtil.createTableHeadItem(writer, vacancyAvailability);
+            TagExpander.createTableHeadItem(writer, vacancyID);
+            TagExpander.createTableHeadItem(writer, vacancyName);
+            TagExpander.createTableHeadItem(writer, vacancySpecialtyName);
+            TagExpander.createTableHeadItem(writer, vacancySalary);
+            TagExpander.createTableHeadItem(writer, vacancyNeedWorkExperience);
+            TagExpander.createTableHeadItem(writer, vacancyCompanyName);
+            TagExpander.createTableHeadItem(writer, vacancyAvailability);
             writer.write("</tr></thead>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -97,7 +94,7 @@ public class ViewAllVacanciesTag extends TagSupport {
 
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Vacancy> vacancies) throws JspException {
         String locale = sessionRequestContext.getLocale();
-        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+        ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
         try {
             if (vacancies != null) {
                 int size = vacancies.size();
@@ -112,7 +109,11 @@ public class ViewAllVacanciesTag extends TagSupport {
                         writer.write("<td>" + vacancy.getSpecialty().getSpecialtyName() + "</td>");
                         writer.write("<td>" + vacancy.getSalary() + "</td>");
                         writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
-                        writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
+                        writer.write("<td>");
+                        writer.write("<ul class=\"navigate\"><li>");
+                        TagExpander.createCompanyViewButton(writer, CommandName.FIND_COMPANY_INFO.name(), pageContext, vacancy.getVacancyCompany().getEntityId(), vacancy.getVacancyCompany().getName());
+                        writer.write("</li></ul>");
+                        writer.write("</td>");
                         writer.write("<td>");
                         if (vacancy.isVacancyActive()) {
                             writer.write(resourceBundle.getString(VACANCY_ACTIVE_STATUS));
@@ -135,7 +136,7 @@ public class ViewAllVacanciesTag extends TagSupport {
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Vacancy> vacancies, Integer finderId) throws JspException {
         ApplicationService applicationService = ApplicationServiceImpl.getInstance();
         String locale = sessionRequestContext.getLocale();
-        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+        ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
         try {
             if (vacancies != null) {
                 int size = vacancies.size();
@@ -150,12 +151,16 @@ public class ViewAllVacanciesTag extends TagSupport {
                         writer.write("<td>" + vacancy.getSpecialty().getSpecialtyName() + "</td>");
                         writer.write("<td>" + vacancy.getSalary() + "</td>");
                         writer.write("<td>" + vacancy.getNeedWorkExperience() + "</td>");
-                        writer.write("<td>" + vacancy.getVacancyCompany().getName() + "</td>");
+                        writer.write("<td>");
+                        writer.write("<ul class=\"navigate\"><li>");
+                        TagExpander.createCompanyViewButton(writer, CommandName.FIND_COMPANY_INFO.name(), pageContext, vacancy.getVacancyCompany().getEntityId(), vacancy.getVacancyCompany().getName());
+                        writer.write("</li></ul>");
+                        writer.write("</td>");
                         writer.write("<td>");
                         if (!applicationService.isFinderApply(vacancy.getEntityId(), finderId)) {
                             String command = CommandName.APPLY_VACANCY.name();
                             writer.write("<ul class=\"navigate\"><li>");
-                            TagUtil.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
+                            TagExpander.createApplyVacancyButton(writer, command, pageContext, vacancy.getEntityId(), resourceBundle.getString(APPLY_BUTTON_TEXT));
                             writer.write("</li></ul>");
                         } else {
                             writer.write(resourceBundle.getString(APPLY_SENT));

@@ -9,7 +9,6 @@ import edu.epam.project.model.service.ApplicationService;
 import edu.epam.project.model.service.FinderService;
 import edu.epam.project.model.service.impl.ApplicationServiceImpl;
 import edu.epam.project.model.service.impl.FinderServiceImpl;
-import edu.epam.project.tag.util.TagUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -39,7 +38,7 @@ public class ViewAllApplicationsTag extends TagSupport {
         int applicationsCount = (int) sessionRequestContext.getSessionAttribute(SessionAttribute.APPLICATIONS_COUNT);
         int pagesCount = applicationsCount % LIST_LINES_COUNT == 0 ? applicationsCount / LIST_LINES_COUNT : applicationsCount / LIST_LINES_COUNT + 1;
         String command = CommandName.FIND_APPLICATION_LIST.name();
-        TagUtil.paginate(pageContext, pagesCount, command);
+        TagExpander.paginate(pageContext, pagesCount, command);
         return SKIP_BODY;
     }
 
@@ -59,17 +58,17 @@ public class ViewAllApplicationsTag extends TagSupport {
     private void createTableHeader(JspWriter writer, SessionRequestContext sessionRequestContext) throws JspException {
         try {
             String locale = sessionRequestContext.getLocale();
-            ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+            ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
             String applicationID = resourceBundle.getString(APPLICATION_ID_BUNDLE);
             String applicationVacancyName = resourceBundle.getString(APPLICATION_VACANCY_NAME_BUNDLE);
             String applicationFinderLogin = resourceBundle.getString(APPLICATION_FINDER_LOGIN);
             String applicationOperation = resourceBundle.getString(APPLICATION_OPERATION);
             writer.write("<thead><tr>");
             writer.write("<th><span style=\"font-weight: bold\">№</span></th>");
-            TagUtil.createTableHeadItem(writer, applicationID);
-            TagUtil.createTableHeadItem(writer, applicationVacancyName);
-            TagUtil.createTableHeadItem(writer, applicationFinderLogin);
-            TagUtil.createTableHeadItem(writer, applicationOperation);
+            TagExpander.createTableHeadItem(writer, applicationID);
+            TagExpander.createTableHeadItem(writer, applicationVacancyName);
+            TagExpander.createTableHeadItem(writer, applicationFinderLogin);
+            TagExpander.createTableHeadItem(writer, applicationOperation);
             writer.write("</tr></thead>");
         } catch (IOException e) {
             throw new JspException(e);
@@ -78,7 +77,7 @@ public class ViewAllApplicationsTag extends TagSupport {
 
     private void createLines(JspWriter writer, SessionRequestContext sessionRequestContext, List<Application> applications) throws JspException {
         String locale = sessionRequestContext.getLocale();
-        ResourceBundle resourceBundle = TagUtil.getLocalizeText(locale);
+        ResourceBundle resourceBundle = TagExpander.getLocalizeText(locale);
         FinderService finderService = FinderServiceImpl.getInstance();
         ApplicationService applicationService = ApplicationServiceImpl.getInstance();
         try {
@@ -103,8 +102,8 @@ public class ViewAllApplicationsTag extends TagSupport {
                             }
                             writer.write("</td>");
                             writer.write("<td><ul class=\"navigate\">");
-                            TagUtil.createConfirmApplicationButton(writer, CommandName.CONFIRM_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_CONFIRM));
-                            TagUtil.createRejectApplicationButton(writer, CommandName.REJECT_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_REJECT));
+                            TagExpander.createConfirmApplicationButton(writer, CommandName.CONFIRM_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_CONFIRM));
+                            TagExpander.createRejectApplicationButton(writer, CommandName.REJECT_APPLICATION.name(), pageContext, application.getEntityId(), resourceBundle.getString(APPLICATION_OPERATION_REJECT));
                             writer.write("</ul></td>");
                         }
                     } else {

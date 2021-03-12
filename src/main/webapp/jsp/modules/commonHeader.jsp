@@ -24,7 +24,7 @@
             <li>
                 <a href="#" ><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="#" >Something</a></li>
+                    <li><a href="#" ><fmt:message key="all_companies_title"></a></li>
                 </ul>
             </li>
             <li><a href="${pageContext.request.contextPath}/jsp/guest/login.jsp" class="delim"><fmt:message key="login"/></a></li>

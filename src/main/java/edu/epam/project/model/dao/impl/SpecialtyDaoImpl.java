@@ -3,8 +3,7 @@ package edu.epam.project.model.dao.impl;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.SpecialtyDao;
-import edu.epam.project.model.dao.builder.EntityBuilder;
-import edu.epam.project.model.dao.builder.impl.SpecialtyBuilder;
+import edu.epam.project.model.dao.table.SpecialtiesColumn;
 import edu.epam.project.model.entity.Specialty;
 import edu.epam.project.model.pool.ConnectionPool;
 
@@ -20,7 +19,6 @@ import java.util.Optional;
 public class SpecialtyDaoImpl implements SpecialtyDao {
 
     private static final Logger logger = LogManager.getLogger();
-    private final EntityBuilder<Specialty> specialtyBuilder = new SpecialtyBuilder();
 
     @Language("SQL")
     private static final String INSERT_SPECIALTY = "INSERT INTO specialties (specialty_name) VALUES (?);";
@@ -52,13 +50,14 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public Optional<Specialty> findById(Integer specialtyId) throws DaoException {
-        Optional<Specialty> specialty;
+        Optional<Specialty> specialty = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SPECIALTY_BY_ID)) {
             preparedStatement.setInt(1, specialtyId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            specialty = Optional.ofNullable(specialtyBuilder.build(resultSet));
+            if (resultSet.next()) {
+                specialty = Optional.of(buildSpecialty(resultSet));
+            }
         } catch (ConnectionException | SQLException e) {
             logger.error(e);
             throw new DaoException(e);
@@ -78,7 +77,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SPECIALTIES)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Specialty specialty = specialtyBuilder.build(resultSet);
+                Specialty specialty = buildSpecialty(resultSet);
                 specialties.add(specialty);
             }
         } catch (ConnectionException | SQLException e) {
@@ -101,5 +100,11 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @Override
     public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
+    }
+
+    private Specialty buildSpecialty(ResultSet resultSet) throws SQLException {
+        Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
+        String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
+        return new Specialty(specialtyId, specialtyName);
     }
 }

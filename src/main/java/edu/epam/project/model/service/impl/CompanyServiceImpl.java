@@ -65,6 +65,25 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Map<Optional<Company>, Optional<String>> findCompanyById(String companyId) throws ServiceException {
+        Optional<Company> foundCompany = Optional.empty();
+        Optional<String> errorMessage = Optional.empty();
+        Map<Optional<Company>, Optional<String>> findResult = new HashMap<>();
+        if (!UserInputValidator.isValidId(companyId)) {
+            errorMessage = Optional.of(ErrorMessage.INCORRECT_FIND_COMPANY_PARAMETERS);
+        } else {
+            try {
+                foundCompany = companyDao.findById(Integer.parseInt(companyId));
+            } catch (DaoException e) {
+                logger.error(e);
+                throw new ServiceException(e);
+            }
+        }
+        findResult.put(foundCompany, errorMessage);
+        return findResult;
+    }
+
+    @Override
     public void update(Company entity) throws ServiceException {
 
     }

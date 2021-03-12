@@ -15,4 +15,6 @@ public interface CompanyService extends BaseService<Integer, Company> {
     Optional<Company> findByHrLogin(String hrLogin) throws ServiceException;
 
     Optional<String> findCompanyNameByHrLogin(String hrLogin) throws ServiceException;
+
+    Map<Optional<Company>, Optional<String>> findCompanyById(String companyId) throws ServiceException;
 }
