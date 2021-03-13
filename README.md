@@ -1,16 +1,11 @@
 # Human Resources System
-***
 ## Project concept
-***
 The job applicant fills in information about himself. The HR employee records 
 the application and makes a decision on hiring and and the applicant receives
 a notification about the result by email. The HR employee creates and manages vacancies.
 The admin creates and manages companies.
-
 ## Application architecture: Model-View-Controller
-***
 ## Project Features
-***
 - Database
     - Dynamic thread-safe connection pool
     - Protection from SQL injection
@@ -31,14 +26,12 @@ The admin creates and manages companies.
 - Validating the information entered by the user
 - Used design patterns: Command, Proxy, Dao, Singleton, MVC
 ## Admin Features
-***
 - A new company adding
 - A new specialty adding
 - User blocking
 - User unblocking
 - Viewing all users information
 ## HR Features
-***
 - A new vacancy adding
 - Confirming finder application
   - Then automatic deletion of application and vacancy
@@ -48,18 +41,15 @@ The admin creates and manages companies.
 - New specialties reloading
 - Applicant profile viewing
 ## Finder Features
-***
 - Info adding
 - Profile updating
 - Applying for a vacancy
 ## Common Authorized Users Features
-***
 - Avatar uploading
 - Company info viewing
 - Vacancies viewing
 - Log out
 ## Guest Features
-***
 - Locale changing
 - Signing in
 - Registering
