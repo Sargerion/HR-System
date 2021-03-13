@@ -7,7 +7,6 @@ import java.util.Enumeration;
 
 @WebFilter(filterName = "XSSFilter")
 public class XSSFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         Enumeration<String> allAttributes = request.getAttributeNames();
