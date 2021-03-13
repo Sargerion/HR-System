@@ -143,6 +143,16 @@ public enum CommandName {
         {
             setAllowedUserTypes(UserType.COMPANY_HR);
         }
+    },
+    FORWARD_TO_CHANGE_AVATAR(new ForwardToChangeAvatarCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
+        }
+    },
+    FORWARD_TO_ADD_COMPANY(new ForwardToAddCompanyCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
     };
 
     private Command command;

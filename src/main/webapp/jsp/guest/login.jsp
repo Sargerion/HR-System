@@ -14,8 +14,8 @@
 <body>
 <c:import url="/jsp/modules/commonHeader.jsp"/>
 <c:import url="/jsp/modules/loginForm.jsp"/>
-<div style="display:flex;align-items:center;justify-content: center;margin:55px;position: sticky;">
-    <%@include file="/images/svg/hr_system.svg"%>
+<div style="display:flex;align-items:center;justify-content: center;margin:-170px;background-size: cover;">
+    <img src="${pageContext.request.contextPath}/images/svg/hr_system.svg">
 </div>
 <c:import url="/jsp/modules/footer.jsp"/>
 </body>

@@ -7,8 +7,8 @@
 
 <html>
 <body>
-<div class="container" style="max-height: 100%">
-<form style="height: 80%" name="addCompanyForm" method="post" action="<c:url value="/controller"/>">
+<div class="container" style="max-height: 76%">
+<form style="height: 66%" name="addCompanyForm" method="post" action="<c:url value="/controller"/>">
     <input type="hidden" name="command" value="add_company">
     <h1><fmt:message key="company_form_title"/></h1>
     <br/>
@@ -48,7 +48,7 @@
     font-size: 20px;
     line-height: 20px;
     width: 60%;
-    height: 5%;
+    height: 8%;
     color:#FFFFFF;
     text-align:center;
     transition: all 0.2s;
@@ -57,9 +57,10 @@
            onmouseover="this.style.borderColor='rgba(25, 181, 254, 1)';"
            onmouseout="this.style.borderColor='#4ef18f';"
            type="submit" value="<fmt:message key="company_form_button_value"/>">
+</form>
+    <br/>
     <c:import url="/jsp/error/error_parts/error_part.jsp"/>
     <c:import url="/jsp/modules/part/message_part.jsp"/>
-</form>
     <c:remove var="correct_company_name" scope="session"/>
     <c:remove var="correct_company_owner" scope="session"/>
     <c:remove var="correct_company_town" scope="session"/>

@@ -15,7 +15,7 @@
 <c:import url="part/hrHeader.jsp"/>
 <c:choose>
     <c:when test="${sessionScope.view_by_hr_finder != null}">
-        <div class="wrapper" style="height: 40%; width: 54%;">
+        <div class="wrapper" style="height: 43%; width: 54%;">
             <div class="left">
                 <h3><fmt:message key="login_placeholder"/></h3>
                 <p>${sessionScope.finder_login}</p>

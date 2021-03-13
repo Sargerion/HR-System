@@ -28,20 +28,16 @@
             <li>
                 <a href="#" class="delim"><fmt:message key="service"/></a>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/jsp/common/changeAvatar.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="upload_title"/></h5></a></li>
+                    <li><c:import url="/jsp/modules/forwardAvatarForm.jsp"/></li>
                     <li>
-                         <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp">
-                             <h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;">
-                                <c:choose>
-                                    <c:when test="${sessionScope.finder == null}">
-                                        <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="add_finder_info_title"/></h5></a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="admin_profile_title"/></h5></a>
-                                    </c:otherwise>
-                                </c:choose>
-                             </h5>
-                         </a>
+                        <c:choose>
+                            <c:when test="${sessionScope.finder == null}">
+                                <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="add_finder_info_title"/></h5></a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="admin_profile_title"/></h5></a>
+                            </c:otherwise>
+                        </c:choose>
                     </li>
                     <li><c:import url="/jsp/modules/vacancyListForm.jsp"/></li>
                     <li><a href="${pageContext.request.contextPath}/jsp/finder/editFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="edit_finder_title"/></h5></a></li>
