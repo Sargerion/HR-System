@@ -1,6 +1,6 @@
 package edu.epam.project.model.pool;
 
-class UnnecessaryConnectionsReturner implements Runnable {
+class UnnecessaryConnectionsReturnerThread extends Thread {
     @Override
     public void run() {
         ConnectionPool.getInstance().closeUnnecessaryConnections();

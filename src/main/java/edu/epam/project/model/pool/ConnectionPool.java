@@ -23,7 +23,7 @@ public class ConnectionPool {
     private static final AtomicBoolean isPoolInitialize = new AtomicBoolean(true);
     private static final int MAX_POOL_SIZE = 8;
     private static final int MIN_POOL_SIZE = 4;
-    private static final int RETURN_CONNECTION_PERIOD_MINUTES = 2;
+    private static final int RETURN_CONNECTION_PERIOD_MINUTES = 1;
     private static final int WAIT_BEFORE_START_REMOVE_CONNECTIONS_MINUTES = 1;
     private static final int CONDITIONAL_VALUE_TO_DOWNSIZE_POOL = 50;
     private static final int HOW_MUCH_DOWNSIZE_POOL = 2;
@@ -131,7 +131,7 @@ public class ConnectionPool {
                 throw new RuntimeException(e);
             }
         }
-        UnnecessaryConnectionsReturner connectionsReturner = new UnnecessaryConnectionsReturner();
+        UnnecessaryConnectionsReturnerThread connectionsReturner = new UnnecessaryConnectionsReturnerThread();
         scheduledExecutorService.scheduleAtFixedRate(connectionsReturner, WAIT_BEFORE_START_REMOVE_CONNECTIONS_MINUTES, RETURN_CONNECTION_PERIOD_MINUTES, TimeUnit.MINUTES);
     }
 
