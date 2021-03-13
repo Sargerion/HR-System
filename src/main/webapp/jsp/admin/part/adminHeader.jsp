@@ -38,7 +38,13 @@
     cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value="<fmt:message key="company_form_button_value"/>">
                         </form>
                     </li>
-                    <li><a href="${pageContext.request.contextPath}/jsp/admin/addSpecialty.jsp"><h5 style="margin-left: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="specialty_form_title"/></h5></a></li>
+                    <li>
+                        <form style="position:relative;" name="forward_add_specialty_form" method="post" action="<c:url value="/controller"/>">
+                            <input type="hidden" name="command" value="forward_to_add_specialty">
+                            <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: royalblue;
+    cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value="<fmt:message key="specialty_form_title"/>">
+                        </form>
+                    </li>
                 </ul>
             </li>
             <li><c:import url="/jsp/modules/logoutForm.jsp"/></li>

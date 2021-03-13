@@ -76,12 +76,17 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public List<Specialty> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public void update(Specialty specialty) throws ServiceException {
+        try {
+            specialtyDao.update(specialty);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public void update(Specialty entity) throws ServiceException {
+    public List<Specialty> findAll(int start, int end) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 

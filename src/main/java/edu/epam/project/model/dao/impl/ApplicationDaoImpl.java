@@ -147,11 +147,6 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void update(Application entity) throws DaoException {
-
-    }
-
-    @Override
     public void deleteById(Integer applicationId) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_APPLICATION)) {
@@ -196,5 +191,10 @@ public class ApplicationDaoImpl implements ApplicationDao {
         String finderWorkStatus = resultSet.getString(FindersColumn.WORK_STATUS);
         Finder finder = new Finder(finderId, requireSalary, workExperience, specialty, finderWorkStatus);
         return new Application(applicationId, vacancy, finder);
+    }
+
+    @Override
+    public void update(Application entity) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

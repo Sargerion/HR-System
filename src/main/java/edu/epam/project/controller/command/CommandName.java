@@ -2,10 +2,7 @@ package edu.epam.project.controller.command;
 
 import edu.epam.project.controller.command.impl.admin.*;
 import edu.epam.project.controller.command.impl.common.*;
-import edu.epam.project.controller.command.impl.finder.AddInfoCommand;
-import edu.epam.project.controller.command.impl.finder.ApplyVacancyCommand;
-import edu.epam.project.controller.command.impl.finder.EditFinderInfoCommand;
-import edu.epam.project.controller.command.impl.finder.ForwardToEditInfoCommand;
+import edu.epam.project.controller.command.impl.finder.*;
 import edu.epam.project.controller.command.impl.hr.*;
 import edu.epam.project.model.entity.UserType;
 
@@ -134,12 +131,12 @@ public enum CommandName {
             setAllowedUserTypes(UserType.FINDER);
         }
     },
-    FIND_COMPANY_INFO(new FindCompanyInfo()) {
+    FIND_COMPANY_INFO(new FindCompanyInfoCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
     },
-    VIEW_FINDER_PROFILE(new ViewFinderProfile()) {
+    VIEW_FINDER_PROFILE(new ViewFinderProfileCommand()) {
         {
             setAllowedUserTypes(UserType.COMPANY_HR);
         }
@@ -152,6 +149,21 @@ public enum CommandName {
     FORWARD_TO_ADD_COMPANY(new ForwardToAddCompanyCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    FORWARD_TO_ADD_SPECIALTY(new ForwardToAddSpecialtyCommand()) {
+        {
+            setAllowedUserTypes(UserType.ADMIN);
+        }
+    },
+    FORWARD_TO_ADD_FINDER_INFO(new ForwardToAddInfoCommand()) {
+        {
+            setAllowedUserTypes(UserType.FINDER);
+        }
+    },
+    FORWARD_TO_ADD_VACANCY(new ForwardToAddVacancyCommand()) {
+        {
+            setAllowedUserTypes(UserType.COMPANY_HR);
         }
     };
 

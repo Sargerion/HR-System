@@ -84,11 +84,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void update(Company entity) throws ServiceException {
-
-    }
-
-    @Override
     public Optional<Company> findById(Integer companyId) throws ServiceException {
         Optional<Company> foundCompany;
         try {
@@ -134,6 +129,16 @@ public class CompanyServiceImpl implements CompanyService {
             throw new ServiceException(e);
         }
         return isCompanyHr;
+    }
+
+    @Override
+    public void update(Company company) throws ServiceException {
+        try {
+            companyDao.update(company);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override

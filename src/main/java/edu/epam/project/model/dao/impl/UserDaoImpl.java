@@ -284,16 +284,6 @@ public class UserDaoImpl implements UserDao {
         return isExistsStringValue(userLogin, CONTAINS_USER_LOGIN);
     }
 
-    @Override
-    public void add(User entity) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
     private User buildUser(ResultSet resultSet) throws SQLException {
         Integer userId = resultSet.getInt(UsersColumn.ID);
         String userLogin = resultSet.getString(UsersColumn.LOGIN);
@@ -302,5 +292,15 @@ public class UserDaoImpl implements UserDao {
         UserStatus userStatus = UserStatus.valueOf(resultSet.getString(UserStatusesColumn.NAME));
         String confirmationToken = resultSet.getString(UsersColumn.CONFIRMATION_TOKEN);
         return new User(userId, userLogin, userEmail, userType, userStatus, confirmationToken);
+    }
+
+    @Override
+    public void add(User entity) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

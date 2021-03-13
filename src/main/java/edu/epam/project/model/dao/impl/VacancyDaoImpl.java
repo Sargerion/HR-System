@@ -50,6 +50,10 @@ public class VacancyDaoImpl implements VacancyDao {
     @Language("SQL")
     private static final String UPDATE_VACANCY_STATUS = "UPDATE vacancies SET vacancy_is_active = ? WHERE vacancy_id = ?;";
 
+    @Language("SQL")
+    private static final String UPDATE_VACANCY = "UPDATE vacancies SET vacancy_name = ?, vacancy_specialty_id = ?, vacancy_salary_usd = ?, vacancy_need_work_experience = ?, " +
+            "vacancy_company_id = ?, vacancy_is_active = ? WHERE vacancy_id = ?;";
+
     @Override
     public void add(Vacancy vacancy) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -89,8 +93,21 @@ public class VacancyDaoImpl implements VacancyDao {
     }
 
     @Override
-    public void update(Vacancy entity) throws DaoException {
-
+    public void update(Vacancy vacancy) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_VACANCY)) {
+            preparedStatement.setString(1, vacancy.getName());
+            preparedStatement.setInt(2, vacancy.getSpecialty().getEntityId());
+            preparedStatement.setBigDecimal(3, vacancy.getSalary());
+            preparedStatement.setInt(4, vacancy.getNeedWorkExperience());
+            preparedStatement.setInt(5, vacancy.getVacancyCompany().getEntityId());
+            preparedStatement.setBoolean(6, vacancy.isVacancyActive());
+            preparedStatement.setInt(7, vacancy.getEntityId());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
     }
 
     @Override

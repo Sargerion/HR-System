@@ -21,7 +21,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Language("SQL")
     private static final String INSERT_COMPANY = "INSERT INTO companies (company_name, company_owner, company_addres, company_hr_login) " +
-            "VALUES (?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?);";
 
     @Language("SQL")
     private static final String SELECT_COMPANY_BY_ID = "SELECT company_id, company_name, company_owner, company_addres, company_hr_login FROM companies WHERE company_id = ?;";
@@ -37,6 +37,9 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Language("SQL")
     private static final String SELECT_COMPANY_BY_HR_LOGIN = "SELECT company_id, company_name, company_owner, company_addres, company_hr_login FROM companies WHERE company_hr_login = ?;";
+
+    @Language("SQL")
+    private static final String UPDATE_COMPANY = "UPDATE companies SET company_name = ?, company_owner = ?, company_addres = ? WHERE company_id = ?;";
 
     @Override
     public void add(Company company) throws DaoException {
@@ -75,13 +78,17 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public List<Company> findAll(int start, int end) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public void update(Company entity) throws DaoException {
-
+    public void update(Company company) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COMPANY)) {
+            preparedStatement.setString(1, company.getName());
+            preparedStatement.setString(2, company.getOwner());
+            preparedStatement.setString(3, company.getAddress());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
     }
 
     @Override
@@ -128,11 +135,6 @@ public class CompanyDaoImpl implements CompanyDao {
         return isExistsStringValue(hrLogin, CONTAINS_COMPANY_HR_LOGIN);
     }
 
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
     private Company buildCompany(ResultSet resultSet) throws SQLException {
         Integer companyId = resultSet.getInt(CompaniesColumn.ID);
         String companyName = resultSet.getString(CompaniesColumn.NAME);
@@ -140,5 +142,15 @@ public class CompanyDaoImpl implements CompanyDao {
         String companyAddress = resultSet.getString(CompaniesColumn.ADDRESS);
         String companyHrLogin = resultSet.getString(CompaniesColumn.HR_UNIQUE_LOGIN);
         return new Company(companyId, companyName, companyOwner, companyAddress, companyHrLogin);
+    }
+
+    @Override
+    public List<Company> findAll(int start, int end) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

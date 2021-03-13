@@ -135,10 +135,6 @@ public class ConnectionPool {
         scheduledExecutorService.scheduleAtFixedRate(connectionsReturner, WAIT_BEFORE_START_REMOVE_CONNECTIONS_MINUTES, RETURN_CONNECTION_PERIOD_MINUTES, TimeUnit.MINUTES);
     }
 
-    private AtomicInteger detectPoolSize() {
-        return new AtomicInteger(freeConnections.size() + givenAwayConnections.size());
-    }
-
     private void deregisterDrivers() {
         DriverManager.getDrivers().asIterator().forEachRemaining(driver -> {
             try {
@@ -147,5 +143,9 @@ public class ConnectionPool {
                 logger.error(e);
             }
         });
+    }
+
+    private AtomicInteger detectPoolSize() {
+        return new AtomicInteger(freeConnections.size() + givenAwayConnections.size());
     }
 }

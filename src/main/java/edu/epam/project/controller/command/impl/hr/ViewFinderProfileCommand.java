@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
-public class ViewFinderProfile implements Command {
+public class ViewFinderProfileCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String EMPTY_ACTIVATE_PARAMETERS = "Empty activate parameters";

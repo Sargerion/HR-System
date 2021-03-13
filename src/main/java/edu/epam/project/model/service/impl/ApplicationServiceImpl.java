@@ -142,11 +142,6 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public void update(Application entity) throws ServiceException {
-
-    }
-
-    @Override
     public List<Application> findAll(int start, int end) throws ServiceException {
         List<Application> applications;
         try {
@@ -192,6 +187,11 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new ServiceException(e);
         }
         return isExists;
+    }
+
+    @Override
+    public void update(Application entity) throws ServiceException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

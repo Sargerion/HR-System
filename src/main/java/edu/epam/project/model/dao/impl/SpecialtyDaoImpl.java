@@ -32,6 +32,9 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @Language("SQL")
     private static final String CONTAINS_SPECIALTY_NAME = "SELECT EXISTS(SELECT specialty_name FROM specialties WHERE specialty_name = ?) AS specialty_name_existence;";
 
+    @Language("SQL")
+    private static final String UPDATE_SPECIALTY = "UPDATE specialties SET specialty_name = ? WHERE specialty_id = ?;";
+
     @Override
     public void add(Specialty specialty) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -66,11 +69,6 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
-    public void update(Specialty entity) throws DaoException {
-
-    }
-
-    @Override
     public List<Specialty> findAllSpecialties() throws DaoException {
         List<Specialty> specialties = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -88,8 +86,27 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
+    public void update(Specialty specialty) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SPECIALTY)) {
+            preparedStatement.setString(1, specialty.getSpecialtyName());
+            preparedStatement.setInt(2, specialty.getEntityId());
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public boolean isExistsSpecialtyName(String specialtyName) throws DaoException {
         return isExistsStringValue(specialtyName, CONTAINS_SPECIALTY_NAME);
+    }
+
+    private Specialty buildSpecialty(ResultSet resultSet) throws SQLException {
+        Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
+        String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
+        return new Specialty(specialtyId, specialtyName);
     }
 
     @Override
@@ -100,11 +117,5 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @Override
     public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
-    }
-
-    private Specialty buildSpecialty(ResultSet resultSet) throws SQLException {
-        Integer specialtyId = resultSet.getInt(SpecialtiesColumn.ID);
-        String specialtyName = resultSet.getString(SpecialtiesColumn.NAME);
-        return new Specialty(specialtyId, specialtyName);
     }
 }

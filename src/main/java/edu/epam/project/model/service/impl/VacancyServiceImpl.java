@@ -64,11 +64,6 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void update(Vacancy entity) throws ServiceException {
-
-    }
-
-    @Override
     public List<Vacancy> findAll(int start, int end) throws ServiceException {
         List<Vacancy> vacancies;
         try {
@@ -108,6 +103,16 @@ public class VacancyServiceImpl implements VacancyService {
     public void updateVacancyStatus(boolean isActive, Integer vacancyId) throws ServiceException {
         try {
             vacancyDao.updateVacancyStatus(isActive, vacancyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void update(Vacancy vacancy) throws ServiceException {
+        try {
+            vacancyDao.update(vacancy);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);

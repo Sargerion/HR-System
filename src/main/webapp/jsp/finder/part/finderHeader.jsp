@@ -30,17 +30,28 @@
                 <ul>
                     <li><c:import url="/jsp/modules/forwardAvatarForm.jsp"/></li>
                     <li>
-                        <c:choose>
-                            <c:when test="${sessionScope.finder == null}">
-                                <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="add_finder_info_title"/></h5></a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/jsp/finder/addFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="admin_profile_title"/></h5></a>
-                            </c:otherwise>
-                        </c:choose>
+                        <form style="position:relative;" name="forward_add_finder_info_form" method="post" action="<c:url value="/controller"/>">
+                            <input type="hidden" name="command" value="forward_to_add_finder_info">
+                            <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: royalblue;
+    cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value=
+                             <c:choose>
+                                     <c:when test="${sessionScope.finder == null}">
+                                         "<fmt:message key="add_finder_info_title"/>"
+                                     </c:when>
+                                     <c:otherwise>
+                                         "<fmt:message key="admin_profile_title"/>"
+                                     </c:otherwise>
+                             </c:choose>>
+                        </form>
                     </li>
                     <li><c:import url="/jsp/modules/vacancyListForm.jsp"/></li>
-                    <li><a href="${pageContext.request.contextPath}/jsp/finder/editFinderInfo.jsp"><h5 style="margin-left: 16px; font-size: 16px; line-height: 1.1em; font-weight: normal;white-space: normal;"><fmt:message key="edit_finder_title"/></h5></a></li>
+                    <li>
+                        <form method="post" action="<c:url value="/controller"/>">
+                            <input type="hidden" name="command" value="forward_to_edit_info">
+                            <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: royalblue;
+    cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value="<fmt:message key="edit_finder_title"/>">
+                        </form>
+                    </li>
                 </ul>
             </li>
             <li><c:import url="/jsp/modules/logoutForm.jsp"/></li>

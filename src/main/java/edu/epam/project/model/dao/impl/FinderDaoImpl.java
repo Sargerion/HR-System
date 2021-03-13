@@ -126,16 +126,6 @@ public class FinderDaoImpl implements FinderDao {
         return isExistsId(finderId, CONTAINS_FINDER_ID);
     }
 
-    @Override
-    public List<Finder> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
     private Finder buildFinder(ResultSet resultSet) throws SQLException {
         Integer finderId = resultSet.getInt(FindersColumn.ID);
         BigDecimal requireSalary = resultSet.getBigDecimal(FindersColumn.REQUIRE_SALARY);
@@ -145,5 +135,15 @@ public class FinderDaoImpl implements FinderDao {
         Specialty specialty = new Specialty(specialtyId, specialtyName);
         String finderWorkStatus = resultSet.getString(FindersColumn.WORK_STATUS);
         return new Finder(finderId, requireSalary, workExperience, specialty, finderWorkStatus);
+    }
+
+    @Override
+    public List<Finder> findAll(int start, int end) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteById(Integer entityId) throws DaoException {
+        throw new UnsupportedOperationException();
     }
 }

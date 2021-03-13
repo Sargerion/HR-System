@@ -185,10 +185,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Integer entityId) throws ServiceException {
+    public Optional<User> findById(Integer userId) throws ServiceException {
         Optional<User> foundUser;
         try {
-            foundUser = userDao.findById(entityId);
+            foundUser = userDao.findById(userId);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -198,9 +198,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void update(User entity) throws ServiceException {
+    public void update(User user) throws ServiceException {
         try {
-            userDao.update(entity);
+            userDao.update(user);
         } catch (DaoException e) {
             logger.error(e);
             throw new ServiceException(e);

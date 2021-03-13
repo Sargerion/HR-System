@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
-public class FindCompanyInfo implements Command {
+public class FindCompanyInfoCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
     private static final String EMPTY_FIND_COMPANY_PARAMETERS = "Empty find company parameters";
