@@ -1,7 +1,7 @@
 # Human Resources System
 ## Project concept
 The job applicant fills in information about himself. The HR employee records 
-the application and makes a decision on hiring and and the applicant receives
+the application and makes a decision on hiring, and the applicant receives
 a notification about the result by email. The HR employee creates and manages vacancies.
 The admin creates and manages companies.
 ## Application architecture: Model-View-Controller
