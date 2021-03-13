@@ -22,23 +22,17 @@ public class LanguageCommand implements Command {
         Optional<String> currentPage = requestContext.getRequestParameter(RequestParameter.CURRENT_PAGE);
         User user = (User) requestContext.getSessionAttribute(SessionAttribute.USER);
         UserType userType = UserType.GUEST;
-        String getToChangeLocale;
-        String getCurrentPage;
-        CommandResult commandResult = null;
+        CommandResult commandResult;
         if (user != null) {
             userType = user.getType();
         }
         if (toChangeLocale.isEmpty() || currentPage.isEmpty()) {
-            commandResult = defineCommandResult(userType);
             requestContext.setRequestAttribute(RequestAttribute.ERROR_MESSAGE, EMPTY_TO_CHANGE_LOCALE_PARAMETERS);
+            commandResult = defineCommandResult(userType);
         } else {
-            getToChangeLocale = toChangeLocale.get();
-            getCurrentPage = currentPage.get();
-            if (!getCurrentPage.isEmpty() && !getToChangeLocale.isEmpty()) {
-                requestContext.setSessionAttribute(SessionAttribute.LOCALE, getToChangeLocale);
-                commandResult = new CommandResult(getCurrentPage, TransitionType.FORWARD);
-                logger.info(FriendlyMessage.LOCALE_CHANGED);
-            }
+            requestContext.setSessionAttribute(SessionAttribute.LOCALE, toChangeLocale.get());
+            commandResult = new CommandResult(currentPage.get(), TransitionType.FORWARD);
+            logger.info(FriendlyMessage.LOCALE_CHANGED);
         }
         return commandResult;
     }

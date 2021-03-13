@@ -65,9 +65,9 @@
         <br/>
     </form>
     <c:import url="/jsp/hr/part/findSpecialtiesForm.jsp"/>
-    <br/>
-    <c:import url="/jsp/modules/part/message_part.jsp"/>
-    <c:import url="/jsp/error/error_parts/error_part.jsp"/>
 </div>
+<br/>
+<c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 </body>
 </html>
