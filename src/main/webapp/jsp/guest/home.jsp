@@ -12,14 +12,13 @@
 </head>
 <body>
 <c:import url="/jsp/modules/commonHeader.jsp"/>
+<c:import url="/jsp/modules/part/message_part.jsp"/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <ul>
     <li style="display: inline-block"><img src="${pageContext.request.contextPath}/images/svg/apple_logo.svg"></li>
     <li style="display: inline-block"><img style="padding-left: 410px; margin: 50px" src="${pageContext.request.contextPath}/images/png/intel.png" height="200" width="612"></li>
     <li style="display: inline-block"><img style="padding-left: 420px; margin: 42px" src="${pageContext.request.contextPath}/images/svg/facebook.svg"></li>
 </ul>
-<c:import url="/jsp/modules/part/message_part.jsp"/>
-<c:import url="/jsp/error/error_parts/error_part.jsp"/>
-<br/>
 <div style="display:flex;align-items:center;justify-content: center;margin:-130px;background-size: cover;">
     <img src="${pageContext.request.contextPath}/images/svg/hr_system.svg">
 </div>
