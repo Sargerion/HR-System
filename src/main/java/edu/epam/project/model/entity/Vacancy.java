@@ -2,6 +2,10 @@ package edu.epam.project.model.entity;
 
 import java.math.BigDecimal;
 
+/**
+ * Class for encapsulating Vacancy object, contains Specialty and Company encapsulate objects like fields.
+ * @author Sargerion.
+ */
 public class Vacancy extends Entity {
 
     private String name;

@@ -15,6 +15,10 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * The ApplicationDao implementation.
+ * @author Sargerion.
+ */
 public class ApplicationDaoImpl implements ApplicationDao {
 
     private static final Logger logger = LogManager.getLogger();

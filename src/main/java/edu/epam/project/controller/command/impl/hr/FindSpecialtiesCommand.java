@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * The implementation of Command interface for new specialties finding by company_hr user type.
+ * @author Sargerion.
+ */
 public class FindSpecialtiesCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

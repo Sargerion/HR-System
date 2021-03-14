@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for finding selected company info by common authorized user types.
+ * @author Sargerion.
+ */
 public class FindCompanyInfoCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

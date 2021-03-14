@@ -9,6 +9,10 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * Custom tag for viewing avatar by authorized users.
+ * @author Sargerion.
+ */
 public class ViewImageTag extends TagSupport {
 
     private static final String UPLOAD_AVATAR_DIRECTORY_FOR_VIEW = "user_avatars";

@@ -1,5 +1,9 @@
 package edu.epam.project.model.dao.table;
 
+/**
+ * Class, which gives string constants, which contains real user_statuses table fields.
+ * @author Sargerion.
+ */
 public class UserStatusesColumn {
 
     public static final String ID = "user_status_id";

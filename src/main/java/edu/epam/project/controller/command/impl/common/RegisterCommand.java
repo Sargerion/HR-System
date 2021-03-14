@@ -15,6 +15,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The implementation of Command interface for registering by common user types.
+ * @author Sargerion.
+ */
 public class RegisterCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

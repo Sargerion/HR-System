@@ -1,5 +1,9 @@
 package edu.epam.project.model.entity;
 
+/**
+ * Abstract Entity class, for grouping system entities.
+ * @author Sargerion.
+ */
 public abstract class Entity {
 
     private Integer entityId;

@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Class MailBuilder used to loads mail properties.
+ * @author Sargerion.
+ */
 class MailBuilder {
 
     private static final Logger logger = LogManager.getLogger();
@@ -18,6 +22,7 @@ class MailBuilder {
             properties.load(input);
         } catch (IOException e) {
             logger.fatal(e);
+            throw new RuntimeException(e);
         }
     }
 

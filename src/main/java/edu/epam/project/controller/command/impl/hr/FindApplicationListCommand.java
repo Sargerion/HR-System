@@ -15,6 +15,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for vacancies finding by company_hr user type.
+ * @author Sargerion.
+ */
 public class FindApplicationListCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

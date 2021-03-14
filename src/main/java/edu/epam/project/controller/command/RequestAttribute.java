@@ -1,5 +1,9 @@
 package edu.epam.project.controller.command;
 
+/**
+ * Class, which keeps request attributes.
+ * @author Sargerion.
+ */
 public class RequestAttribute {
 
     public static final String ERROR_MESSAGE = "errorMessage";

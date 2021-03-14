@@ -15,6 +15,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The CompanyService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class CompanyServiceImpl implements CompanyService {
 
     private static final CompanyServiceImpl instance = new CompanyServiceImpl();

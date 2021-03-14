@@ -14,6 +14,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The SpecialtyService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class SpecialtyServiceImpl implements SpecialtyService {
 
     private static final SpecialtyServiceImpl instance = new SpecialtyServiceImpl();

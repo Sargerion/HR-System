@@ -19,8 +19,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Custom tag for applications viewing by company hr, also there are company hr has confirm/reject functionality and view finder profile.
+ * @author Sargerion.
+ */
 public class ViewAllApplicationsTag extends TagSupport {
 
+    /**
+     * The constant LIST_LINES_COUNT represents count of table lines.
+     */
     public static final int LIST_LINES_COUNT = 10;
     private static final String APPLICATION_ID_BUNDLE = "all_applications_table_id";
     private static final String APPLICATION_VACANCY_NAME_BUNDLE = "all_applications_table_vacancy_name";

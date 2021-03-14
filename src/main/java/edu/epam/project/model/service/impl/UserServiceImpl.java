@@ -18,6 +18,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The UserService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class UserServiceImpl implements UserService {
 
     private static final UserServiceImpl instance = new UserServiceImpl();

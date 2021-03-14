@@ -19,6 +19,10 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * The VacancyService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class VacancyServiceImpl implements VacancyService {
 
     private static final VacancyServiceImpl instance = new VacancyServiceImpl();

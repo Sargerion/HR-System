@@ -18,6 +18,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The ApplicationService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class ApplicationServiceImpl implements ApplicationService {
 
     private static final ApplicationServiceImpl instance = new ApplicationServiceImpl();

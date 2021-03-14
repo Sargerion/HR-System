@@ -11,6 +11,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for changing language by common user types.
+ * @author Sargerion.
+ */
 public class LanguageCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

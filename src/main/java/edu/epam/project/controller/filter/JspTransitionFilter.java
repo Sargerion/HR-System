@@ -15,6 +15,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Filter implementation to restrict access to pages by user type.
+ * @author Sargerion.
+ */
 @WebFilter(urlPatterns = {"/jsp/*"}, filterName = "JspTransitionFilter")
 public class JspTransitionFilter implements Filter {
 

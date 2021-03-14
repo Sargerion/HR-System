@@ -1,5 +1,9 @@
 package edu.epam.project.model.dao.table;
 
+/**
+ * Class, which gives string constants, which contains real user_types table fields.
+ * @author Sargerion.
+ */
 public class UserTypesColumn {
 
     public static final String ID = "user_type_id";

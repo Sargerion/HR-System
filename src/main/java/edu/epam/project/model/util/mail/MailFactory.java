@@ -5,6 +5,10 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import java.util.Properties;
 
+/**
+ * Class MailFactory used for authentication in mail and creates mail session.
+ * @author Sargerion.
+ */
 class MailFactory {
     public static final String MAIL_USER_NAME = "mail.user.name";
     public static final String MAIL_USER_PASSWORD = "mail.user.password";

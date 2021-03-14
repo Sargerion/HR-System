@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for user unblocking by admin user type.
+ * @author Sargerion.
+ */
 public class UnblockUserCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

@@ -5,7 +5,7 @@ import edu.epam.project.model.entity.UserType;
 
 /**
  * The interface Command.
- * @author Sargerion
+ * @author Sargerion.
  */
 public interface Command {
 
@@ -19,7 +19,7 @@ public interface Command {
     CommandResult execute(SessionRequestContext requestContext) throws CommandException;
 
     /**
-     * Define command result for each user type.
+     * Define home page for each user type.
      *
      * @param userType the user type.
      * @return the command result which contains page path and transition type.

@@ -7,6 +7,10 @@ import edu.epam.project.model.util.message.FriendlyMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The implementation of Command interface for logging out by common authorized user types.
+ * @author Sargerion.
+ */
 public class LogOutCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

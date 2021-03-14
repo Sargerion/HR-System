@@ -20,6 +20,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for application rejecting by company_hr user type.
+ * @author Sargerion.
+ */
 public class RejectApplicationCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

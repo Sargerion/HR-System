@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The implementation of Command interface for adding a company by admin user type.
+ * @author Sargerion.
+ */
 public class AddCompanyCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

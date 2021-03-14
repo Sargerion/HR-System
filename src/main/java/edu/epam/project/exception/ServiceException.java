@@ -1,5 +1,9 @@
 package edu.epam.project.exception;
 
+/**
+ * An exception to handle errors that occurred during the execution of the service.
+ * @author Sargerion.
+ */
 public class ServiceException extends Exception {
 
     public ServiceException() {

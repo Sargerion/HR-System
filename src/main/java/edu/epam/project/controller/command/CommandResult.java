@@ -1,5 +1,9 @@
 package edu.epam.project.controller.command;
 
+/**
+ * The type Command result, which contains page path and transition type.
+ * @author Sargerion.
+ */
 public class CommandResult {
 
     private String page;

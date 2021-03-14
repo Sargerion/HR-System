@@ -16,8 +16,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Custom tag for vacancies viewing by authorized users, also there are authorized users can select and view company info and finder can apply for a vacancy.
+ * @author Sargerion.
+ */
 public class ViewAllVacanciesTag extends TagSupport {
 
+    /**
+     * The constant LIST_LINES_COUNT represents count of table lines.
+     */
     public static final int LIST_LINES_COUNT = 10;
     private static final String VACANCY_ID_BUNDLE = "all_vacancies_table_id";
     private static final String VACANCY_NAME_BUNDLE = "all_vacancies_table_name";

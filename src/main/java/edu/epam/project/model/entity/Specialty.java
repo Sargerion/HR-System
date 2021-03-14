@@ -1,5 +1,9 @@
 package edu.epam.project.model.entity;
 
+/**
+ * Class for encapsulating Specialty object.
+ * @author Sargerion.
+ */
 public class Specialty extends Entity{
 
     private String specialtyName;

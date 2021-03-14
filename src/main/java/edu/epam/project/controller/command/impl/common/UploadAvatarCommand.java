@@ -16,6 +16,10 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The implementation of Command interface for avatar uploading by common authorized user types.
+ * @author Sargerion.
+ */
 public class UploadAvatarCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

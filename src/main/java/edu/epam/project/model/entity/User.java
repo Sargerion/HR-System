@@ -1,5 +1,9 @@
 package edu.epam.project.model.entity;
 
+/**
+ * Class for encapsulating User object, contains UserType and UserStatus encapsulate enums like fields.
+ * @author Sargerion.
+ */
 public class User extends Entity {
 
     public String login;

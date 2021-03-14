@@ -15,6 +15,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for finding vacancy list by common authorized user types.
+ * @author Sargerion.
+ */
 public class FindVacancyListCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

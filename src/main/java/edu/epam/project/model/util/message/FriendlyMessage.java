@@ -1,5 +1,9 @@
 package edu.epam.project.model.util.message;
 
+/**
+ * Class FriendlyMessage used to saving акшутвдн messages, for notifies user actions.
+ * @author Sargerion.
+ */
 public class FriendlyMessage {
 
     public static final String CONFIRM_REGISTER_MESSAGE_FINDER = "Registration like finder complete, please check confirmation link on the mail";
@@ -10,7 +14,6 @@ public class FriendlyMessage {
     public static final String EMPTY_USER_LIST = "Unfortunately, there are no users";
     public static final String EMPTY_VACANCY_LIST = "Unfortunately, there are no vacancies";
     public static final String ADD_FINDER_INFO = "Finder info added correctly";
-    public static final String UPDATE_FINDER_INFO = "Finder info updated correctly";
     public static final String ADD_VACANCY = "Vacancy added correctly";
     public static final String ADD_COMPANY = "Company added correctly";
     public static final String ADD_SPECIALTY = "Specialty added correctly";

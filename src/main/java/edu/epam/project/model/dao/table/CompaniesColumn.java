@@ -1,5 +1,9 @@
 package edu.epam.project.model.dao.table;
 
+/**
+ * Class, which gives string constants, which contains real companies table fields.
+ * @author Sargerion.
+ */
 public class CompaniesColumn {
 
     public static final String ID = "company_id";

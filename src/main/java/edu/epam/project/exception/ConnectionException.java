@@ -1,5 +1,9 @@
 package edu.epam.project.exception;
 
+/**
+ * An exception to handle errors that occurred during the execution of the custom connection pool.
+ * @author Sargerion.
+ */
 public class ConnectionException extends Exception {
 
     public ConnectionException() {

@@ -20,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The FinderService implementation, with Singleton design pattern.
+ * @author Sargerion.
+ */
 public class FinderServiceImpl implements FinderService {
 
     private static final FinderServiceImpl instance = new FinderServiceImpl();

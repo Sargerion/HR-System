@@ -1,10 +1,14 @@
 package edu.epam.project.model.util;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.mindrot.jbcrypt.BCrypt;
-
+/**
+ * Class Encryptor, used to hashes user passwords and checks them.
+ * @author Sargerion.
+ */
 public class Encryptor {
 
     private static final Logger logger = LogManager.getLogger();

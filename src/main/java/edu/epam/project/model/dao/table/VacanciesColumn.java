@@ -1,5 +1,9 @@
 package edu.epam.project.model.dao.table;
 
+/**
+ * Class, which gives string constants, which contains real vacancies table fields.
+ * @author Sargerion.
+ */
 public class VacanciesColumn {
 
     public static final String ID = "vacancy_id";

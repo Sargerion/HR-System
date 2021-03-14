@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Util class TagExpander used for optimization purposes for custom tags.
+ * @author Sargerion.
+ */
 class TagExpander {
 
     private static final String PAGE_PROPERTIES_PATH = "property/pagecontent";

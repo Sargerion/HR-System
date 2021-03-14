@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Servlet for viewing the user's avatar.
+ * @author Sargerion.
+ */
 @WebServlet(urlPatterns = {"/user_avatars/*"})
 public class ImageViewServlet extends HttpServlet {
 

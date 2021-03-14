@@ -1,5 +1,9 @@
 package edu.epam.project.controller.command;
 
+/**
+ * Class, which keeps JSP paths.
+ * @author Sargerion.
+ */
 public class PathJsp {
 
     public static final String HOME_PAGE = "/jsp/guest/home.jsp";

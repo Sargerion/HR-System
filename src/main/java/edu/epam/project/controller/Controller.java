@@ -13,6 +13,10 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
+/**
+ * Class for processing user requests.
+ * @author Sargerion.
+ */
 @WebServlet(name = "controller", urlPatterns = {"/controller"})
 @MultipartConfig(maxFileSize = 1024 * 1024 * 2, maxRequestSize = 1024 * 1024 * 8)
 public class Controller extends HttpServlet {

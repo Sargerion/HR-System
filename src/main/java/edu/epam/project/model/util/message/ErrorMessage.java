@@ -1,5 +1,9 @@
 package edu.epam.project.model.util.message;
 
+/**
+ * Class ErrorMessage used to saving error messages, for incorrect user behaviour.
+ * @author Sargerion.
+ */
 public class ErrorMessage {
 
     public static final String INVALID_LOGIN_OR_PASSWORD = "Invalid login or password";

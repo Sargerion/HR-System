@@ -1,5 +1,9 @@
 package edu.epam.project.model.dao.table;
 
+/**
+ * Class, which gives string constants, which contains real specialties table fields.
+ * @author Sargerion.
+ */
 public class SpecialtiesColumn {
 
     public static final String ID = "specialty_id";

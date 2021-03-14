@@ -13,6 +13,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * Class MailSender used to delivers messages to users, class used Singleton pattern.
+ * @author Sargerion.
+ */
 public class MailSender {
 
     private static final MailSender instance = new MailSender();

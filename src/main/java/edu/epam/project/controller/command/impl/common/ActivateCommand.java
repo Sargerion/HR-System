@@ -16,6 +16,10 @@ import org.apache.logging.log4j.Logger;
 import edu.epam.project.model.util.message.FriendlyMessage;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for activating after correct registration by common user types.
+ * @author Sargerion.
+ */
 public class ActivateCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

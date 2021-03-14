@@ -1,5 +1,9 @@
 package edu.epam.project.model.entity;
 
+/**
+ * Class for encapsulating Application object, contains Vacancy and Finder encapsulate objects like fields.
+ * @author Sargerion.
+ */
 public class Application extends Entity {
 
     private Vacancy applicationVacancy;

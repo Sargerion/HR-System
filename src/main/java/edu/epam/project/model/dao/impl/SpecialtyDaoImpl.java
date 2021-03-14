@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The SpecialtyDao implementation.
+ * @author Sargerion.
+ */
 public class SpecialtyDaoImpl implements SpecialtyDao {
 
     private static final Logger logger = LogManager.getLogger();

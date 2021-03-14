@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * The enum Command name, implementations of Command interface.
- * @author Sargerion
+ * @author Sargerion.
  */
 public enum CommandName {
 

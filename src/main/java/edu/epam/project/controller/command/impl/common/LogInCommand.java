@@ -21,6 +21,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+/**
+ * The implementation of Command interface for logging in by common registered user types.
+ * @author Sargerion.
+ */
 public class LogInCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

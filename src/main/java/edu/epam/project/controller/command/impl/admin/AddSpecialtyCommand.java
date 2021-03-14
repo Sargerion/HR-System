@@ -14,6 +14,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for adding a specialty by admin user type.
+ * @author Sargerion.
+ */
 public class AddSpecialtyCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

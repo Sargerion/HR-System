@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Filter implementation to restrict access to commands by user type.
+ * @author Sargerion.
+ */
 @WebFilter(filterName = "CommandAccessFilter")
 public class CommandAccessFilter implements Filter {
 

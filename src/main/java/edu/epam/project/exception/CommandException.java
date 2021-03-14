@@ -1,7 +1,10 @@
 package edu.epam.project.exception;
 
+/**
+ * An exception to handle errors that occurred during the execution of the command.
+ * @author Sargerion.
+ */
 public class CommandException extends Exception {
-
     public CommandException() {
     }
 

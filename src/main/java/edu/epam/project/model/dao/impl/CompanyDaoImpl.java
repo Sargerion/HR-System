@@ -15,6 +15,10 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The CompanyDao implementation.
+ * @author Sargerion.
+ */
 public class CompanyDaoImpl implements CompanyDao {
 
     private static final Logger logger = LogManager.getLogger();

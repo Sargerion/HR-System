@@ -19,8 +19,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.io.IOException;
 
+/**
+ * Custom tag for all users viewing by admin, also there are admin has block/unblock functionality.
+ * @author Sargerion.
+ */
 public class ViewAllUsersTag extends TagSupport {
 
+    /**
+     * The constant LIST_LINES_COUNT represents count of table lines.
+     */
     public static final int LIST_LINES_COUNT = 10;
     private static final String USER_ID_BUNDLE = "all_users_table_id";
     private static final String USER_LOGIN_BUNDLE = "all_users_table_login";

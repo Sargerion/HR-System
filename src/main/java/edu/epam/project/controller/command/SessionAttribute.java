@@ -1,5 +1,9 @@
 package edu.epam.project.controller.command;
 
+/**
+ * Class, which keeps session attributes, for saving information between requests.
+ * @author Sargerion.
+ */
 public class SessionAttribute {
 
     public static final String LOCALE = "locale";

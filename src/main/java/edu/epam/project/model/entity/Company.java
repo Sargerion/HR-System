@@ -1,5 +1,9 @@
 package edu.epam.project.model.entity;
 
+/**
+ * Class for encapsulating Company object.
+ * @author Sargerion.
+ */
 public class Company extends Entity {
 
     private String name;

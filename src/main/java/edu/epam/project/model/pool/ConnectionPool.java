@@ -16,6 +16,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Thread-safe, dynamic ConnectionPool to optimize the work with the database.
+ * @author Sargerion.
+ */
 public class ConnectionPool {
 
     private static ConnectionPool instance;
@@ -40,6 +44,11 @@ public class ConnectionPool {
         initializePool();
     }
 
+    /**
+     * Gets instance with double-checked locking.
+     *
+     * @return the instance of ConnectionPool object.
+     */
     public static ConnectionPool getInstance() {
         if (isPoolInitialize.get()) {
             lockInstance.lock();
@@ -52,6 +61,12 @@ public class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Gets connection from pool.
+     *
+     * @return the Connection object.
+     * @throws ConnectionException if InterruptedException was thrown.
+     */
     public Connection getConnection() throws ConnectionException {
         ProxyConnection proxyConnection = null;
         if (!freeConnections.isEmpty() || detectPoolSize().get() == MAX_POOL_SIZE) {
@@ -74,6 +89,12 @@ public class ConnectionPool {
         return proxyConnection;
     }
 
+    /**
+     * Release connection.
+     *
+     * @param connection the Connection object.
+     * @throws ConnectionException if trying to release not ProxyConnection object.
+     */
     public void releaseConnection(Connection connection) throws ConnectionException {
         if (!(connection instanceof ProxyConnection)) {
             logger.error("Not proxy trying release");
@@ -86,6 +107,11 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Destroy pool, which called before program finally finished.
+     *
+     * @throws ConnectionException if InterruptedException or SQLException was thrown.
+     */
     public void destroyPool() throws ConnectionException {
         for (int i = 0; i < detectPoolSize().get(); i++) {
             try {
@@ -101,6 +127,10 @@ public class ConnectionPool {
         deregisterDrivers();
     }
 
+    /**
+     * Close unnecessary connections.
+     * Called by UnnecessaryConnectionsReturnerThread in override method run() for dynamic decreasing pool size.
+     */
     void closeUnnecessaryConnections() {
         if (givenPerPeriodConnectionCount.get() < CONDITIONAL_VALUE_TO_DOWNSIZE_POOL) {
             int connectionsToCloseCount = HOW_MUCH_DOWNSIZE_POOL;

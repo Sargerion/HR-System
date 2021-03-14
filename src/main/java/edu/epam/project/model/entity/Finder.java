@@ -2,6 +2,10 @@ package edu.epam.project.model.entity;
 
 import java.math.BigDecimal;
 
+/**
+ *  Class for encapsulating Finder object, contains Specialty encapsulate object like field.
+ *  @author Sargerion.
+ */
 public class Finder extends Entity {
 
     private static final String NOT_HIRE_STATUS = "Not Hire";

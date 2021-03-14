@@ -19,6 +19,10 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The FinderDao implementation.
+ * @author Sargerion.
+ */
 public class FinderDaoImpl implements FinderDao {
 
     private static final Logger logger = LogManager.getLogger();

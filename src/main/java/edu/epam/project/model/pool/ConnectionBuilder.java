@@ -13,6 +13,10 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Class ConnectionBuilder, used to register mysql jdbc driver and load database properties.
+ * @author Sargerion.
+ */
 class ConnectionBuilder {
 
     private static final Logger logger = LogManager.getLogger();
@@ -21,6 +25,9 @@ class ConnectionBuilder {
     private static final Properties properties = new Properties();
     private String urlValue;
 
+    /**
+     * Instantiates a new Connection builder.
+     */
     ConnectionBuilder() {
         try (InputStream input = ConnectionBuilder.class.getResourceAsStream(PROPERTIES_PATH)) {
             properties.load(input);
@@ -32,6 +39,12 @@ class ConnectionBuilder {
         }
     }
 
+    /**
+     * Create connection.
+     *
+     * @return the created connection.
+     * @throws ConnectionException if database throws SQLException.
+     */
     Connection create() throws ConnectionException {
         Connection connection;
         try {

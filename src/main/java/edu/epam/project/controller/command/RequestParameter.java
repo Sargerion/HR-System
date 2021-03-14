@@ -1,5 +1,9 @@
 package edu.epam.project.controller.command;
 
+/**
+ * Class, which keeps request parameters.
+ * @author Sargerion.
+ */
 public class RequestParameter {
 
     public static final String COMMAND = "command";

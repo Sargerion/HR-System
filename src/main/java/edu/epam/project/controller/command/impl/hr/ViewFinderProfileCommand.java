@@ -13,6 +13,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The implementation of Command interface for viewing selected finder profile by company_hr user type.
+ * @author Sargerion.
+ */
 public class ViewFinderProfileCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();

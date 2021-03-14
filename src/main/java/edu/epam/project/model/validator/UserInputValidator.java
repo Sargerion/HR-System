@@ -2,6 +2,10 @@ package edu.epam.project.model.validator;
 
 import java.math.BigDecimal;
 
+/**
+ * Class UserInputValidator used to validate user input on services.
+ * @author Sargerion.
+ */
 public class UserInputValidator {
 
     private static final String LOGIN_REGEX = "^[a-zA-Zа-яА-Я0-9_-]{6,15}$";

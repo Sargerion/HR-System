@@ -1,8 +1,5 @@
 package edu.epam.project.controller.command;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,6 +7,13 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.*;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/**
+ * Class-Wrapper to encapsulate a user request and move it in the program.
+ * @author Sargerion.
+ */
 public class SessionRequestContext {
 
     private static final Logger logger = LogManager.getLogger();

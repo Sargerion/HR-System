@@ -9,11 +9,21 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * Class ProxyConnection used Proxy design pattern, used to protect ConnectionPool from being hit by not a ProxyConnection object,
+ * and inherit Connection interface functionality.
+ * @author Sargerion.
+ */
 public class ProxyConnection implements Connection {
 
     private static final Logger logger = LogManager.getLogger();
     private Connection connection;
 
+    /**
+     * Instantiates a new Proxy connection.
+     *
+     * @param connection Connection object
+     */
     ProxyConnection(Connection connection) {
         this.connection = connection;
     }
@@ -67,6 +77,11 @@ public class ProxyConnection implements Connection {
         }
     }
 
+    /**
+     * Real close connection.
+     *
+     * @throws SQLException the sql exception.
+     */
     void realClose() throws SQLException {
         connection.close();
     }

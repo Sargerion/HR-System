@@ -5,6 +5,10 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
 
+/**
+ * Filter implementation to protect against cross-site scripting attacks.
+ * @author Sargerion.
+ */
 @WebFilter(filterName = "XSSFilter")
 public class XSSFilter implements Filter {
     @Override
