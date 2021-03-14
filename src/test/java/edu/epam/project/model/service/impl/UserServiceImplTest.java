@@ -17,7 +17,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,48 +35,33 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByIdTest() {
+    public void findByIdTest() throws DaoException, ServiceException {
         int userId = 1;
         Optional<User> expectedUser = Optional.of(new User(userId, "sergio_1", "sergey.galyan16@gmail.com", UserType.ADMIN, UserStatus.ACTIVE, ""));
-        Optional<User> actualUser = Optional.empty();
-        try {
-            given(userDao.findById(userId)).willReturn(expectedUser);
-            actualUser = userService.findById(userId);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(userDao.findById(userId)).willReturn(expectedUser);
+        Optional<User> actualUser = userService.findById(userId);
         Assert.assertEquals(actualUser, expectedUser);
     }
 
     @Test
-    public void detectUserStatusByLoginTest() {
+    public void detectUserStatusByLoginTest() throws DaoException, ServiceException {
         String userLogin = "sergio_1";
         UserStatus expectedStatus = UserStatus.ACTIVE;
-        UserStatus actualStatus = null;
-        try {
-            given(userDao.detectUserStatusByLogin(userLogin)).willReturn(expectedStatus);
-            actualStatus = userService.detectUserStatusByLogin(userLogin);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(userDao.detectUserStatusByLogin(userLogin)).willReturn(expectedStatus);
+        UserStatus actualStatus = userService.detectUserStatusByLogin(userLogin);
         Assert.assertEquals(actualStatus, expectedStatus);
     }
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws DaoException, ServiceException {
         int start = 0;
         int end = 2;
         List<User> expectedResult = List.of(
                 new User(1, "sergio_1", "sergey.galyan16@gmail.com", UserType.ADMIN, UserStatus.ACTIVE, ""),
                 new User(108, "JustFinder", "jwd.epam@gmail.com", UserType.FINDER, UserStatus.ACTIVE, "confirm")
         );
-        List<User> actualResult = new ArrayList<>();
-        try {
-            given(userDao.findAll(start, end)).willReturn(expectedResult);
-            actualResult = userService.findAll(start, end);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(userDao.findAll(start, end)).willReturn(expectedResult);
+        List<User> actualResult = userService.findAll(start, end);
         Assert.assertEquals(actualResult, expectedResult);
     }
 

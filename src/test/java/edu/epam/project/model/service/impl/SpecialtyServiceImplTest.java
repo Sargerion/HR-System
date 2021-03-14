@@ -15,7 +15,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,21 +33,16 @@ public class SpecialtyServiceImplTest {
     }
 
     @Test
-    public void findByIdTest() {
+    public void findByIdTest() throws DaoException, ServiceException {
         int specialtyId = 5;
         Optional<Specialty> expectedResult = Optional.of(new Specialty(specialtyId, "big_dater"));
-        Optional<Specialty> actualResult = Optional.empty();
-        try {
-            given(specialtyDao.findById(specialtyId)).willReturn(expectedResult);
-            actualResult = specialtyService.findById(specialtyId);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(specialtyDao.findById(specialtyId)).willReturn(expectedResult);
+        Optional<Specialty> actualResult = specialtyService.findById(specialtyId);
         Assert.assertEquals(actualResult, expectedResult);
     }
 
     @Test
-    public void findAllSpecialtiesTest() {
+    public void findAllSpecialtiesTest() throws DaoException, ServiceException {
         List<Specialty> expectedResult = List.of(
                 new Specialty(5, "big_dater"),
                 new Specialty(7, "frontend"),
@@ -57,13 +51,8 @@ public class SpecialtyServiceImplTest {
                 new Specialty(10, "data-engineer"),
                 new Specialty(11, "project-manager")
         );
-        List<Specialty> actualResult = new ArrayList<>();
-        try {
-            given(specialtyDao.findAllSpecialties()).willReturn(expectedResult);
-            actualResult = specialtyService.findAllSpecialties();
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(specialtyDao.findAllSpecialties()).willReturn(expectedResult);
+        List<Specialty> actualResult = specialtyService.findAllSpecialties();
         Assert.assertEquals(actualResult, expectedResult);
     }
 

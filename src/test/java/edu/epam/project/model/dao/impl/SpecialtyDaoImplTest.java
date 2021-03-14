@@ -24,44 +24,32 @@ public class SpecialtyDaoImplTest {
     }
 
     @Test
-    public void addTest() {
+    public void addTest() throws DaoException {
         Specialty addingSpecialty = new Specialty(0, "TestSpecialty");
-        try {
-            specialtyDao.add(addingSpecialty);
-            Optional<Specialty> actualResult = specialtyDao.findById(addingSpecialty.getEntityId());
-            Assert.assertTrue(actualResult.isPresent());
-            specialtyDao.deleteById(addingSpecialty.getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        specialtyDao.add(addingSpecialty);
+        Optional<Specialty> actualResult = specialtyDao.findById(addingSpecialty.getEntityId());
+        Assert.assertTrue(actualResult.isPresent());
+        specialtyDao.deleteById(addingSpecialty.getEntityId());
     }
 
     @Test
-    public void isExistsSpecialtyNameTest() {
+    public void isExistsSpecialtyNameTest() throws DaoException {
         Specialty tempSpecialty = new Specialty(0, "TestSpecialty");
-        try {
-            specialtyDao.add(tempSpecialty);
-            boolean result = specialtyDao.isExistsSpecialtyName(tempSpecialty.getSpecialtyName());
-            Assert.assertTrue(result);
-            specialtyDao.deleteById(tempSpecialty.getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        specialtyDao.add(tempSpecialty);
+        boolean result = specialtyDao.isExistsSpecialtyName(tempSpecialty.getSpecialtyName());
+        Assert.assertTrue(result);
+        specialtyDao.deleteById(tempSpecialty.getEntityId());
     }
 
     @Test
-    public void findAllSpecialtiesTest() {
+    public void findAllSpecialtiesTest() throws DaoException {
         Specialty tempSpecialty = new Specialty(0, "TestSpecialty");
-        try {
-            List<Specialty> currentSpecialties = specialtyDao.findAllSpecialties();
-            specialtyDao.add(tempSpecialty);
-            currentSpecialties.add(tempSpecialty);
-            List<Specialty> newSpecialties = specialtyDao.findAllSpecialties();
-            specialtyDao.deleteById(tempSpecialty.getEntityId());
-            Assert.assertEquals(currentSpecialties, newSpecialties);
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        List<Specialty> currentSpecialties = specialtyDao.findAllSpecialties();
+        specialtyDao.add(tempSpecialty);
+        currentSpecialties.add(tempSpecialty);
+        List<Specialty> newSpecialties = specialtyDao.findAllSpecialties();
+        specialtyDao.deleteById(tempSpecialty.getEntityId());
+        Assert.assertEquals(currentSpecialties, newSpecialties);
     }
 
     @AfterClass

@@ -23,42 +23,30 @@ public class CompanyDaoImplTest {
     }
 
     @Test
-    public void addTest() {
+    public void addTest() throws DaoException {
         Company addingCompany = new Company(0, "TestInc", "TestOwner", "TestTown", "TestLogin");
-        try {
-            companyDao.add(addingCompany);
-            Optional<Company> actualResult = companyDao.findById(addingCompany.getEntityId());
-            Assert.assertTrue(actualResult.isPresent());
-            companyDao.deleteById(actualResult.get().getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        companyDao.add(addingCompany);
+        Optional<Company> actualResult = companyDao.findById(addingCompany.getEntityId());
+        Assert.assertTrue(actualResult.isPresent());
+        companyDao.deleteById(actualResult.get().getEntityId());
     }
 
     @Test
-    public void isExistsCompanyNameTest() {
+    public void isExistsCompanyNameTest() throws DaoException {
         Company tempCompany = new Company(0, "TestInc", "TestOwner", "TestTown", "TestLogin");
-        try {
-            companyDao.add(tempCompany);
-            boolean result = companyDao.isExistsCompanyName(tempCompany.getName());
-            Assert.assertTrue(result);
-            companyDao.deleteById(tempCompany.getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        companyDao.add(tempCompany);
+        boolean result = companyDao.isExistsCompanyName(tempCompany.getName());
+        Assert.assertTrue(result);
+        companyDao.deleteById(tempCompany.getEntityId());
     }
 
     @Test
-    public void isExistsCompanyHrLoginTest() {
+    public void isExistsCompanyHrLoginTest() throws DaoException {
         Company tempCompany = new Company(0, "TestInc", "TestOwner", "TestTown", "TestLogin");
-        try {
-            companyDao.add(tempCompany);
-            boolean result = companyDao.isExistsCompanyHrLogin(tempCompany.getHrLogin());
-            Assert.assertTrue(result);
-            companyDao.deleteById(tempCompany.getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        companyDao.add(tempCompany);
+        boolean result = companyDao.isExistsCompanyHrLogin(tempCompany.getHrLogin());
+        Assert.assertTrue(result);
+        companyDao.deleteById(tempCompany.getEntityId());
     }
 
     @AfterClass

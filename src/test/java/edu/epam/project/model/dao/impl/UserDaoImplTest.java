@@ -25,47 +25,35 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void addTest() {
+    public void addTest() throws DaoException {
         User addingUser = new User(0, "Test", "test@mail.com", UserType.FINDER, UserStatus.NOT_ACTIVE, "TestToken");
         String testPassword = "Not hashed";
-        try {
-            userDao.addUser(addingUser, testPassword);
-            Optional<User> actualResult = userDao.findById(addingUser.getEntityId());
-            Assert.assertTrue(actualResult.isPresent());
-            userDao.deleteById(actualResult.get().getEntityId());
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        userDao.addUser(addingUser, testPassword);
+        Optional<User> actualResult = userDao.findById(addingUser.getEntityId());
+        Assert.assertTrue(actualResult.isPresent());
+        userDao.deleteById(actualResult.get().getEntityId());
     }
 
     @Test
-    public void countUsersTest() {
+    public void countUsersTest() throws DaoException {
         User tempUser = new User(0, "Test", "test@mail.com", UserType.FINDER, UserStatus.NOT_ACTIVE, "TestToken");
         String testPassword = "Not hashed";
-        try {
-            int currentUsersCount = userDao.countUsers();
-            userDao.addUser(tempUser, testPassword);
-            int newUsersCount = userDao.countUsers();
-            userDao.deleteById(tempUser.getEntityId());
-            Assert.assertEquals(currentUsersCount + 1, newUsersCount);
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        int currentUsersCount = userDao.countUsers();
+        userDao.addUser(tempUser, testPassword);
+        int newUsersCount = userDao.countUsers();
+        userDao.deleteById(tempUser.getEntityId());
+        Assert.assertEquals(currentUsersCount + 1, newUsersCount);
     }
 
     @Test
-    public void detectUserStatusByLoginTest() {
+    public void detectUserStatusByLoginTest() throws DaoException {
         User tempUser = new User(0, "Test", "test@mail.com", UserType.FINDER, UserStatus.NOT_ACTIVE, "TestToken");
         String testPassword = "Not hashed";
-        try {
-            userDao.addUser(tempUser, testPassword);
-            UserStatus expectedResult = UserStatus.NOT_ACTIVE;
-            UserStatus actualResult = userDao.detectUserStatusByLogin(tempUser.getLogin());
-            userDao.deleteById(tempUser.getEntityId());
-            Assert.assertEquals(actualResult, expectedResult);
-        } catch (DaoException e) {
-            Assert.fail(e.getMessage());
-        }
+        userDao.addUser(tempUser, testPassword);
+        UserStatus expectedResult = UserStatus.NOT_ACTIVE;
+        UserStatus actualResult = userDao.detectUserStatusByLogin(tempUser.getLogin());
+        userDao.deleteById(tempUser.getEntityId());
+        Assert.assertEquals(actualResult, expectedResult);
     }
 
     @AfterClass

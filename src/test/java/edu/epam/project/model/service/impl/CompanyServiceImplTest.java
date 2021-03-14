@@ -32,43 +32,28 @@ public class CompanyServiceImplTest {
     }
 
     @Test
-    public void findByIdTest() {
+    public void findByIdTest() throws DaoException, ServiceException {
         int companyId = 5;
         Optional<Company> expectedResult = Optional.of(new Company(companyId, "Galiano", "Sargerion", "Minsk", "hr_trier"));
-        Optional<Company> actualResult = Optional.empty();
-        try {
-            given(companyDao.findById(companyId)).willReturn(expectedResult);
-            actualResult = companyService.findById(companyId);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(companyDao.findById(companyId)).willReturn(expectedResult);
+        Optional<Company> actualResult = companyService.findById(companyId);
         Assert.assertEquals(actualResult, expectedResult);
     }
 
     @Test
-    public void findCompanyNameByHrLoginTest() {
+    public void findCompanyNameByHrLoginTest() throws DaoException, ServiceException {
         String hrLogin = "hr_trier";
         Optional<String> expectedResult = Optional.of("Galiano");
-        Optional<String> actualResult = Optional.empty();
-        try {
-            given(companyDao.findCompanyNameByHrLogin(hrLogin)).willReturn(expectedResult);
-            actualResult = companyService.findCompanyNameByHrLogin(hrLogin);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(companyDao.findCompanyNameByHrLogin(hrLogin)).willReturn(expectedResult);
+        Optional<String> actualResult = companyService.findCompanyNameByHrLogin(hrLogin);
         Assert.assertEquals(actualResult, expectedResult);
     }
 
     @Test
-    public void isCompanyHrTest() {
+    public void isCompanyHrTest() throws DaoException, ServiceException {
         String hrLogin = "hr_trier";
-        boolean actualResult = false;
-        try {
-            given(companyDao.isExistsCompanyHrLogin(hrLogin)).willReturn(true);
-            actualResult = companyService.isCompanyHr(hrLogin);
-        } catch (DaoException | ServiceException e) {
-            Assert.fail(e.getMessage());
-        }
+        given(companyDao.isExistsCompanyHrLogin(hrLogin)).willReturn(true);
+        boolean actualResult = companyService.isCompanyHr(hrLogin);
         Assert.assertTrue(actualResult);
     }
 
