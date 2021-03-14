@@ -86,12 +86,17 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     }
 
     @Override
-    public List<Specialty> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public void deleteById(Integer specialtyId) throws ServiceException {
+        try {
+            specialtyDao.deleteById(specialtyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public void deleteById(Integer entityId) throws ServiceException {
+    public List<Specialty> findAll(int start, int end) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 }

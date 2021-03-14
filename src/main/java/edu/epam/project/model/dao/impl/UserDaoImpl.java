@@ -71,6 +71,9 @@ public class UserDaoImpl implements UserDao {
     @Language("SQL")
     private static final String UPDATE_AVATAR_PATH_BY_ID = "UPDATE users SET user_avatar_path = ? WHERE user_id = ?;";
 
+    @Language("SQL")
+    private static final String DELETE_USER = "DELETE FROM users WHERE user_id = ?;";
+
     @Override
     public void addUser(User user, String encryptedPassword) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -270,6 +273,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void deleteById(Integer userId) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public int countUsers() throws DaoException {
         return countEntities(COUNT_USERS);
     }
@@ -296,11 +311,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void add(User entity) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }

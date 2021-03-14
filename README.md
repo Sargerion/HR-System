@@ -18,12 +18,12 @@ The admin creates and manages companies.
     - Filter for transitions between pages
     - Encoding filter
     - Cross-site scripting protection filter
-- Localization: EN, RU, BY
+- Localization: EN, RU, BE
 - Available 4 user roles
 - Available 4 custom tags
 - Passwords hashing
 - Accompanying user actions with messages
-- Validating the information entered by the user
+- Validating the information on a client and server
 - Used design patterns: Command, Proxy, Dao, Singleton, MVC
 ## Admin Features
 - A new company adding

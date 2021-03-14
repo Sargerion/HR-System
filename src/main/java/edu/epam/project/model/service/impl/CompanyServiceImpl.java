@@ -142,12 +142,17 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> findAll(int start, int end) throws ServiceException {
-        throw new UnsupportedOperationException();
+    public void deleteById(Integer companyId) throws ServiceException {
+        try {
+            companyDao.deleteById(companyId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 
     @Override
-    public void deleteById(Integer entityId) throws ServiceException {
+    public List<Company> findAll(int start, int end) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 }

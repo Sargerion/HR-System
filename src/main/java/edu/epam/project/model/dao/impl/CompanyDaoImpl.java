@@ -41,6 +41,9 @@ public class CompanyDaoImpl implements CompanyDao {
     @Language("SQL")
     private static final String UPDATE_COMPANY = "UPDATE companies SET company_name = ?, company_owner = ?, company_addres = ? WHERE company_id = ?;";
 
+    @Language("SQL")
+    private static final String DELETE_COMPANY = "DELETE FROM companies WHERE company_id = ?;";
+
     @Override
     public void add(Company company) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -126,6 +129,18 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
+    public void deleteById(Integer companyId) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COMPANY)) {
+            preparedStatement.setInt(1, companyId);
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public boolean isExistsCompanyName(String companyName) throws DaoException {
         return isExistsStringValue(companyName, CONTAINS_COMPANY_NAME);
     }
@@ -146,11 +161,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Override
     public List<Company> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }

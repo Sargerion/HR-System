@@ -35,6 +35,9 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @Language("SQL")
     private static final String UPDATE_SPECIALTY = "UPDATE specialties SET specialty_name = ? WHERE specialty_id = ?;";
 
+    @Language("SQL")
+    private static final String DELETE_SPECIALTY = "DELETE FROM specialties WHERE specialty_id = ?;";
+
     @Override
     public void add(Specialty specialty) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -99,6 +102,18 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     }
 
     @Override
+    public void deleteById(Integer specialtyId) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SPECIALTY)) {
+            preparedStatement.setInt(1, specialtyId);
+            preparedStatement.executeUpdate();
+        } catch (ConnectionException | SQLException e) {
+            logger.error(e);
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
     public boolean isExistsSpecialtyName(String specialtyName) throws DaoException {
         return isExistsStringValue(specialtyName, CONTAINS_SPECIALTY_NAME);
     }
@@ -111,11 +126,6 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public List<Specialty> findAll(int start, int end) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteById(Integer entityId) throws DaoException {
         throw new UnsupportedOperationException();
     }
 }

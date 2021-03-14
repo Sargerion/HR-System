@@ -243,6 +243,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Integer entityId) throws ServiceException {
-        throw new UnsupportedOperationException();
+        try {
+            userDao.deleteById(entityId);
+        } catch (DaoException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
     }
 }
