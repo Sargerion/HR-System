@@ -12,6 +12,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SpecialtyDaoImplTest {
 
@@ -27,8 +28,8 @@ public class SpecialtyDaoImplTest {
         Specialty addingSpecialty = new Specialty(0, "TestSpecialty");
         try {
             specialtyDao.add(addingSpecialty);
-            boolean isAdded = specialtyDao.isExistsSpecialtyName(addingSpecialty.getSpecialtyName());
-            Assert.assertTrue(isAdded);
+            Optional<Specialty> actualResult = specialtyDao.findById(addingSpecialty.getEntityId());
+            Assert.assertTrue(actualResult.isPresent());
             specialtyDao.deleteById(addingSpecialty.getEntityId());
         } catch (DaoException e) {
             Assert.fail(e.getMessage());

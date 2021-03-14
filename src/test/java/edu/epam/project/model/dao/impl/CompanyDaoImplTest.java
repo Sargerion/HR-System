@@ -27,7 +27,7 @@ public class CompanyDaoImplTest {
         Company addingCompany = new Company(0, "TestInc", "TestOwner", "TestTown", "TestLogin");
         try {
             companyDao.add(addingCompany);
-            Optional<Company> actualResult = companyDao.findCompanyByHrLogin(addingCompany.getHrLogin());
+            Optional<Company> actualResult = companyDao.findById(addingCompany.getEntityId());
             Assert.assertTrue(actualResult.isPresent());
             companyDao.deleteById(actualResult.get().getEntityId());
         } catch (DaoException e) {

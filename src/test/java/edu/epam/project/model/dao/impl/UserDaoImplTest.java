@@ -30,7 +30,7 @@ public class UserDaoImplTest {
         String testPassword = "Not hashed";
         try {
             userDao.addUser(addingUser, testPassword);
-            Optional<User> actualResult = userDao.findUserByLogin(addingUser.getLogin());
+            Optional<User> actualResult = userDao.findById(addingUser.getEntityId());
             Assert.assertTrue(actualResult.isPresent());
             userDao.deleteById(actualResult.get().getEntityId());
         } catch (DaoException e) {
