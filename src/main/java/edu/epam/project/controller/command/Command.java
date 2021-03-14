@@ -3,10 +3,27 @@ package edu.epam.project.controller.command;
 import edu.epam.project.exception.CommandException;
 import edu.epam.project.model.entity.UserType;
 
+/**
+ * The interface Command.
+ * @author Sargerion
+ */
 public interface Command {
 
+    /**
+     * Processes user's request and returns page path with transition type.
+     *
+     * @param requestContext the request wrapper.
+     * @return the command result which contains page path and transition type.
+     * @throws CommandException when the services doesn't work correctly.
+     */
     CommandResult execute(SessionRequestContext requestContext) throws CommandException;
 
+    /**
+     * Define command result for each user type.
+     *
+     * @param userType the user type.
+     * @return the command result which contains page path and transition type.
+     */
     default CommandResult defineCommandResult(UserType userType) {
         CommandResult commandResult;
         switch (userType) {
