@@ -26,6 +26,7 @@ The admin creates and manages companies.
 - Validating the information on a client and server
 - Used design patterns: Command, Proxy, Dao, Singleton, MVC
 ## Common Authorized Users Features
+- Signing in
 - Avatar uploading
 - Company info viewing
 - Vacancies viewing
@@ -51,7 +52,6 @@ The admin creates and manages companies.
 - Applying for a vacancy
 ## Guest Features
 - Locale changing
-- Signing in
 - Registering
 - Automatic activation after clicking on a link from the mail
 ### &copy;Galian Sergey, 2021
