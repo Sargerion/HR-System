@@ -7,7 +7,7 @@
 
 <html>
 <body>
-<form style="padding-left:240px; width: 0;height: 0;background: none;box-shadow: 0 0 0 0;" name="find_specialties_form" method="post" action="<c:url value="/controller"/>">
+<form style="padding-left:240px; width: 0;height: 0;background: none;box-shadow: 0 0 0 0;" name="find_specialties_form" method="get" action="<c:url value="/controller"/>">
     <input type="hidden" name="command" value="find_specialties">
     <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: royalblue;
     cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value="<fmt:message key="specialties_reload_button"/>">

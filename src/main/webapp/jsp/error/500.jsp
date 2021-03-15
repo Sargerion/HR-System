@@ -17,15 +17,7 @@
         <div class="notfound-404">
             <h3>500</h3>
         </div>
-        <h4><fmt:message key="error505_request_name_Part1"/> ${pageContext.errorData.requestURI} <fmt:message key="error505_request_name_Part2"/></h4>
-        <br/>
-        <h4><fmt:message key="error505_servlet_name"/> ${pageContext.errorData.servletName}</h4>
-        <br/>
-        <h4><fmt:message key="error505_status_code"/> ${pageContext.errorData.statusCode}</h4>
-        <br/>
-        <h4><fmt:message key="error505_exception"/> ${pageContext.exception}</h4>
-        <br/>
-        <h4><fmt:message key="error505_mess_from_exc"/> ${pageContext.exception.message}</h4>
+        <h4><fmt:message key="error505_name"/>: <c:import url="error_parts/error_part.jsp"/></h4>
         <a href=<c:choose>
                     <c:when test="${sessionScope.user.getType() eq 'ADMIN'}">
                         "${pageContext.request.contextPath}/jsp/admin/welcomeAdmin.jsp"

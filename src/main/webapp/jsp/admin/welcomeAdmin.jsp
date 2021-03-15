@@ -19,7 +19,7 @@
 <br/>
 <div class="wrapper" style="height: 36%; width: 54%;">
     <div class="left">
-        <img src="${pageContext.request.contextPath}/user_avatars/" width="200">
+        <img src="${pageContext.request.contextPath}/user_avatars" width="200">
         <p>${sessionScope.user.getLogin()}</p>
     </div>
     <div class="right">

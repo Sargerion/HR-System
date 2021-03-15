@@ -61,15 +61,6 @@ public enum CommandName {
     },
 
     /**
-     * The Performance of ForwardToUserListCommand implementation.
-     */
-    FORWARD_TO_USER_LIST(new ForwardToUserListCommand()) {
-        {
-            setAllowedUserTypes(UserType.ADMIN);
-        }
-    },
-
-    /**
      * The Performance of FindUserListCommand implementation.
      */
     USER_LIST(new FindUserListCommand()) {
@@ -91,15 +82,6 @@ public enum CommandName {
      * The Performance of FindVacancyListCommand implementation.
      */
     FIND_VACANCY_LIST(new FindVacancyListCommand()) {
-        {
-            setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
-        }
-    },
-
-    /**
-     * The Performance of ForwardToVacancyListCommand implementation.
-     */
-    FORWARD_TO_VACANCY_LIST(new ForwardToVacancyListCommand()) {
         {
             setAllowedUserTypes(UserType.ADMIN, UserType.COMPANY_HR, UserType.FINDER);
         }
@@ -163,15 +145,6 @@ public enum CommandName {
      * The Performance of FindApplicationListCommand implementation.
      */
     FIND_APPLICATION_LIST(new FindApplicationListCommand()) {
-        {
-            setAllowedUserTypes(UserType.COMPANY_HR);
-        }
-    },
-
-    /**
-     * The Performance of ForwardToApplicationListCommand implementation.
-     */
-    FORWARD_TO_APPLICATION_LIST(new ForwardToApplicationListCommand()) {
         {
             setAllowedUserTypes(UserType.COMPANY_HR);
         }

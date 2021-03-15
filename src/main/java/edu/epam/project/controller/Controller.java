@@ -42,6 +42,7 @@ public class Controller extends HttpServlet {
             commandResult = command.execute(requestContext);
         } catch (CommandException e) {
             logger.error(e);
+            request.getSession().setAttribute(SessionAttribute.ERROR_MESSAGE, e.getMessage());
             commandResult = new CommandResult(PathJsp.ERROR_500_PAGE, TransitionType.FORWARD);
         }
         requestContext.insertAttributes(request);

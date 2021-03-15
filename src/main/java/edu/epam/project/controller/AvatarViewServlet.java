@@ -12,11 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Servlet for viewing the user's avatar.
+ * Servlet for viewing the user avatar.
  * @author Sargerion.
  */
-@WebServlet(urlPatterns = {"/user_avatars/*"})
-public class ImageViewServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/user_avatars"})
+public class AvatarViewServlet extends HttpServlet {
 
     private static final String UPLOAD_AVATAR_DIRECTORY = "D:/project_directory/user_avatars";
     private static final String DEFAULT_AVATAR = "default_avatar.png";

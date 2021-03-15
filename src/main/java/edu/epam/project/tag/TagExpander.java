@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 class TagExpander {
 
     private static final String PAGE_PROPERTIES_PATH = "property/pagecontent";
+    private static final String UPLOAD_AVATAR_ENDPOINT = "user_avatars";
 
     private TagExpander() {
     }
@@ -28,8 +29,8 @@ class TagExpander {
         try {
             JspWriter writer = pageContext.getOut();
             String contextPath = pageContext.getServletContext().getContextPath();
-            writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
-            writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+            writer.write("<form method=\"get\" action=\"" + contextPath + "/controller\">");
+            writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command.toLowerCase() + "\"/>");
             writer.write("<ul class=\"navigate\">");
             for (int i = 0; i < pagesCount; i++) {
                 createButton(writer, i + 1);
@@ -49,10 +50,10 @@ class TagExpander {
         }
     }
 
-    static void showImage(PageContext pageContext, String imageName) throws IOException {
+    static void showImage(PageContext pageContext) throws IOException {
         JspWriter writer = pageContext.getOut();
         String contextPath = pageContext.getServletContext().getContextPath();
-        writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + imageName + "\">");
+        writer.write("<img width=\"55\" height=\"55\" style=\"border-radius: 50%; margin-left: 11px; margin-top: 8px;\" src=\"" + contextPath + "/" + UPLOAD_AVATAR_ENDPOINT + "\">");
     }
 
     static void createApplyVacancyButton(JspWriter writer, String command, PageContext pageContext, int vacancyId, String buttonText) throws IOException {
@@ -102,8 +103,8 @@ class TagExpander {
 
     static void createCompanyViewButton(JspWriter writer, String command, PageContext pageContext, int companyId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
-        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
-        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<form method=\"get\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command.toLowerCase() + "\"/>");
         writer.write("<button class=\"apply_button\" type=\"submit\" name=\"companyButton\" ");
         writer.write("value=\"" + companyId + "\">");
         writer.write(buttonText + "</button></form>");
@@ -111,8 +112,8 @@ class TagExpander {
 
     static void createFinderProfileViewButton(JspWriter writer, String command, PageContext pageContext, int finderId, String buttonText) throws IOException {
         String contextPath = pageContext.getServletContext().getContextPath();
-        writer.write("<form method=\"post\" action=\"" + contextPath + "/controller\">");
-        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command + "\"/>");
+        writer.write("<form method=\"get\" action=\"" + contextPath + "/controller\">");
+        writer.write("<input type=\"hidden\" name=\"command\" value=\"" + command.toLowerCase() + "\"/>");
         writer.write("<button class=\"apply_button\" type=\"submit\" name=\"finderButton\" ");
         writer.write("value=\"" + finderId + "\">");
         writer.write(buttonText + "</button></form>");

@@ -7,9 +7,8 @@
 
 <html>
 <body>
-<form style="position:relative;" name="vacancy_list_form" method="post" action="<c:url value="/controller"/>">
+<form style="position:relative;" name="vacancy_list_form" method="get" action="<c:url value="/controller"/>">
     <input type="hidden" name="command" value="find_vacancy_list">
-    <input type="hidden" name="command" value="forward_to_vacancy_list">
     <input type="submit" style="margin-left: 50%;transform:translate(-50%);width: 120px;height: 76px;border: none;outline: none;background: royalblue;
     cursor: pointer; color: snow;border-radius: 4px;font-size:16px;transition: .3s;white-space: normal;" value="<fmt:message key="vacancy_list"/>">
 </form>
