@@ -54,4 +54,4 @@ The admin creates and manages companies.
 - Signing in
 - Registering
 - Automatic activation after clicking on a link from the mail
-### &copy;Galian Sergey, 2021
+### &copy; Sergey Galian, 2021
