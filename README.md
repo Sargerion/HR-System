@@ -43,14 +43,14 @@ The admin creates and manages companies.
 - Viewing all users information
 ## HR Features
 - A new vacancy adding
-- Confirming finder application
+- Confirming application
   - Then automatic deletion of application and vacancy
-- Rejecting finder application
+- Rejecting application
   - Then automatic deletion of application, but vacancy remains open for submission 
 - Viewing all applications to his company
 - New specialties reloading
 - Applicant profile viewing
-## Finder Features
+## Applicant Features
 - Info adding
 - Profile updating
 - Applying for a vacancy
