@@ -24,7 +24,12 @@ The admin creates and manages companies.
 - Passwords hashing
 - Accompanying user actions with messages
 - Validating the information on a client and server
-- Used design patterns: Command, Proxy, Dao, Singleton, MVC
+- Used design patterns: Command, Proxy, Dao, State, Singleton, MVC
+## Guest Features
+- Locale changing
+- Signing in
+- Registering
+- Automatic activation after clicking on a link from the mail
 ## Common Authorized Users Features
 - Avatar uploading
 - Company info viewing
@@ -49,9 +54,4 @@ The admin creates and manages companies.
 - Info adding
 - Profile updating
 - Applying for a vacancy
-## Guest Features
-- Locale changing
-- Signing in
-- Registering
-- Automatic activation after clicking on a link from the mail
 ### &copy; Sergey Galian, 2021
