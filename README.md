@@ -35,23 +35,23 @@ The admin creates and manages companies.
 - Company info viewing
 - Vacancies viewing
 - Log out
+## Applicant Features
+- Info adding
+- Profile updating
+- Applying for a vacancy
+## HR Features
+- A new vacancy adding
+- Confirming application
+  - Then automatic deletion of application and vacancy
+- Rejecting application
+  - Then automatic deletion of application, but vacancy remains open for submission
+- Viewing all applications to his company
+- New specialties reloading
+- Applicant profile viewing
 ## Admin Features
 - A new company adding
 - A new specialty adding
 - User blocking
 - User unblocking
 - Viewing all users information
-## HR Features
-- A new vacancy adding
-- Confirming application
-  - Then automatic deletion of application and vacancy
-- Rejecting application
-  - Then automatic deletion of application, but vacancy remains open for submission 
-- Viewing all applications to his company
-- New specialties reloading
-- Applicant profile viewing
-## Applicant Features
-- Info adding
-- Profile updating
-- Applying for a vacancy
 ### &copy; Sergey Galian, 2021
