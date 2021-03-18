@@ -3,7 +3,7 @@ package edu.epam.project.model.dao.impl;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
 import edu.epam.project.model.dao.CompanyDao;
-import edu.epam.project.model.dao.table.CompaniesColumn;
+import edu.epam.project.model.dao.column.CompaniesColumn;
 import edu.epam.project.model.entity.Company;
 import edu.epam.project.model.pool.ConnectionPool;
 

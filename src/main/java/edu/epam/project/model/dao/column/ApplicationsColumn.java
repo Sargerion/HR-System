@@ -1,4 +1,4 @@
-package edu.epam.project.model.dao.table;
+package edu.epam.project.model.dao.column;
 
 /**
  * Class, which gives string constants, which contains real applications table fields.

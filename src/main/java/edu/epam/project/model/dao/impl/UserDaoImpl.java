@@ -1,9 +1,9 @@
 package edu.epam.project.model.dao.impl;
 
 import edu.epam.project.model.dao.UserDao;
-import edu.epam.project.model.dao.table.UserStatusesColumn;
-import edu.epam.project.model.dao.table.UserTypesColumn;
-import edu.epam.project.model.dao.table.UsersColumn;
+import edu.epam.project.model.dao.column.UserStatusesColumn;
+import edu.epam.project.model.dao.column.UserTypesColumn;
+import edu.epam.project.model.dao.column.UsersColumn;
 import edu.epam.project.model.entity.*;
 import edu.epam.project.exception.ConnectionException;
 import edu.epam.project.exception.DaoException;
