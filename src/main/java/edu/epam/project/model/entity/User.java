@@ -6,7 +6,7 @@ package edu.epam.project.model.entity;
  */
 public class User extends Entity {
 
-    public String login;
+    private String login;
     private String email;
     private UserType type;
     private UserStatus status;
