@@ -18,7 +18,6 @@ import java.io.IOException;
  */
 @WebFilter(filterName = "CommandAccessFilter")
 public class CommandAccessFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;

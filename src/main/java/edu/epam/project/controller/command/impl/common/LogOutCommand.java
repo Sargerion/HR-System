@@ -14,11 +14,11 @@ import org.apache.logging.log4j.Logger;
 public class LogOutCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
+    private static final boolean INVALIDATE_TRUE = true;
 
     @Override
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
-        String locale = requestContext.getLocale();
-        requestContext.setRequestAttribute(RequestAttribute.LOCALE, locale);
+        requestContext.setLogout(INVALIDATE_TRUE);
         logger.info(FriendlyMessage.LOG_OUT);
         return new CommandResult(PathJsp.HOME_PAGE, TransitionType.FORWARD);
     }

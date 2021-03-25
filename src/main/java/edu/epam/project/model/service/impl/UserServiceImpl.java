@@ -24,8 +24,8 @@ import java.util.*;
  */
 public class UserServiceImpl implements UserService {
 
-    private static final UserServiceImpl instance = new UserServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final UserServiceImpl instance = new UserServiceImpl();
     private final UserDao userDao = new UserDaoImpl();
 
     private UserServiceImpl() {

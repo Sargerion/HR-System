@@ -46,9 +46,6 @@ public class Controller extends HttpServlet {
             commandResult = new CommandResult(PathJsp.ERROR_500_PAGE, TransitionType.FORWARD);
         }
         requestContext.insertAttributes(request);
-        if (commandName.name().equalsIgnoreCase(RequestParameter.LOG_OUT)) {
-            request.getSession().invalidate();
-        }
         if (commandResult.getTransitionType() == TransitionType.FORWARD) {
             RequestDispatcher dispatcher = request.getRequestDispatcher(commandResult.getPage());
             dispatcher.forward(request, response);

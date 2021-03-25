@@ -23,7 +23,7 @@ class ConnectionBuilder {
     private static final String PROPERTIES_PATH = "/property/database.properties";
     private static final String URL = "url";
     private static final Properties properties = new Properties();
-    private String urlValue;
+    private final String urlValue;
 
     /**
      * Instantiates a new Connection builder.

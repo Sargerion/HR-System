@@ -19,8 +19,8 @@ import javax.mail.internet.MimeMessage;
  */
 public class MailSender {
 
-    private static final MailSender instance = new MailSender();
     private static final Logger logger = LogManager.getLogger();
+    private static final MailSender instance = new MailSender();
     private static final String ACTIVATE_MESSAGE = "You have registered on CringeLinkedIn, please confirm registration by link";
     private static final String ACTIVATE_LINK = "http://localhost:8081/cringelinkedin/controller?command=activate&";
     private static final String HIRE_MESSAGE = "Congrats, you've got work in ";

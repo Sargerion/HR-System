@@ -10,6 +10,7 @@ import java.util.Properties;
  * @author Sargerion.
  */
 class MailFactory {
+
     public static final String MAIL_USER_NAME = "mail.user.name";
     public static final String MAIL_USER_PASSWORD = "mail.user.password";
 

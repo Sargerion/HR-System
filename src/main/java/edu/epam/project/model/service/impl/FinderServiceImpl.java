@@ -26,8 +26,8 @@ import java.util.Optional;
  */
 public class FinderServiceImpl implements FinderService {
 
-    private static final FinderServiceImpl instance = new FinderServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final FinderServiceImpl instance = new FinderServiceImpl();
     private final FinderDao finderDao = new FinderDaoImpl();
 
     private FinderServiceImpl() {

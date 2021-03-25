@@ -22,6 +22,7 @@ public class SessionRequestContext {
     private Map<String, Object> sessionAttributes;
     private String locale;
     private List<Part> fileParts;
+    private boolean isLogout;
 
     public SessionRequestContext(HttpServletRequest request) {
         requestAttributes = extractRequestAttributes(request);
@@ -35,6 +36,9 @@ public class SessionRequestContext {
         requestAttributes.forEach(request::setAttribute);
         HttpSession session = request.getSession();
         sessionAttributes.forEach(session::setAttribute);
+        if (isLogout) {
+            session.invalidate();
+        }
     }
 
     public String getLocale() {
@@ -70,6 +74,25 @@ public class SessionRequestContext {
 
     public List<Part> getFileParts() {
         return fileParts;
+    }
+
+    public boolean isLogout() {
+        return isLogout;
+    }
+
+    public void setLogout(boolean logout) {
+        isLogout = logout;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SessionRequestContext{");
+        sb.append("requestAttributes=").append(requestAttributes);
+        sb.append(", requestParameters=").append(requestParameters);
+        sb.append(", sessionAttributes=").append(sessionAttributes);
+        sb.append(", locale='").append(locale).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     private Map<String, Object> extractRequestAttributes(HttpServletRequest request) {
@@ -113,16 +136,5 @@ public class SessionRequestContext {
             logger.error(e);
         }
         return fileParts;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("SessionRequestContext{");
-        sb.append("requestAttributes=").append(requestAttributes);
-        sb.append(", requestParameters=").append(requestParameters);
-        sb.append(", sessionAttributes=").append(sessionAttributes);
-        sb.append(", locale='").append(locale).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }

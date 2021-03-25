@@ -21,7 +21,6 @@ import java.util.List;
  */
 @WebFilter(urlPatterns = {"/jsp/*"}, filterName = "JspTransitionFilter")
 public class JspTransitionFilter implements Filter {
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;

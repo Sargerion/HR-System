@@ -21,8 +21,8 @@ import java.util.*;
  */
 public class CompanyServiceImpl implements CompanyService {
 
-    private static final CompanyServiceImpl instance = new CompanyServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final CompanyServiceImpl instance = new CompanyServiceImpl();
     private final CompanyDao companyDao = new CompanyDaoImpl();
 
     private CompanyServiceImpl() {

@@ -22,8 +22,8 @@ import org.apache.logging.log4j.Logger;
  */
 public class ConnectionPool {
 
-    private static ConnectionPool instance;
     private static final Logger logger = LogManager.getLogger();
+    private static ConnectionPool instance;
     private static final AtomicBoolean isPoolInitialize = new AtomicBoolean(true);
     private static final int MAX_POOL_SIZE = 8;
     private static final int MIN_POOL_SIZE = 4;

@@ -25,8 +25,8 @@ import java.util.*;
  */
 public class VacancyServiceImpl implements VacancyService {
 
-    private static final VacancyServiceImpl instance = new VacancyServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final VacancyServiceImpl instance = new VacancyServiceImpl();
     private final VacancyDao vacancyDao = new VacancyDaoImpl();
 
     private VacancyServiceImpl() {

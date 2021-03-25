@@ -24,8 +24,8 @@ import java.util.*;
  */
 public class ApplicationServiceImpl implements ApplicationService {
 
-    private static final ApplicationServiceImpl instance = new ApplicationServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final ApplicationServiceImpl instance = new ApplicationServiceImpl();
     private final ApplicationDao applicationDao = new ApplicationDaoImpl();
 
     private ApplicationServiceImpl() {

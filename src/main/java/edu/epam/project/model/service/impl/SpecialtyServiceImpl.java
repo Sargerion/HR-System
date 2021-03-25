@@ -20,8 +20,8 @@ import java.util.*;
  */
 public class SpecialtyServiceImpl implements SpecialtyService {
 
-    private static final SpecialtyServiceImpl instance = new SpecialtyServiceImpl();
     private static final Logger logger = LogManager.getLogger();
+    private static final SpecialtyServiceImpl instance = new SpecialtyServiceImpl();
     private final SpecialtyDao specialtyDao = new SpecialtyDaoImpl();
 
     private SpecialtyServiceImpl() {
