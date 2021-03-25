@@ -13,6 +13,11 @@
 </head>
 <body>
 <c:import url="part/finderHeader.jsp"/>
+<br/>
+<br/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
+<br/>
+<br/>
 <ul>
     <li style="display: inline-block"><img src="${pageContext.request.contextPath}/images/svg/apple_logo.svg"></li>
     <li style="display: inline-block"><img style="padding-left: 410px; margin: 50px" src="${pageContext.request.contextPath}/images/png/intel.png" height="200" width="612"></li>

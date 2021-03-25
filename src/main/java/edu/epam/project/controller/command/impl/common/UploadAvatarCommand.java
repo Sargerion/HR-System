@@ -41,12 +41,11 @@ public class UploadAvatarCommand implements Command {
         try {
             for (Part part : fileParts) {
                 fileName = part.getSubmittedFileName();
-                if (fileName != null) {
+                if (fileName != null && !fileName.isEmpty()) {
                     fileName = buildNewFileName(fileName);
                     part.write(fileName);
                 }
             }
-
         } catch (IOException e) {
             logger.error(e);
         }

@@ -15,6 +15,7 @@
 <c:import url="part/adminHeader.jsp"/>
 <br/>
 <br/>
+<c:import url="/jsp/error/error_parts/error_part.jsp"/>
 <br/>
 <br/>
 <div class="wrapper" style="height: 36%; width: 54%;">
