@@ -272,7 +272,7 @@ public enum CommandName {
     /**
      * Allowed user types for command.
      */
-    EnumSet<UserType> allowedUserTypes = EnumSet.noneOf(UserType.class);
+    private EnumSet<UserType> allowedUserTypes = EnumSet.noneOf(UserType.class);
 
     CommandName(Command command) {
         this.command = command;
