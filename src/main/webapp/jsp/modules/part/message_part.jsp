@@ -5,7 +5,7 @@
     <p style="color: deepskyblue; font-size: 20px; text-align: center;border: 1px solid green;padding: 35px;">${requestScope.confirmMessage}</p>
 </c:if>
 <c:if test="${not empty requestScope.confirmMailMessage}">
-    <p style="color: deepskyblue; font-size: 13px; text-align: center;border: 1px solid green;padding: 10px;">${requestScope.confirmMailMessage}</p>
+    <p style="position: absolute;right: 732px; text-align: center; color: royalblue; font-size: 15px; border: 1px solid green; padding: 10px;">${requestScope.confirmMailMessage}</p>
 </c:if>
 
 <c:if test="${not empty sessionScope.confirmMessage}">
