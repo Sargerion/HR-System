@@ -31,13 +31,10 @@ public class UploadAvatarCommand implements Command {
     public CommandResult execute(SessionRequestContext requestContext) throws CommandException {
         UserService userService = UserServiceImpl.getInstance();
         User user = (User) requestContext.getSessionAttribute(SessionAttribute.USER);
-        UserType userType = UserType.GUEST;
+        UserType userType = user.getType();
         CommandResult commandResult;
         List<Part> fileParts = requestContext.getFileParts();
         String fileName = null;
-        if (user != null) {
-            userType = user.getType();
-        }
         try {
             for (Part part : fileParts) {
                 fileName = part.getSubmittedFileName();
